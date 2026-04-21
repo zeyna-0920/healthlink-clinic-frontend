@@ -35,7 +35,9 @@ export function SiteHeader() {
               key={item.to}
               to={item.to}
               className="px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:text-primary hover:bg-accent transition-colors"
-              activeProps={{ className: "px-3 py-2 text-sm font-medium rounded-md text-primary bg-accent" }}
+              activeProps={{
+                className: "px-3 py-2 text-sm font-medium rounded-md text-primary bg-accent",
+              }}
               activeOptions={{ exact: item.to === "/" }}
             >
               {item.label}
@@ -70,7 +72,9 @@ export function SiteHeader() {
                 to={item.to}
                 onClick={() => setOpen(false)}
                 className="px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-accent"
-                activeProps={{ className: "px-3 py-2 text-sm font-medium rounded-md text-primary bg-accent" }}
+                activeProps={{
+                  className: "px-3 py-2 text-sm font-medium rounded-md text-primary bg-accent",
+                }}
                 activeOptions={{ exact: item.to === "/" }}
               >
                 {item.label}
@@ -78,10 +82,14 @@ export function SiteHeader() {
             ))}
             <div className="flex gap-2 pt-2">
               <Button asChild variant="outline" size="sm" className="flex-1">
-                <Link to="/auth" onClick={() => setOpen(false)}>Connexion</Link>
+                <Link to="/auth" onClick={() => setOpen(false)}>
+                  Connexion
+                </Link>
               </Button>
               <Button asChild size="sm" className="flex-1">
-                <Link to="/rendez-vous" onClick={() => setOpen(false)}>RDV</Link>
+                <Link to="/rendez-vous" onClick={() => setOpen(false)}>
+                  RDV
+                </Link>
               </Button>
             </div>
           </nav>
