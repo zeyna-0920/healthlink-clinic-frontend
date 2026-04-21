@@ -11,11 +11,7 @@ export const Route = createFileRoute("/personnel")({
   head: () => ({
     meta: [
       { title: "Notre Équipe — Clinique Moulaye Dabakh" },
-      {
-        name: "description",
-        content:
-          "Découvrez les médecins, infirmiers et sages-femmes de la Clinique Moulaye Dabakh.",
-      },
+      { name: "description", content: "Découvrez les médecins, infirmiers et sages-femmes de la Clinique Moulaye Dabakh." },
     ],
   }),
   component: PersonnelPage,
@@ -23,9 +19,9 @@ export const Route = createFileRoute("/personnel")({
 
 const team = [
   { name: "Dr Ablaye Diop", role: "Médecin", img: drAblaye },
-  { name: "Maïssa Gueye", role: "Infirmier d'État", img: nurseAdama },
+  { name: "Maïssa Gueye", role: "Infirmière d'État", img: nurseMaissa },
   { name: "Mariama Junior Diarra", role: "Infirmière d'État", img: nurseMariama },
-  { name: "Adama Hanne", role: "Infirmière d'État", img: nurseMaissa },
+  { name: "Adama Hanne", role: "Infirmier d'État", img: nurseAdama },
   { name: "Mommy Ndiaye", role: "Sage-femme", img: midwifeMommy },
 ];
 
@@ -41,19 +37,9 @@ function PersonnelPage() {
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
         {team.map((m) => (
-          <Card
-            key={m.name}
-            className="overflow-hidden hover:shadow-[var(--shadow-card)] transition-shadow"
-          >
+          <Card key={m.name} className="overflow-hidden hover:shadow-[var(--shadow-card)] transition-shadow">
             <div className="aspect-square overflow-hidden">
-              <img
-                src={m.img}
-                alt={m.name}
-                loading="lazy"
-                width={640}
-                height={640}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
+              <img src={m.img} alt={m.name} loading="lazy" width={640} height={640} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
             </div>
             <div className="p-4">
               <h3 className="font-semibold">{m.name}</h3>
@@ -69,10 +55,7 @@ function PersonnelPage() {
         </div>
         <div>
           <h3 className="font-bold mb-1">Trésorier</h3>
-          <p className="text-sm text-muted-foreground">
-            Notre trésorier assure la gestion transparente des tickets et des paiements de la
-            clinique (consultations jour et nuit).
-          </p>
+          <p className="text-sm text-muted-foreground">Notre trésorier assure la gestion transparente des tickets et des paiements de la clinique.</p>
         </div>
       </Card>
     </div>
