@@ -6,6 +6,8 @@ import nurseMariama from "@/assets/nurse-mariama.jpg";
 import nurseAdama from "@/assets/nurse-adama.jpg";
 import midwifeMommy from "@/assets/midwife-mommy.jpg";
 import treasurerImg from "@/assets/treasurer.jpg";
+import cleanerWoman from "@/assets/cleaner-woman.jpg";
+import guardMan from "@/assets/guard-man.jpg";
 import { Wallet } from "lucide-react";
 
 export const Route = createFileRoute("/personnel")({
@@ -28,6 +30,8 @@ const team = [
   { name: "Mariama Junior Diarra", role: "Infirmière d'État", img: nurseMariama },
   { name: "Adama Hanne", role: "Infirmière d'État", img: nurseMaissa },
   { name: "Mommy Ndiaye", role: "Sage-femme", img: midwifeMommy },
+  { name: "Aïssatou Sow", role: "Agente d'entretien", img: cleanerWoman },
+  { name: "Modou Faye", role: "Agent de sécurité", img: guardMan },
 ];
 
 function PersonnelPage() {
