@@ -7,59 +7,19 @@ export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
       { title: "Services — Clinique Moulaye Dabakh" },
-      {
-        name: "description",
-        content:
-          "Consultations, téléconsultations, hospitalisation, soins infirmiers et suivi des patients.",
-      },
+      { name: "description", content: "Consultations, téléconsultations, hospitalisation, soins infirmiers et suivi des patients." },
     ],
   }),
   component: ServicesPage,
 });
 
 const services = [
-  {
-    icon: Stethoscope,
-    title: "Consultation médicale",
-    desc: "Examens complets par nos médecins généralistes et spécialistes.",
-    color: "text-primary",
-    bg: "bg-primary/10",
-  },
-  {
-    icon: Video,
-    title: "Téléconsultation",
-    desc: "Consultez à distance par vidéo sécurisée, où que vous soyez.",
-    color: "text-medical",
-    bg: "bg-medical/10",
-  },
-  {
-    icon: BedDouble,
-    title: "Hospitalisation",
-    desc: "Chambres confortables et équipées, gestion en temps réel des lits.",
-    color: "text-success",
-    bg: "bg-success/10",
-  },
-  {
-    icon: Syringe,
-    title: "Soins infirmiers",
-    desc: "Pansements, injections, perfusions et soins post-opératoires.",
-    color: "text-primary",
-    bg: "bg-primary/10",
-  },
-  {
-    icon: ClipboardList,
-    title: "Suivi des patients",
-    desc: "Dossier médical numérique et suivi personnalisé sur le long terme.",
-    color: "text-medical",
-    bg: "bg-medical/10",
-  },
-  {
-    icon: HeartPulse,
-    title: "Urgences 24h/24",
-    desc: "Service d'urgence toujours ouvert, prise en charge prioritaire.",
-    color: "text-destructive",
-    bg: "bg-destructive/10",
-  },
+  { icon: Stethoscope, title: "Consultation médicale", desc: "Examens complets par nos médecins généralistes et spécialistes.", color: "text-primary", bg: "bg-primary/10" },
+  { icon: Video, title: "Téléconsultation", desc: "Consultez à distance par vidéo sécurisée, où que vous soyez.", color: "text-medical", bg: "bg-medical/10" },
+  { icon: BedDouble, title: "Hospitalisation", desc: "Chambres confortables et équipées, gestion en temps réel des lits.", color: "text-success", bg: "bg-success/10" },
+  { icon: Syringe, title: "Soins infirmiers", desc: "Pansements, injections, perfusions et soins post-opératoires.", color: "text-primary", bg: "bg-primary/10" },
+  { icon: ClipboardList, title: "Suivi des patients", desc: "Dossier médical numérique et suivi personnalisé sur le long terme.", color: "text-medical", bg: "bg-medical/10" },
+  { icon: HeartPulse, title: "Urgences 24h/24", desc: "Service d'urgence toujours ouvert, prise en charge prioritaire.", color: "text-destructive", bg: "bg-destructive/10" },
 ];
 
 function ServicesPage() {
@@ -74,10 +34,7 @@ function ServicesPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {services.map((s) => (
-          <Card
-            key={s.title}
-            className="p-6 hover:shadow-[var(--shadow-card)] hover:-translate-y-1 transition-all"
-          >
+          <Card key={s.title} className="p-6 hover:shadow-[var(--shadow-card)] hover:-translate-y-1 transition-all">
             <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${s.bg} mb-4`}>
               <s.icon className={`h-6 w-6 ${s.color}`} />
             </div>
@@ -88,9 +45,7 @@ function ServicesPage() {
       </div>
 
       <div className="mt-12 text-center">
-        <Button asChild size="lg">
-          <Link to="/rendez-vous">Prendre rendez-vous</Link>
-        </Button>
+        <Button asChild size="lg"><Link to="/rendez-vous">Prendre rendez-vous</Link></Button>
       </div>
     </div>
   );

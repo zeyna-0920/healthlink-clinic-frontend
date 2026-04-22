@@ -12,10 +12,7 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Connexion / Inscription — Clinique Moulaye Dabakh" },
-      {
-        name: "description",
-        content: "Créez votre compte patient ou connectez-vous pour gérer vos rendez-vous.",
-      },
+      { name: "description", content: "Créez votre compte patient ou connectez-vous pour gérer vos rendez-vous." },
     ],
   }),
   component: AuthPage,
@@ -31,9 +28,7 @@ function AuthPage() {
           <ShieldCheck className="h-7 w-7 text-primary-foreground" />
         </div>
         <h1 className="text-3xl font-bold">Espace patient</h1>
-        <p className="text-sm text-muted-foreground mt-2">
-          Gérez vos rendez-vous et votre dossier médical.
-        </p>
+        <p className="text-sm text-muted-foreground mt-2">Gérez vos rendez-vous et votre dossier médical.</p>
       </div>
 
       <Card className="p-6">
@@ -44,54 +39,20 @@ function AuthPage() {
           </TabsList>
 
           <TabsContent value="login" className="space-y-4">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                toast.info("Connectez Lovable Cloud pour activer l'authentification.");
-              }}
-              className="space-y-4"
-            >
-              <div className="space-y-2">
-                <Label>Email</Label>
-                <Input type="email" placeholder="vous@email.com" />
-              </div>
-              <div className="space-y-2">
-                <Label>Mot de passe</Label>
-                <Input type="password" placeholder="••••••••" />
-              </div>
-              <Button type="submit" className="w-full">
-                Se connecter
-              </Button>
+            <form onSubmit={(e) => { e.preventDefault(); toast.info("Connectez Lovable Cloud pour activer l'authentification."); }} className="space-y-4">
+              <div className="space-y-2"><Label>Email</Label><Input type="email" placeholder="vous@email.com" /></div>
+              <div className="space-y-2"><Label>Mot de passe</Label><Input type="password" placeholder="••••••••" /></div>
+              <Button type="submit" className="w-full">Se connecter</Button>
             </form>
           </TabsContent>
 
           <TabsContent value="signup" className="space-y-4">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                toast.info("Connectez Lovable Cloud pour activer l'authentification.");
-              }}
-              className="space-y-4"
-            >
-              <div className="space-y-2">
-                <Label>Nom complet</Label>
-                <Input placeholder="Votre nom" />
-              </div>
-              <div className="space-y-2">
-                <Label>Email</Label>
-                <Input type="email" placeholder="vous@email.com" />
-              </div>
-              <div className="space-y-2">
-                <Label>Téléphone</Label>
-                <Input placeholder="+221 ..." />
-              </div>
-              <div className="space-y-2">
-                <Label>Mot de passe</Label>
-                <Input type="password" placeholder="••••••••" />
-              </div>
-              <Button type="submit" className="w-full">
-                Créer mon compte
-              </Button>
+            <form onSubmit={(e) => { e.preventDefault(); toast.info("Connectez Lovable Cloud pour activer l'authentification."); }} className="space-y-4">
+              <div className="space-y-2"><Label>Nom complet</Label><Input placeholder="Votre nom" /></div>
+              <div className="space-y-2"><Label>Email</Label><Input type="email" placeholder="vous@email.com" /></div>
+              <div className="space-y-2"><Label>Téléphone</Label><Input placeholder="+221 ..." /></div>
+              <div className="space-y-2"><Label>Mot de passe</Label><Input type="password" placeholder="••••••••" /></div>
+              <Button type="submit" className="w-full">Créer mon compte</Button>
             </form>
           </TabsContent>
         </Tabs>
