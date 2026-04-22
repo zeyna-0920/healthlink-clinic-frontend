@@ -5,6 +5,7 @@ import nurseMaissa from "@/assets/nurse-maissa.jpg";
 import nurseMariama from "@/assets/nurse-mariama.jpg";
 import nurseAdama from "@/assets/nurse-adama.jpg";
 import midwifeMommy from "@/assets/midwife-mommy.jpg";
+import treasurerImg from "@/assets/treasurer.jpg";
 import { Wallet } from "lucide-react";
 
 export const Route = createFileRoute("/personnel")({
@@ -63,16 +64,28 @@ function PersonnelPage() {
         ))}
       </div>
 
-      <Card className="mt-12 p-6 flex items-start gap-4 bg-[image:var(--gradient-soft)] border-primary/20">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
-          <Wallet className="h-6 w-6 text-primary" />
+      <Card className="mt-12 overflow-hidden bg-[image:var(--gradient-soft)] border-primary/20 grid md:grid-cols-[280px_1fr] gap-0">
+        <div className="aspect-square md:aspect-auto overflow-hidden">
+          <img
+            src={treasurerImg}
+            alt="Trésorier de la clinique tenant des tickets et reçus"
+            loading="lazy"
+            width={768}
+            height={768}
+            className="w-full h-full object-cover"
+          />
         </div>
-        <div>
-          <h3 className="font-bold mb-1">Trésorier</h3>
-          <p className="text-sm text-muted-foreground">
-            Notre trésorier assure la gestion transparente des tickets et des paiements de la
-            clinique (consultations jour et nuit).
-          </p>
+        <div className="p-6 flex items-start gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
+            <Wallet className="h-6 w-6 text-primary" />
+          </div>
+          <div>
+            <h3 className="font-bold mb-1">Trésorier</h3>
+            <p className="text-sm text-muted-foreground">
+              Notre trésorier assure la gestion transparente des tickets et des paiements de la
+              clinique (consultations jour et nuit).
+            </p>
+          </div>
         </div>
       </Card>
     </div>
