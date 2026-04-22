@@ -1,4 +1,4 @@
-import { createServerFileRoute } from "@tanstack/react-start/server";
+import { createServerFn } from "@tanstack/react-start";
 
 /**
  * GET /api/medicaments
@@ -90,10 +90,7 @@ const MEDICAMENTS: Medicament[] = [
   },
 ];
 
-export const ServerRoute = createServerFileRoute("/api/medicaments").methods({
-  GET: async () => {
-    return Response.json(MEDICAMENTS, {
-      headers: { "cache-control": "public, max-age=60" },
-    });
-  },
+export const getMedicaments = createServerFn().handler(async (): Promise<Medicament[]> => {
+  // Brancher Cloudflare D1 ici (voir commentaire en haut du fichier).
+  return MEDICAMENTS;
 });
