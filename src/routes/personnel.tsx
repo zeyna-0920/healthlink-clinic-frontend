@@ -8,7 +8,7 @@ import midwifeMommy from "@/assets/midwife-mommy.jpg";
 import treasurerImg from "@/assets/treasurer.jpg";
 import cleanerWoman from "@/assets/cleaner-woman.jpg";
 import guardMan from "@/assets/guard-man.jpg";
-import { Wallet } from "lucide-react";
+
 
 export const Route = createFileRoute("/personnel")({
   head: () => ({
@@ -30,6 +30,7 @@ const team = [
   { name: "Mariama Junior Diarra", role: "Infirmière d'État", img: nurseMariama },
   { name: "Adama Hanne", role: "Infirmière d'État", img: nurseMaissa },
   { name: "Mommy Ndiaye", role: "Sage-femme", img: midwifeMommy },
+  { name: "Trésorier", role: "Gestion des tickets & paiements", img: treasurerImg },
   { name: "Aïssatou Sow", role: "Agente d'entretien", img: cleanerWoman },
   { name: "Modou Faye", role: "Agent de sécurité", img: guardMan },
 ];
@@ -67,31 +68,6 @@ function PersonnelPage() {
           </Card>
         ))}
       </div>
-
-      <Card className="mt-12 overflow-hidden bg-[image:var(--gradient-soft)] border-primary/20 grid md:grid-cols-[280px_1fr] gap-0">
-        <div className="aspect-square md:aspect-auto overflow-hidden">
-          <img
-            src={treasurerImg}
-            alt="Trésorier de la clinique tenant des tickets et reçus"
-            loading="lazy"
-            width={768}
-            height={768}
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="p-6 flex items-start gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
-            <Wallet className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h3 className="font-bold mb-1">Trésorier</h3>
-            <p className="text-sm text-muted-foreground">
-              Notre trésorier assure la gestion transparente des tickets et des paiements de la
-              clinique (consultations jour et nuit).
-            </p>
-          </div>
-        </div>
-      </Card>
     </div>
   );
 }
