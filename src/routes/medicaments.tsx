@@ -183,12 +183,14 @@ function MedicamentsPage() {
                 key={m.id}
                 className="group overflow-hidden p-0 border border-border/60 shadow-[var(--shadow-soft)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="aspect-[16/10] overflow-hidden bg-muted">
+                <div className="aspect-[16/10] overflow-hidden bg-white flex items-center justify-center p-4">
                   <img
                     src={m.image}
                     alt={m.nom}
                     loading="lazy"
-                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    width={800}
+                    height={512}
+                    className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 <div className="p-5 flex flex-col gap-3">
