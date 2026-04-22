@@ -21,27 +21,56 @@ export function SiteFooter() {
           <div>
             <h4 className="font-semibold mb-3 text-sm">Navigation</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/services" className="hover:text-primary">Services</Link></li>
-              <li><Link to="/personnel" className="hover:text-primary">Équipe</Link></li>
-              <li><Link to="/tarifs" className="hover:text-primary">Tarifs</Link></li>
-              <li><Link to="/rendez-vous" className="hover:text-primary">Rendez-vous</Link></li>
+              <li>
+                <Link to="/services" className="hover:text-primary">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link to="/personnel" className="hover:text-primary">
+                  Équipe
+                </Link>
+              </li>
+              <li>
+                <Link to="/tarifs" className="hover:text-primary">
+                  Tarifs
+                </Link>
+              </li>
+              <li>
+                <Link to="/rendez-vous" className="hover:text-primary">
+                  Rendez-vous
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold mb-3 text-sm">Horaires</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Consultations : <span className="text-foreground font-medium">08h – 00h</span></li>
-              <li>Urgences : <span className="text-success font-medium">24h/24 – 7j/7</span></li>
+              <li>
+                Consultations : <span className="text-foreground font-medium">08h – 00h</span>
+              </li>
+              <li>
+                Urgences : <span className="text-success font-medium">24h/24 – 7j/7</span>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold mb-3 text-sm">Contact</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2"><MapPin className="h-4 w-4 mt-0.5 text-primary" />Rue de la Santé, Ville</li>
-              <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" />+221 33 123 45 67</li>
-              <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary" />contact@moulaye-dabakh.sn</li>
+              <li className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 mt-0.5 text-primary" />
+                Rue de la Santé, Ville
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-primary" />
+                +221 33 123 45 67
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" />
+                contact@moulaye-dabakh.sn
+              </li>
             </ul>
           </div>
         </div>
