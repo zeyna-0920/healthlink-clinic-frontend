@@ -9,6 +9,8 @@ import augmentinImg from "@/assets/meds/augmentin.jpg";
 import bisoprololImg from "@/assets/meds/bisoprolol.jpg";
 import azithromycineImg from "@/assets/meds/azithromycine.jpg";
 import panadolImg from "@/assets/meds/panadol.jpg";
+import smectaImg from "@/assets/meds/smecta.jpg";
+import imodiumImg from "@/assets/meds/imodium.jpg";
 
 /**
  * GET /api/medicaments
@@ -19,7 +21,7 @@ export type Medicament = {
   id: number;
   nom: string;
   description: string;
-  categorie: "fievre" | "douleur" | "infection" | "coeur";
+  categorie: "fievre" | "douleur" | "infection" | "coeur" | "diarrhee";
   image: string;
 };
 
@@ -93,6 +95,20 @@ const MEDICAMENTS: Medicament[] = [
     description: "Paracétamol pour soulager efficacement maux de tête, fièvre et douleurs courantes.",
     categorie: "fievre",
     image: panadolImg,
+  },
+  {
+    id: 11,
+    nom: "Smecta 3g",
+    description: "Pansement intestinal à base de diosmectite, traite la diarrhée aiguë et chronique.",
+    categorie: "diarrhee",
+    image: smectaImg,
+  },
+  {
+    id: 12,
+    nom: "Imodium 2mg",
+    description: "Lopéramide, ralentit le transit intestinal pour stopper rapidement la diarrhée.",
+    categorie: "diarrhee",
+    image: imodiumImg,
   },
 ];
 
