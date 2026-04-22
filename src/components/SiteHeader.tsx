@@ -8,6 +8,7 @@ const navItems = [
   { to: "/about", label: "À Propos" },
   { to: "/services", label: "Services" },
   { to: "/personnel", label: "Personnel" },
+  { to: "/medicaments", label: "Médicaments" },
   { to: "/rendez-vous", label: "Rendez-vous" },
   { to: "/tarifs", label: "Tarifs" },
   { to: "/contact", label: "Contact" },

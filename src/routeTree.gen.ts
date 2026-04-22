@@ -13,6 +13,7 @@ import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RendezVousRouteImport } from './routes/rendez-vous'
 import { Route as PersonnelRouteImport } from './routes/personnel'
+import { Route as MedicamentsRouteImport } from './routes/medicaments'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
@@ -36,6 +37,11 @@ const RendezVousRoute = RendezVousRouteImport.update({
 const PersonnelRoute = PersonnelRouteImport.update({
   id: '/personnel',
   path: '/personnel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MedicamentsRoute = MedicamentsRouteImport.update({
+  id: '/medicaments',
+  path: '/medicaments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/medicaments': typeof MedicamentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
   '/services': typeof ServicesRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/medicaments': typeof MedicamentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
   '/services': typeof ServicesRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
+  '/medicaments': typeof MedicamentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
   '/services': typeof ServicesRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
+    | '/medicaments'
     | '/personnel'
     | '/rendez-vous'
     | '/services'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
+    | '/medicaments'
     | '/personnel'
     | '/rendez-vous'
     | '/services'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
+    | '/medicaments'
     | '/personnel'
     | '/rendez-vous'
     | '/services'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
+  MedicamentsRoute: typeof MedicamentsRoute
   PersonnelRoute: typeof PersonnelRoute
   RendezVousRoute: typeof RendezVousRoute
   ServicesRoute: typeof ServicesRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/personnel'
       fullPath: '/personnel'
       preLoaderRoute: typeof PersonnelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medicaments': {
+      id: '/medicaments'
+      path: '/medicaments'
+      fullPath: '/medicaments'
+      preLoaderRoute: typeof MedicamentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
+  MedicamentsRoute: MedicamentsRoute,
   PersonnelRoute: PersonnelRoute,
   RendezVousRoute: RendezVousRoute,
   ServicesRoute: ServicesRoute,
