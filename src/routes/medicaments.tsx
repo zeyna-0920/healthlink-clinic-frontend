@@ -34,6 +34,7 @@ const CATEGORIES: { value: Categorie | "tous"; label: string }[] = [
   { value: "douleur", label: "Douleur" },
   { value: "infection", label: "Infection" },
   { value: "coeur", label: "Cœur" },
+  { value: "diarrhee", label: "Diarrhée" },
 ];
 
 const BADGE_STYLES: Record<Categorie, string> = {
@@ -41,6 +42,7 @@ const BADGE_STYLES: Record<Categorie, string> = {
   douleur: "bg-purple-100 text-purple-700 hover:bg-purple-100",
   infection: "bg-emerald-100 text-emerald-700 hover:bg-emerald-100",
   coeur: "bg-rose-100 text-rose-700 hover:bg-rose-100",
+  diarrhee: "bg-amber-100 text-amber-700 hover:bg-amber-100",
 };
 
 const CAT_LABEL: Record<Categorie, string> = {
@@ -48,6 +50,7 @@ const CAT_LABEL: Record<Categorie, string> = {
   douleur: "Douleur",
   infection: "Infection",
   coeur: "Cœur",
+  diarrhee: "Diarrhée",
 };
 
 // URL d'API configurable. Si vide, on appelle la server function locale.
