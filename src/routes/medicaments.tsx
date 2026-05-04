@@ -5,7 +5,34 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { getMedicaments, type Medicament } from "./api/medicaments";
+import { getMedicaments, type Medicament, type MedSlug } from "./api/medicaments";
+import paracetamolImg from "@/assets/meds/paracetamol.jpg";
+import ibuprofeneImg from "@/assets/meds/ibuprofene.jpg";
+import amoxicillineImg from "@/assets/meds/amoxicilline.jpg";
+import aspirineImg from "@/assets/meds/aspirine.jpg";
+import dolipraneImg from "@/assets/meds/doliprane.jpg";
+import tramadolImg from "@/assets/meds/tramadol.jpg";
+import augmentinImg from "@/assets/meds/augmentin.jpg";
+import bisoprololImg from "@/assets/meds/bisoprolol.jpg";
+import azithromycineImg from "@/assets/meds/azithromycine.jpg";
+import panadolImg from "@/assets/meds/panadol.jpg";
+import smectaImg from "@/assets/meds/smecta.jpg";
+import imodiumImg from "@/assets/meds/imodium.jpg";
+
+const IMG_MAP: Record<MedSlug, string> = {
+  paracetamol: paracetamolImg,
+  ibuprofene: ibuprofeneImg,
+  amoxicilline: amoxicillineImg,
+  aspirine: aspirineImg,
+  doliprane: dolipraneImg,
+  tramadol: tramadolImg,
+  augmentin: augmentinImg,
+  bisoprolol: bisoprololImg,
+  azithromycine: azithromycineImg,
+  panadol: panadolImg,
+  smecta: smectaImg,
+  imodium: imodiumImg,
+};
 
 export const Route = createFileRoute("/medicaments")({
   head: () => ({
@@ -188,7 +215,7 @@ function MedicamentsPage() {
               >
                 <div className="aspect-[16/10] overflow-hidden bg-white flex items-center justify-center p-4">
                   <img
-                    src={m.image}
+                    src={IMG_MAP[m.image]}
                     alt={m.nom}
                     loading="lazy"
                     width={800}
