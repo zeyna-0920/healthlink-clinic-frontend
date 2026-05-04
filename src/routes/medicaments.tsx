@@ -215,7 +215,7 @@ function MedicamentsPage() {
               >
                 <div className="aspect-[16/10] overflow-hidden bg-white flex items-center justify-center p-4">
                   <img
-                    src={m.image}
+                    src={IMG_MAP[m.image]}
                     alt={m.nom}
                     loading="lazy"
                     width={800}
