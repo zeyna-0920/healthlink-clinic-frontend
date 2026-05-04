@@ -72,6 +72,59 @@ const BADGE_STYLES: Record<Categorie, string> = {
   diarrhee: "bg-amber-100 text-amber-700 hover:bg-amber-100",
 };
 
+// Thèmes de couleur par catégorie pour habiller la carte entière
+const CARD_THEME: Record<
+  Categorie,
+  {
+    ring: string;
+    imgBg: string;
+    title: string;
+    accentBar: string;
+    button: string;
+  }
+> = {
+  fievre: {
+    ring: "hover:border-orange-300",
+    imgBg: "bg-gradient-to-br from-orange-50 to-orange-100/60",
+    title: "text-orange-900",
+    accentBar: "bg-gradient-to-r from-orange-400 to-amber-400",
+    button:
+      "border-orange-200 text-orange-700 hover:bg-orange-500 hover:text-white hover:border-orange-500",
+  },
+  douleur: {
+    ring: "hover:border-purple-300",
+    imgBg: "bg-gradient-to-br from-purple-50 to-fuchsia-100/60",
+    title: "text-purple-900",
+    accentBar: "bg-gradient-to-r from-purple-400 to-fuchsia-400",
+    button:
+      "border-purple-200 text-purple-700 hover:bg-purple-500 hover:text-white hover:border-purple-500",
+  },
+  infection: {
+    ring: "hover:border-emerald-300",
+    imgBg: "bg-gradient-to-br from-emerald-50 to-teal-100/60",
+    title: "text-emerald-900",
+    accentBar: "bg-gradient-to-r from-emerald-400 to-teal-400",
+    button:
+      "border-emerald-200 text-emerald-700 hover:bg-emerald-500 hover:text-white hover:border-emerald-500",
+  },
+  coeur: {
+    ring: "hover:border-rose-300",
+    imgBg: "bg-gradient-to-br from-rose-50 to-pink-100/60",
+    title: "text-rose-900",
+    accentBar: "bg-gradient-to-r from-rose-400 to-pink-400",
+    button:
+      "border-rose-200 text-rose-700 hover:bg-rose-500 hover:text-white hover:border-rose-500",
+  },
+  diarrhee: {
+    ring: "hover:border-amber-300",
+    imgBg: "bg-gradient-to-br from-amber-50 to-yellow-100/60",
+    title: "text-amber-900",
+    accentBar: "bg-gradient-to-r from-amber-400 to-yellow-400",
+    button:
+      "border-amber-200 text-amber-700 hover:bg-amber-500 hover:text-white hover:border-amber-500",
+  },
+};
+
 const CAT_LABEL: Record<Categorie, string> = {
   fievre: "Fièvre",
   douleur: "Douleur",
@@ -208,35 +261,49 @@ function MedicamentsPage() {
         {/* Grille */}
         {!loading && !error && filtered.length > 0 && (
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 transition-all duration-300">
-            {filtered.map((m) => (
-              <Card
-                key={m.id}
-                className="group overflow-hidden p-0 border border-border/60 shadow-[var(--shadow-soft)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="aspect-[16/10] overflow-hidden bg-white flex items-center justify-center p-4">
-                  <img
-                    src={IMG_MAP[m.image]}
-                    alt={m.nom}
-                    loading="lazy"
-                    width={800}
-                    height={512}
-                    className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-5 flex flex-col gap-3">
-                  <Badge className={`w-fit border-0 ${BADGE_STYLES[m.categorie]}`}>
-                    {CAT_LABEL[m.categorie]}
-                  </Badge>
-                  <h3 className="font-display font-semibold text-lg text-foreground leading-tight">
-                    {m.nom}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-3">{m.description}</p>
-                  <Button variant="outline" size="sm" className="mt-2 w-full">
-                    Voir plus
-                  </Button>
-                </div>
-              </Card>
-            ))}
+            {filtered.map((m) => {
+              const theme = CARD_THEME[m.categorie];
+              return (
+                <Card
+                  key={m.id}
+                  className={`group relative overflow-hidden p-0 border-2 border-border/60 ${theme.ring} shadow-[var(--shadow-soft)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300`}
+                >
+                  <div className={`absolute top-0 left-0 right-0 h-1.5 ${theme.accentBar}`} />
+                  <div
+                    className={`aspect-[16/10] overflow-hidden ${theme.imgBg} flex items-center justify-center p-5`}
+                  >
+                    <img
+                      src={IMG_MAP[m.image]}
+                      alt={m.nom}
+                      loading="lazy"
+                      width={800}
+                      height={512}
+                      className="h-full w-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-5 flex flex-col gap-3 bg-card">
+                    <Badge className={`w-fit border-0 ${BADGE_STYLES[m.categorie]}`}>
+                      {CAT_LABEL[m.categorie]}
+                    </Badge>
+                    <h3
+                      className={`font-display font-bold text-lg ${theme.title} leading-tight tracking-tight`}
+                    >
+                      {m.nom}
+                    </h3>
+                    <p className="text-sm text-muted-foreground/90 leading-relaxed line-clamp-3">
+                      {m.description}
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`mt-2 w-full font-medium transition-colors ${theme.button}`}
+                    >
+                      Voir plus →
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         )}
       </section>
