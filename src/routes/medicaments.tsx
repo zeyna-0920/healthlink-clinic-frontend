@@ -261,35 +261,49 @@ function MedicamentsPage() {
         {/* Grille */}
         {!loading && !error && filtered.length > 0 && (
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 transition-all duration-300">
-            {filtered.map((m) => (
-              <Card
-                key={m.id}
-                className="group overflow-hidden p-0 border border-border/60 shadow-[var(--shadow-soft)] hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="aspect-[16/10] overflow-hidden bg-white flex items-center justify-center p-4">
-                  <img
-                    src={IMG_MAP[m.image]}
-                    alt={m.nom}
-                    loading="lazy"
-                    width={800}
-                    height={512}
-                    className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-5 flex flex-col gap-3">
-                  <Badge className={`w-fit border-0 ${BADGE_STYLES[m.categorie]}`}>
-                    {CAT_LABEL[m.categorie]}
-                  </Badge>
-                  <h3 className="font-display font-semibold text-lg text-foreground leading-tight">
-                    {m.nom}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-3">{m.description}</p>
-                  <Button variant="outline" size="sm" className="mt-2 w-full">
-                    Voir plus
-                  </Button>
-                </div>
-              </Card>
-            ))}
+            {filtered.map((m) => {
+              const theme = CARD_THEME[m.categorie];
+              return (
+                <Card
+                  key={m.id}
+                  className={`group relative overflow-hidden p-0 border-2 border-border/60 ${theme.ring} shadow-[var(--shadow-soft)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300`}
+                >
+                  <div className={`absolute top-0 left-0 right-0 h-1.5 ${theme.accentBar}`} />
+                  <div
+                    className={`aspect-[16/10] overflow-hidden ${theme.imgBg} flex items-center justify-center p-5`}
+                  >
+                    <img
+                      src={IMG_MAP[m.image]}
+                      alt={m.nom}
+                      loading="lazy"
+                      width={800}
+                      height={512}
+                      className="h-full w-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-5 flex flex-col gap-3 bg-card">
+                    <Badge className={`w-fit border-0 ${BADGE_STYLES[m.categorie]}`}>
+                      {CAT_LABEL[m.categorie]}
+                    </Badge>
+                    <h3
+                      className={`font-display font-bold text-lg ${theme.title} leading-tight tracking-tight`}
+                    >
+                      {m.nom}
+                    </h3>
+                    <p className="text-sm text-muted-foreground/90 leading-relaxed line-clamp-3">
+                      {m.description}
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`mt-2 w-full font-medium transition-colors ${theme.button}`}
+                    >
+                      Voir plus →
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         )}
       </section>
