@@ -72,6 +72,59 @@ const BADGE_STYLES: Record<Categorie, string> = {
   diarrhee: "bg-amber-100 text-amber-700 hover:bg-amber-100",
 };
 
+// Thèmes de couleur par catégorie pour habiller la carte entière
+const CARD_THEME: Record<
+  Categorie,
+  {
+    ring: string;
+    imgBg: string;
+    title: string;
+    accentBar: string;
+    button: string;
+  }
+> = {
+  fievre: {
+    ring: "hover:border-orange-300",
+    imgBg: "bg-gradient-to-br from-orange-50 to-orange-100/60",
+    title: "text-orange-900",
+    accentBar: "bg-gradient-to-r from-orange-400 to-amber-400",
+    button:
+      "border-orange-200 text-orange-700 hover:bg-orange-500 hover:text-white hover:border-orange-500",
+  },
+  douleur: {
+    ring: "hover:border-purple-300",
+    imgBg: "bg-gradient-to-br from-purple-50 to-fuchsia-100/60",
+    title: "text-purple-900",
+    accentBar: "bg-gradient-to-r from-purple-400 to-fuchsia-400",
+    button:
+      "border-purple-200 text-purple-700 hover:bg-purple-500 hover:text-white hover:border-purple-500",
+  },
+  infection: {
+    ring: "hover:border-emerald-300",
+    imgBg: "bg-gradient-to-br from-emerald-50 to-teal-100/60",
+    title: "text-emerald-900",
+    accentBar: "bg-gradient-to-r from-emerald-400 to-teal-400",
+    button:
+      "border-emerald-200 text-emerald-700 hover:bg-emerald-500 hover:text-white hover:border-emerald-500",
+  },
+  coeur: {
+    ring: "hover:border-rose-300",
+    imgBg: "bg-gradient-to-br from-rose-50 to-pink-100/60",
+    title: "text-rose-900",
+    accentBar: "bg-gradient-to-r from-rose-400 to-pink-400",
+    button:
+      "border-rose-200 text-rose-700 hover:bg-rose-500 hover:text-white hover:border-rose-500",
+  },
+  diarrhee: {
+    ring: "hover:border-amber-300",
+    imgBg: "bg-gradient-to-br from-amber-50 to-yellow-100/60",
+    title: "text-amber-900",
+    accentBar: "bg-gradient-to-r from-amber-400 to-yellow-400",
+    button:
+      "border-amber-200 text-amber-700 hover:bg-amber-500 hover:text-white hover:border-amber-500",
+  },
+};
+
 const CAT_LABEL: Record<Categorie, string> = {
   fievre: "Fièvre",
   douleur: "Douleur",
