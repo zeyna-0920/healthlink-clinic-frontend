@@ -1,16 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import paracetamolImg from "@/assets/meds/paracetamol.jpg";
-import ibuprofeneImg from "@/assets/meds/ibuprofene.jpg";
-import amoxicillineImg from "@/assets/meds/amoxicilline.jpg";
-import aspirineImg from "@/assets/meds/aspirine.jpg";
-import dolipraneImg from "@/assets/meds/doliprane.jpg";
-import tramadolImg from "@/assets/meds/tramadol.jpg";
-import augmentinImg from "@/assets/meds/augmentin.jpg";
-import bisoprololImg from "@/assets/meds/bisoprolol.jpg";
-import azithromycineImg from "@/assets/meds/azithromycine.jpg";
-import panadolImg from "@/assets/meds/panadol.jpg";
-import smectaImg from "@/assets/meds/smecta.jpg";
-import imodiumImg from "@/assets/meds/imodium.jpg";
 
 /**
  * GET /api/medicaments
