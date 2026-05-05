@@ -27,9 +27,9 @@ function AboutPage() {
         </p>
       </div>
 
-      <Card className="p-8 mb-8">
-        <h2 className="text-2xl font-bold mb-3">Notre histoire</h2>
-        <p className="text-muted-foreground leading-relaxed">
+      <Card className="p-8 mb-8 bg-primary/10 border-primary/30 shadow-[var(--shadow-card)]">
+        <h2 className="text-2xl font-bold mb-3 text-primary">Notre histoire</h2>
+        <p className="text-foreground/80 leading-relaxed">
           La Clinique Moulaye Dabakh a été fondée avec la conviction que chaque personne mérite un
           accès rapide et digne à des soins de qualité. Située au cœur de la ville, notre
           établissement combine expertise médicale et innovation numérique pour mieux vous servir.
@@ -37,34 +37,34 @@ function AboutPage() {
       </Card>
 
       <div className="grid md:grid-cols-2 gap-6 mb-8">
-        <Card className="p-6">
+        <Card className="p-6 bg-primary/10 border-primary/30 shadow-[var(--shadow-soft)]">
           <Target className="h-8 w-8 text-primary mb-3" />
-          <h3 className="text-xl font-bold mb-2">Notre mission</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="text-xl font-bold mb-2 text-primary">Notre mission</h3>
+          <p className="text-sm text-foreground/80">
             Faciliter l'accès aux soins médicaux grâce à la digitalisation : prise de rendez-vous en
             ligne, téléconsultation et gestion intelligente des hospitalisations.
           </p>
         </Card>
-        <Card className="p-6">
+        <Card className="p-6 bg-success/10 border-success/30 shadow-[var(--shadow-soft)]">
           <Sparkles className="h-8 w-8 text-success mb-3" />
-          <h3 className="text-xl font-bold mb-2">Notre vision</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="text-xl font-bold mb-2 text-success">Notre vision</h3>
+          <p className="text-sm text-foreground/80">
             Devenir la référence en matière de soins digitalisés au Sénégal, où chaque patient
             bénéficie d'un parcours fluide, humain et efficace.
           </p>
         </Card>
-        <Card className="p-6">
+        <Card className="p-6 bg-destructive/10 border-destructive/30 shadow-[var(--shadow-soft)]">
           <Heart className="h-8 w-8 text-destructive mb-3" />
-          <h3 className="text-xl font-bold mb-2">Nos valeurs</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="text-xl font-bold mb-2 text-destructive">Nos valeurs</h3>
+          <p className="text-sm text-foreground/80">
             Bienveillance, excellence, transparence et innovation guident chacune de nos actions au
             quotidien.
           </p>
         </Card>
-        <Card className="p-6">
+        <Card className="p-6 bg-medical/10 border-medical/30 shadow-[var(--shadow-soft)]">
           <Users className="h-8 w-8 text-medical mb-3" />
-          <h3 className="text-xl font-bold mb-2">Notre équipe</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="text-xl font-bold mb-2 text-medical">Notre équipe</h3>
+          <p className="text-sm text-foreground/80">
             Médecins, infirmiers et sages-femmes passionnés, à votre écoute 24h/24 pour les urgences
             et de 8h à minuit pour les consultations.
           </p>
