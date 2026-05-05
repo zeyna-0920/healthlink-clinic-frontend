@@ -83,7 +83,7 @@ function ServicesPage() {
         {services.map((s) => (
           <Card
             key={s.title}
-            className={`p-6 ${s.bg} border-2 ${s.color.replace("text-", "border-")}/30 hover:shadow-[var(--shadow-card)] hover:-translate-y-1 transition-all`}
+            className={`p-6 ${s.bg} border-2 ${s.border} hover:shadow-[var(--shadow-card)] hover:-translate-y-1 transition-all`}
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-background/70 mb-4 shadow-sm">
               <s.icon className={`h-6 w-6 ${s.color}`} />
