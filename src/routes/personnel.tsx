@@ -70,5 +70,6 @@ function PersonnelPage() {
         ))}
       </div>
     </div>
+    </div>
   );
 }
