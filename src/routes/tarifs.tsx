@@ -36,6 +36,7 @@ const tarifs = [
 
 function TarifsPage() {
   return (
+    <div className="bg-[image:var(--gradient-soft)]">
     <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-12">
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">Nos tarifs</h1>
@@ -85,6 +86,7 @@ function TarifsPage() {
           reste à votre disposition pour toute information.
         </p>
       </Card>
+    </div>
     </div>
   );
 }

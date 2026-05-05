@@ -180,7 +180,7 @@ function MedicamentsPage() {
   }, [meds, search, activeCat]);
 
   return (
-    <div className="bg-background">
+    <div className="bg-[image:var(--gradient-soft)]">
       {/* Hero */}
       <section className="border-b border-border/60 bg-[image:var(--gradient-soft)]">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
