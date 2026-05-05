@@ -81,5 +81,6 @@ function AboutPage() {
         </p>
       </Card>
     </div>
+    </div>
   );
 }

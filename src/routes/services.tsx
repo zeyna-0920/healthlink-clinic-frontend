@@ -94,5 +94,6 @@ function ServicesPage() {
         </Button>
       </div>
     </div>
+    </div>
   );
 }
