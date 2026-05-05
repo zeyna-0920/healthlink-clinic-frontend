@@ -37,6 +37,7 @@ const team = [
 
 function PersonnelPage() {
   return (
+    <div className="bg-[image:var(--gradient-soft)]">
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
       <div className="text-center mb-12">
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">Notre équipe médicale</h1>
