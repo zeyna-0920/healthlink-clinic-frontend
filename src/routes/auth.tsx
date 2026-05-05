@@ -25,6 +25,7 @@ function AuthPage() {
   const [tab, setTab] = useState("login");
 
   return (
+    <div className="bg-[image:var(--gradient-soft)]">
     <div className="mx-auto max-w-md px-4 sm:px-6 py-16">
       <div className="text-center mb-8">
         <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[image:var(--gradient-hero)] mb-4">
