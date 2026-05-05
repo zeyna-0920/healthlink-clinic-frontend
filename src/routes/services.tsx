@@ -24,6 +24,7 @@ const services = [
     desc: "Examens complets par nos médecins généralistes et spécialistes.",
     color: "text-primary",
     bg: "bg-primary/10",
+    border: "border-primary/30",
   },
   {
     icon: Video,
@@ -31,6 +32,7 @@ const services = [
     desc: "Consultez à distance par vidéo sécurisée, où que vous soyez.",
     color: "text-medical",
     bg: "bg-medical/10",
+    border: "border-medical/30",
   },
   {
     icon: BedDouble,
@@ -38,6 +40,7 @@ const services = [
     desc: "Chambres confortables et équipées, gestion en temps réel des lits.",
     color: "text-success",
     bg: "bg-success/10",
+    border: "border-success/30",
   },
   {
     icon: Syringe,
@@ -45,6 +48,7 @@ const services = [
     desc: "Pansements, injections, perfusions et soins post-opératoires.",
     color: "text-primary",
     bg: "bg-primary/10",
+    border: "border-primary/30",
   },
   {
     icon: ClipboardList,
@@ -52,6 +56,7 @@ const services = [
     desc: "Dossier médical numérique et suivi personnalisé sur le long terme.",
     color: "text-medical",
     bg: "bg-medical/10",
+    border: "border-medical/30",
   },
   {
     icon: HeartPulse,
@@ -59,6 +64,7 @@ const services = [
     desc: "Service d'urgence toujours ouvert, prise en charge prioritaire.",
     color: "text-destructive",
     bg: "bg-destructive/10",
+    border: "border-destructive/30",
   },
 ];
 
