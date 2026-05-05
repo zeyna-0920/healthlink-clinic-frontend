@@ -188,5 +188,6 @@ function AppointmentPage() {
         </Card>
       </div>
     </div>
+    </div>
   );
 }

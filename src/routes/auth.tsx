@@ -102,5 +102,6 @@ function AuthPage() {
         Connexion sécurisée. Vos données médicales restent confidentielles.
       </p>
     </div>
+    </div>
   );
 }

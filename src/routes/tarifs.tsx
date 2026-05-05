@@ -87,5 +87,6 @@ function TarifsPage() {
         </p>
       </Card>
     </div>
+    </div>
   );
 }

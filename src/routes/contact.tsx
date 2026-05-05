@@ -127,5 +127,6 @@ function ContactPage() {
         </Card>
       </div>
     </div>
+    </div>
   );
 }
