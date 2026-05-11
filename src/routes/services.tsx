@@ -71,35 +71,35 @@ const services = [
 function ServicesPage() {
   return (
     <div className="bg-[image:var(--gradient-soft)]">
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl sm:text-5xl font-bold mb-4">Nos services</h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Un éventail complet de soins pour répondre à tous vos besoins de santé.
-        </p>
-      </div>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-4">Nos services</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Un éventail complet de soins pour répondre à tous vos besoins de santé.
+          </p>
+        </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((s) => (
-          <Card
-            key={s.title}
-            className={`p-6 ${s.bg} border-2 ${s.border} hover:shadow-[var(--shadow-card)] hover:-translate-y-1 transition-all`}
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-background/70 mb-4 shadow-sm">
-              <s.icon className={`h-6 w-6 ${s.color}`} />
-            </div>
-            <h3 className={`text-lg font-bold mb-2 ${s.color}`}>{s.title}</h3>
-            <p className="text-sm text-foreground/80">{s.desc}</p>
-          </Card>
-        ))}
-      </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((s) => (
+            <Card
+              key={s.title}
+              className={`p-6 ${s.bg} border-2 ${s.border} hover:shadow-[var(--shadow-card)] hover:-translate-y-1 transition-all`}
+            >
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-background/70 mb-4 shadow-sm">
+                <s.icon className={`h-6 w-6 ${s.color}`} />
+              </div>
+              <h3 className={`text-lg font-bold mb-2 ${s.color}`}>{s.title}</h3>
+              <p className="text-sm text-foreground/80">{s.desc}</p>
+            </Card>
+          ))}
+        </div>
 
-      <div className="mt-12 text-center">
-        <Button asChild size="lg">
-          <Link to="/rendez-vous">Prendre rendez-vous</Link>
-        </Button>
+        <div className="mt-12 text-center">
+          <Button asChild size="lg">
+            <Link to="/rendez-vous">Prendre rendez-vous</Link>
+          </Button>
+        </div>
       </div>
-    </div>
     </div>
   );
 }

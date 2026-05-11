@@ -74,21 +74,21 @@ export function SiteFooter() {
               </p>
               <div className="mt-5 flex items-center gap-2">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/?locale=fr_FR"
                   aria-label="Facebook"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-card border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
                 >
                   <Facebook className="h-4 w-4" />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/"
                   aria-label="Instagram"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-card border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
                 >
                   <Instagram className="h-4 w-4" />
                 </a>
                 <a
-                  href="#"
+                  href="https://twitter.com/"
                   aria-label="Twitter"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-card border border-border text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
                 >
@@ -152,8 +152,7 @@ export function SiteFooter() {
                     <Clock className="h-3.5 w-3.5" />
                   </span>
                   <span>
-                    08h – 00h ·{" "}
-                    <span className="text-success font-medium">Urgences 24/7</span>
+                    08h – 00h · <span className="text-success font-medium">Urgences 24/7</span>
                   </span>
                 </li>
               </ul>

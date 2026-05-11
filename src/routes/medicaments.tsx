@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { getMedicaments, type Medicament, type MedSlug } from "./api/medicaments";
+import { getMedicaments, type Medicament, type MedSlug } from "./api/-medicaments";
 import paracetamolImg from "@/assets/meds/paracetamol.jpg";
 import ibuprofeneImg from "@/assets/meds/ibuprofene.jpg";
 import amoxicillineImg from "@/assets/meds/amoxicilline.jpg";
