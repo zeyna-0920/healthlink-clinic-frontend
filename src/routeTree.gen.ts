@@ -13,11 +13,18 @@ import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RendezVousRouteImport } from './routes/rendez-vous'
 import { Route as PersonnelRouteImport } from './routes/personnel'
+import { Route as PaymentsRouteImport } from './routes/payments'
+import { Route as PatientsRouteImport } from './routes/patients'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MedicamentsRouteImport } from './routes/medicaments'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BedsRouteImport } from './routes/beds'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PatientsNewRouteImport } from './routes/patients/new'
+import { Route as PatientsPatientIdRouteImport } from './routes/patients/$patientId'
 
 const TarifsRoute = TarifsRouteImport.update({
   id: '/tarifs',
@@ -39,14 +46,39 @@ const PersonnelRoute = PersonnelRouteImport.update({
   path: '/personnel',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PaymentsRoute = PaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientsRoute = PatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MedicamentsRoute = MedicamentsRouteImport.update({
   id: '/medicaments',
   path: '/medicaments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BedsRoute = BedsRouteImport.update({
+  id: '/beds',
+  path: '/beds',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -64,40 +96,71 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PatientsNewRoute = PatientsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => PatientsRoute,
+} as any)
+const PatientsPatientIdRoute = PatientsPatientIdRouteImport.update({
+  id: '/$patientId',
+  path: '/$patientId',
+  getParentRoute: () => PatientsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/beds': typeof BedsRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/medicaments': typeof MedicamentsRoute
+  '/notifications': typeof NotificationsRoute
+  '/patients': typeof PatientsRouteWithChildren
+  '/payments': typeof PaymentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
   '/services': typeof ServicesRoute
   '/tarifs': typeof TarifsRoute
+  '/patients/$patientId': typeof PatientsPatientIdRoute
+  '/patients/new': typeof PatientsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/beds': typeof BedsRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/medicaments': typeof MedicamentsRoute
+  '/notifications': typeof NotificationsRoute
+  '/patients': typeof PatientsRouteWithChildren
+  '/payments': typeof PaymentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
   '/services': typeof ServicesRoute
   '/tarifs': typeof TarifsRoute
+  '/patients/$patientId': typeof PatientsPatientIdRoute
+  '/patients/new': typeof PatientsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
+  '/beds': typeof BedsRoute
   '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRoute
   '/medicaments': typeof MedicamentsRoute
+  '/notifications': typeof NotificationsRoute
+  '/patients': typeof PatientsRouteWithChildren
+  '/payments': typeof PaymentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
   '/services': typeof ServicesRoute
   '/tarifs': typeof TarifsRoute
+  '/patients/$patientId': typeof PatientsPatientIdRoute
+  '/patients/new': typeof PatientsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,42 +168,68 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/auth'
+    | '/beds'
     | '/contact'
+    | '/dashboard'
     | '/medicaments'
+    | '/notifications'
+    | '/patients'
+    | '/payments'
     | '/personnel'
     | '/rendez-vous'
     | '/services'
     | '/tarifs'
+    | '/patients/$patientId'
+    | '/patients/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/auth'
+    | '/beds'
     | '/contact'
+    | '/dashboard'
     | '/medicaments'
+    | '/notifications'
+    | '/patients'
+    | '/payments'
     | '/personnel'
     | '/rendez-vous'
     | '/services'
     | '/tarifs'
+    | '/patients/$patientId'
+    | '/patients/new'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/auth'
+    | '/beds'
     | '/contact'
+    | '/dashboard'
     | '/medicaments'
+    | '/notifications'
+    | '/patients'
+    | '/payments'
     | '/personnel'
     | '/rendez-vous'
     | '/services'
     | '/tarifs'
+    | '/patients/$patientId'
+    | '/patients/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
+  BedsRoute: typeof BedsRoute
   ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRoute
   MedicamentsRoute: typeof MedicamentsRoute
+  NotificationsRoute: typeof NotificationsRoute
+  PatientsRoute: typeof PatientsRouteWithChildren
+  PaymentsRoute: typeof PaymentsRoute
   PersonnelRoute: typeof PersonnelRoute
   RendezVousRoute: typeof RendezVousRoute
   ServicesRoute: typeof ServicesRoute
@@ -177,6 +266,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PersonnelRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/payments': {
+      id: '/payments'
+      path: '/payments'
+      fullPath: '/payments'
+      preLoaderRoute: typeof PaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patients': {
+      id: '/patients'
+      path: '/patients'
+      fullPath: '/patients'
+      preLoaderRoute: typeof PatientsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/medicaments': {
       id: '/medicaments'
       path: '/medicaments'
@@ -184,11 +294,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MedicamentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beds': {
+      id: '/beds'
+      path: '/beds'
+      fullPath: '/beds'
+      preLoaderRoute: typeof BedsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -212,15 +336,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/patients/new': {
+      id: '/patients/new'
+      path: '/new'
+      fullPath: '/patients/new'
+      preLoaderRoute: typeof PatientsNewRouteImport
+      parentRoute: typeof PatientsRoute
+    }
+    '/patients/$patientId': {
+      id: '/patients/$patientId'
+      path: '/$patientId'
+      fullPath: '/patients/$patientId'
+      preLoaderRoute: typeof PatientsPatientIdRouteImport
+      parentRoute: typeof PatientsRoute
+    }
   }
 }
+
+interface PatientsRouteChildren {
+  PatientsPatientIdRoute: typeof PatientsPatientIdRoute
+  PatientsNewRoute: typeof PatientsNewRoute
+}
+
+const PatientsRouteChildren: PatientsRouteChildren = {
+  PatientsPatientIdRoute: PatientsPatientIdRoute,
+  PatientsNewRoute: PatientsNewRoute,
+}
+
+const PatientsRouteWithChildren = PatientsRoute._addFileChildren(
+  PatientsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
+  BedsRoute: BedsRoute,
   ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRoute,
   MedicamentsRoute: MedicamentsRoute,
+  NotificationsRoute: NotificationsRoute,
+  PatientsRoute: PatientsRouteWithChildren,
+  PaymentsRoute: PaymentsRoute,
   PersonnelRoute: PersonnelRoute,
   RendezVousRoute: RendezVousRoute,
   ServicesRoute: ServicesRoute,
