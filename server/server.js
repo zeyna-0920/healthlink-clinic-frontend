@@ -43,6 +43,14 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/medicaments', medicamentRoutes);
 
+// Route racine du backend
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'API HealthLink Clinic fonctionne. Utilisez /api/patients, /api/beds, /api/payments, /api/notifications, etc.',
+  });
+});
+
 // Route de test
 app.get('/api/health', (req, res) => {
   res.status(200).json({
