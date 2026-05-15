@@ -86,7 +86,7 @@
 
 ### Étape 2: Configurer l'environnement
 ```bash
-cd server
+cd backend
 # Le fichier .env est déjà créé avec les valeurs par défaut
 # Modifier MONGODB_URI si nécessaire
 ```
@@ -147,7 +147,7 @@ curl http://localhost:5000/api/health
 ## 📁 Structure du Dossier
 
 ```
-server/
+backend/
 ├── .env                           # Configuration (créé)
 ├── .env.example                   # Exemple de config
 ├── package.json                   # Dépendances npm
@@ -269,7 +269,7 @@ server/
 ## 📞 Support
 
 Pour toute question sur la structure créée, consultez:
-- `server/README.md` - Documentation technique
+- `backend/README.md` - Documentation technique
 - `SETUP_GUIDE.md` - Guide d'installation
 - `API_ARCHITECTURE.md` - Diagrammes des flux
 

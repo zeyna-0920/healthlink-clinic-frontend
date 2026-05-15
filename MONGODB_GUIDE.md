@@ -7,7 +7,7 @@ L'intégration MongoDB pour les médicaments a été mise en place avec succès.
 ## 🔧 Installation et Démarrage
 
 ### 1. Vérifier votre URI MongoDB
-Le fichier `server/.env` contient déjà votre URI MongoDB:
+Le fichier `backend/.env` contient déjà votre URI MongoDB:
 ```
 MONGODB_URI=mongodb+srv://dienebat782_db_user:KGRXyIxZYVm4pEZd@cluster0.lm5jbi4.mongodb.net/healthlink-clinic?retryWrites=true&w=majority
 ```
@@ -16,7 +16,7 @@ MONGODB_URI=mongodb+srv://dienebat782_db_user:KGRXyIxZYVm4pEZd@cluster0.lm5jbi4.
 Exécutez ce script pour peupler la base de données avec toutes les données de test:
 
 ```bash
-cd server
+cd backend
 npm run seed:all
 ```
 
@@ -165,14 +165,14 @@ Pour vérifier que tout fonctionne correctement:
 
 1. **Terminal 1** - Démarrer le serveur:
    ```bash
-   cd server
+   cd backend
    npm run dev
    ```
    Vous devriez voir: `MongoDB Connected`
 
 2. **Terminal 2** - Initialiser la base de données (si nécessaire):
    ```bash
-   cd server
+   cd backend
    npm run seed:all
    ```
 
@@ -212,7 +212,7 @@ Si vous rencontrez des problèmes:
 
 1. **Vérifier la connexion MongoDB**:
    ```bash
-   cd server
+   cd backend
    npm run dev
    ```
    Cherchez le message: `MongoDB Connected`
