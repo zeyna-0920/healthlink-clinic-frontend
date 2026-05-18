@@ -10,7 +10,7 @@
     "install:all": "npm install",
     "dev": "npm run dev -w frontend",
     "dev:backend": "npm run dev -w backend",
-    "build": "npm run build -w frontend",
+    "build": "node node_modules/vite/bin/vite.js build --config frontend/vite.config.ts",
     "start:backend": "npm run start -w backend"
   },
   "devDependencies": {
