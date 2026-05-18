@@ -2,12 +2,19 @@
   "name": "healthlink-clinic",
   "private": true,
   "description": "Racine du monorepo : frontend/ (React) et backend/ (API Express).",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "install:all": "npm install --prefix frontend && npm install --prefix backend",
-    "dev": "npm run dev --prefix frontend",
-    "dev:backend": "npm run dev --prefix backend",
-    "dev:all": "npm run dev:all --prefix frontend",
-    "build": "npm run build --prefix frontend",
-    "start:backend": "npm run start --prefix backend"
+    "install:all": "npm install",
+    "dev": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend",
+    "build": "npm run build -w frontend",
+    "start:backend": "npm run start -w backend"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1",
+    "typescript": "^5.8.3"
   }
 }
