@@ -1,0 +1,19 @@
+[build]
+  # On reste à la racine pour gérer le monorepo et les workspaces NPM
+  base = "."
+  
+  # Commande de build utilisant les workspaces NPM
+  command = "npm run build -w frontend"
+  
+  # Dossier de sortie (relatif à la racine)
+  # Pour TanStack Start/Router, les fichiers clients sont dans frontend/dist/client
+  publish = "frontend/dist/client"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[redirects]]
+  # Redirige toutes les requêtes vers index.html pour le routage côté client (SPA)
+  from = "/*"
+  to = "/index.html"
+  status = 200
