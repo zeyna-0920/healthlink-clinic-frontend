@@ -23,8 +23,10 @@ import {
   Sun,
   Loader2,
   CreditCard,
+  CalendarDays,
 } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import {
   ALL_CONSULTATION_HOURS,
   CONSULTATION_TYPES,
@@ -136,86 +138,148 @@ export function AppointmentBookingForm() {
   };
 
   return (
-    <div className="">
+    <div className="min-h-screen bg-slate-50/50">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-3">
-            Prendre <span className="text-primary">rendez-vous</span> en ligne
+        <div className="text-center mb-16 space-y-4">
+          <Badge className="bg-primary/10 text-primary border-none px-4 py-1.5 rounded-full">Prise de rendez-vous</Badge>
+          <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
+            Prendre <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">rendez-vous</span> en ligne
           </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Connectez-vous, choisissez votre créneau (08h–19h tarif jour, à partir de 20h tarif
             nuit), puis réglez en ligne par Wave ou Orange Money.
           </p>
         </div>
 
         {!loggedIn && (
-          <Card className="mb-6 border-primary/30 bg-primary/5 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3 text-sm">
-              <LogIn className="h-5 w-5 text-primary shrink-0" />
-              <span>Vous devez être connecté pour réserver et payer votre consultation.</span>
+          <Card className="mb-10 group relative overflow-hidden border-none bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white shadow-xl rounded-[2.5rem] transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20">
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl transition-all group-hover:bg-white/20" />
+            <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-8">
+              <div className="flex items-center gap-6">
+                <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                  <LogIn className="h-8 w-8 text-white" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-2xl font-bold">Connexion Requise</h3>
+                  <p className="text-blue-50/90 font-medium">Vous devez être connecté pour réserver et payer votre consultation.</p>
+                </div>
+              </div>
+              <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-bold h-14 px-8 text-lg shadow-xl shadow-black/10">
+                <Link to="/auth">Se connecter / S&apos;inscrire</Link>
+              </Button>
             </div>
-            <Button asChild>
-              <Link to="/auth">Se connecter / S&apos;inscrire</Link>
-            </Button>
           </Card>
         )}
 
         {loggedIn && patient && (
-          <Card className="mb-6 p-4 border-medical/20 bg-medical/5">
-            <p className="text-sm">
-              <span className="font-semibold text-medical">Patient connecté :</span>{" "}
-              {patient.firstName} {patient.lastName} — {patient.phone}
-              <Badge variant="outline" className="ml-2">
+          <Card className="mb-10 group relative overflow-hidden border-none bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white shadow-xl rounded-[2.5rem]">
+            <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+            <div className="relative z-10 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
+                  <CheckCircle2 className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold uppercase tracking-widest text-emerald-50/80">Patient connecté</p>
+                  <p className="text-xl font-extrabold">{patient.firstName} {patient.lastName} — {patient.phone}</p>
+                </div>
+              </div>
+              <Badge className="bg-white/20 backdrop-blur-md border-none text-white px-4 py-1.5 rounded-xl font-bold text-sm">
                 {ageGroup === "child" ? "Tarif enfant" : "Tarif adulte"}
               </Badge>
-            </p>
+            </div>
           </Card>
         )}
 
-        <div className="grid lg:grid-cols-[1fr_1.2fr] gap-6">
-          <Card className="p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <BedDouble className="h-5 w-5 text-success" />
-              <span className="text-sm font-medium">
-                Lits disponibles :{" "}
-                <span className="font-bold text-success">
-                  {AVAILABLE_BEDS} / {TOTAL_BEDS}
-                </span>
-              </span>
-            </div>
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
-              className="rounded-md border"
-            />
-            <div className="mt-4 space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Sun className="h-4 w-4 text-amber-500" />
-                Jour (08h–19h) : {TARIFFS.jour.adult} FCFA adulte
+        <div className="grid lg:grid-cols-[1fr_1.2fr] gap-10">
+          <Card className="p-8 border-none shadow-2xl rounded-[3rem] bg-gradient-to-br from-blue-600 to-indigo-700 text-white relative overflow-hidden group transition-all duration-500 hover:shadow-blue-500/20 hover:-translate-y-1">
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl transition-all group-hover:bg-white/20" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                  <BedDouble className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-blue-100/70">Disponibilité</p>
+                  <p className="text-lg font-bold">
+                    Lits libres :{" "}
+                    <span className="text-white font-black">
+                      {AVAILABLE_BEDS} / {TOTAL_BEDS}
+                    </span>
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Moon className="h-4 w-4 text-medical" />
-                Nuit (à partir de 20h) : {TARIFFS.nuit.adult} FCFA adulte
+
+              <div className="rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl p-4 bg-white/10 backdrop-blur-md">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                  className="rounded-md border-none bg-transparent text-white"
+                />
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Clock className="h-4 w-4 text-primary" />
-                Consultations : 08h – 23h
+
+              <div className="mt-10 space-y-4">
+                <div className="group/item flex items-center gap-4 p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 transition-all hover:bg-white/20">
+                  <div className="h-12 w-12 rounded-xl bg-amber-400 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                    <Sun className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Tarif Journée</p>
+                    <p className="text-xs font-medium text-blue-100/80">{TARIFFS.jour.adult} FCFA • 08h–19h</p>
+                  </div>
+                </div>
+
+                <div className="group/item flex items-center gap-4 p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 transition-all hover:bg-white/20">
+                  <div className="h-12 w-12 rounded-xl bg-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <Moon className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Tarif Nuit</p>
+                    <p className="text-xs font-medium text-blue-100/80">{TARIFFS.nuit.adult} FCFA • Dès 20h</p>
+                  </div>
+                </div>
+
+                <div className="group/item flex items-center gap-4 p-5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 transition-all hover:bg-white/20">
+                  <div className="h-12 w-12 rounded-xl bg-sky-400 flex items-center justify-center shadow-lg shadow-sky-500/20">
+                    <Clock className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Consultations</p>
+                    <p className="text-xs font-medium text-blue-100/80">Ouvert 7j/7 • 08h – 23h</p>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>
-          <Card className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label>Heure du rendez-vous</Label>
+
+          <Card className="p-10 border-none shadow-2xl rounded-[3rem] bg-white relative overflow-hidden group transition-all duration-500 hover:shadow-blue-500/5">
+            <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-blue-500/5 blur-3xl transition-all group-hover:bg-blue-500/10" />
+            
+            <div className="relative z-10 mb-10">
+              <div className="flex items-center gap-4">
+                <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-inner">
+                  <CalendarDays className="h-7 w-7 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black text-slate-900">Détails du RDV</h3>
+                  <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Formulaire de réservation</p>
+                </div>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="relative z-10 space-y-8">
+              <div className="space-y-3">
+                <Label className="text-slate-600 font-bold ml-1 uppercase tracking-widest text-[10px]">Heure du rendez-vous</Label>
                 <Select value={hour} onValueChange={setHour} disabled={!loggedIn}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-14 rounded-2xl border-slate-200 focus:ring-primary shadow-sm text-lg font-medium px-6 bg-slate-50/50">
                     <SelectValue placeholder="Choisir une heure" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-2xl border-slate-100 shadow-2xl p-2">
                     {ALL_CONSULTATION_HOURS.map((h) => (
-                      <SelectItem key={h} value={h}>
+                      <SelectItem key={h} value={h} className="rounded-xl h-12 font-medium">
                         {h} — {getTariffPeriodFromTime(h) === "jour" ? "Tarif jour" : "Tarif nuit"}
                       </SelectItem>
                     ))}
@@ -223,15 +287,15 @@ export function AppointmentBookingForm() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label>Type de consultation</Label>
+              <div className="space-y-3">
+                <Label className="text-slate-600 font-bold ml-1 uppercase tracking-widest text-[10px]">Type de consultation</Label>
                 <Select value={type} onValueChange={setType} disabled={!loggedIn}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-14 rounded-2xl border-slate-200 focus:ring-primary shadow-sm text-lg font-medium px-6 bg-slate-50/50">
                     <SelectValue placeholder="Choisir le type" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="rounded-2xl border-slate-100 shadow-2xl p-2">
                     {CONSULTATION_TYPES.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>
+                      <SelectItem key={t.value} value={t.value} className="rounded-xl h-12 font-medium">
                         {t.label}
                       </SelectItem>
                     ))}
@@ -239,62 +303,78 @@ export function AppointmentBookingForm() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label>Motif de consultation</Label>
+              <div className="space-y-3">
+                <Label className="text-slate-600 font-bold ml-1 uppercase tracking-widest text-[10px]">Motif de consultation</Label>
                 <Input
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  placeholder="Décrivez brièvement votre motif"
+                  placeholder="Ex: Douleurs abdominales, fièvre..."
                   disabled={!loggedIn}
+                  className="h-14 rounded-2xl border-slate-200 focus:ring-primary shadow-sm text-lg font-medium px-6 bg-slate-50/50"
                 />
               </div>
 
               {pricePreview && (
                 <div
-                  className={`rounded-lg border p-4 flex items-center justify-between ${
+                  className={cn(
+                    "rounded-[2rem] border-none p-8 flex items-center justify-between text-white shadow-xl transition-all animate-in zoom-in-95 duration-300",
                     period === "nuit"
-                      ? "border-medical/30 bg-medical/5"
-                      : "border-amber-500/30 bg-amber-500/5"
-                  }`}
+                      ? "bg-gradient-to-r from-indigo-600 to-blue-700 shadow-indigo-500/20"
+                      : "bg-gradient-to-r from-amber-500 to-orange-600 shadow-orange-500/20"
+                  )}
                 >
-                  <div className="flex items-center gap-2">
-                    {period === "nuit" ? (
-                      <Moon className="h-5 w-5 text-medical" />
-                    ) : (
-                      <Sun className="h-5 w-5 text-amber-500" />
-                    )}
-                    <span className="text-sm font-medium">
-                      Tarif {TARIFFS[pricePreview.period].label} (
-                      {ageGroup === "child" ? "enfant" : "adulte"})
-                    </span>
+                  <div className="flex items-center gap-4">
+                    <div className="h-14 w-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                      {period === "nuit" ? (
+                        <Moon className="h-7 w-7 text-white" />
+                      ) : (
+                        <Sun className="h-7 w-7 text-white" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-white/70">Récapitulatif Tarif</p>
+                      <p className="text-lg font-bold">
+                        {TARIFFS[pricePreview.period].label} ({ageGroup === "child" ? "enfant" : "adulte"})
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-xl font-bold text-primary">
-                    {pricePreview.amount.toLocaleString("fr-FR")} FCFA
-                  </span>
+                  <div className="text-right">
+                    <span className="text-4xl font-black">
+                      {pricePreview.amount.toLocaleString("fr-FR")}
+                    </span>
+                    <span className="ml-2 text-sm font-bold opacity-70 text-white">FCFA</span>
+                  </div>
                 </div>
               )}
 
               {hospiBlocked && (
-                <div className="flex items-start gap-2 rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
-                  <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <div>
-                    Clinique pleine — aucun lit disponible. Essayez la téléconsultation ou
-                    contactez-nous pour une urgence.
+                <div className="flex items-start gap-4 rounded-[2rem] bg-rose-50 border border-rose-100 p-6 text-rose-700 animate-in slide-in-from-top-4 duration-300">
+                  <div className="h-10 w-10 rounded-xl bg-rose-100 flex items-center justify-center shrink-0">
+                    <AlertCircle className="h-6 w-6" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-bold">Clinique pleine</p>
+                    <p className="text-sm opacity-90 leading-relaxed">Aucun lit disponible actuellement. Essayez la téléconsultation ou contactez-nous en cas d'urgence.</p>
                   </div>
                 </div>
               )}
 
               {isHospi && !hospiBlocked && (
-                <div className="flex items-start gap-2 rounded-md bg-success/10 border border-success/20 p-3 text-sm text-success">
-                  <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                  <div>{AVAILABLE_BEDS} lit(s) disponible(s). Hospitalisation possible.</div>
+                <div className="flex items-start gap-4 rounded-[2rem] bg-emerald-50 border border-emerald-100 p-6 text-emerald-700 animate-in slide-in-from-top-4 duration-300">
+                  <div className="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="h-6 w-6" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-bold">Disponibilité confirmée</p>
+                    <p className="text-sm opacity-90 leading-relaxed">{AVAILABLE_BEDS} lit(s) libre(s). Vous pouvez procéder à l'hospitalisation.</p>
+                  </div>
                 </div>
               )}
 
               <Button
                 type="submit"
                 size="lg"
-                className="w-full gap-2"
+                className="w-full h-16 rounded-[2rem] text-xl font-bold gap-3 shadow-xl shadow-primary/20 transition-all hover:-translate-y-1 hover:shadow-primary/30"
                 disabled={hospiBlocked || !loggedIn || submitting}
               >
                 {submitting ? (

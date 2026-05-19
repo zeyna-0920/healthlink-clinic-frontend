@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart, Target, Sparkles } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import heroClinic from "@/assets/hero-clinic.jpg";
+import heroAbout from "@/assets/nurse-mariama.jpg";
 import drAblaye from "@/assets/dr-ablaye.jpg";
 import midwifeMommy from "@/assets/midwife-mommy.jpg";
 
@@ -36,15 +36,17 @@ function AboutPage() {
               et accompagnement humain pour garantir un parcours de soins simple, rapide et serein.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-border/40 bg-white/60 backdrop-blur p-6 shadow-sm">
-                <p className="text-4xl font-semibold text-foreground">24/7</p>
-                <p className="mt-2 text-sm text-muted-foreground">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-rose-500/20 hover:-translate-y-1">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
+                <p className="relative z-10 text-4xl font-black tracking-tighter">24/7</p>
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-rose-50/90">
                   Urgences et assistance patients
                 </p>
               </div>
-              <div className="rounded-3xl border border-border/40 bg-white/60 backdrop-blur p-6 shadow-sm">
-                <p className="text-4xl font-semibold text-foreground">15+</p>
-                <p className="mt-2 text-sm text-muted-foreground">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-blue-500 to-indigo-600 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-blue-500/20 hover:-translate-y-1">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
+                <p className="relative z-10 text-4xl font-black tracking-tighter">15+</p>
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-blue-50/90">
                   spécialités médicales disponibles
                 </p>
               </div>
@@ -61,7 +63,7 @@ function AboutPage() {
 
           <div className="overflow-hidden rounded-[2rem] border border-border/40 shadow-2xl">
             <img
-              src={heroClinic}
+              src={heroAbout}
               alt="Clinique moderne"
               className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
             />
@@ -69,35 +71,46 @@ function AboutPage() {
         </div>
 
         <section className="mt-16 grid gap-10 lg:grid-cols-3">
-          <Card className="rounded-[2rem] border border-border/40 bg-white/60 backdrop-blur p-8 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-4">
-              <Target className="h-6 w-6" />
+          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20">
+            <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+            <div className="relative z-10">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md mb-6 shadow-inner">
+                <Target className="h-7 w-7 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold mb-4 tracking-tight">Notre mission</h2>
+              <p className="text-blue-50/90 leading-relaxed text-lg">
+                Faciliter l'accès aux soins par la prise de rendez-vous en ligne, la consultation à
+                distance et la coordination proactive entre patients et équipes médicales.
+              </p>
             </div>
-            <h2 className="text-2xl font-semibold mb-3">Notre mission</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Faciliter l'accès aux soins par la prise de rendez-vous en ligne, la consultation à
-              distance et la coordination proactive entre patients et équipes médicales.
-            </p>
           </Card>
-          <Card className="rounded-[2rem] border border-border/40 bg-white/60 backdrop-blur p-8 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 mb-4">
-              <Sparkles className="h-6 w-6" />
+
+          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-emerald-500 to-teal-700 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/20">
+            <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+            <div className="relative z-10">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md mb-6 shadow-inner">
+                <Sparkles className="h-7 w-7 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold mb-4 tracking-tight">Notre vision</h2>
+              <p className="text-emerald-50/90 leading-relaxed text-lg">
+                Être un modèle de soin moderne au Sénégal, centré sur la qualité, la sécurité et le
+                confort de chaque patient.
+              </p>
             </div>
-            <h2 className="text-2xl font-semibold mb-3">Notre vision</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Être un modèle de soin moderne au Sénégal, centré sur la qualité, la sécurité et le
-              confort de chaque patient.
-            </p>
           </Card>
-          <Card className="rounded-[2rem] border border-border/40 bg-white/60 backdrop-blur p-8 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-500/10 text-red-600 mb-4">
-              <Heart className="h-6 w-6" />
+
+          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-rose-500 to-orange-600 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-rose-500/20">
+            <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+            <div className="relative z-10">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md mb-6 shadow-inner">
+                <Heart className="h-7 w-7 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold mb-4 tracking-tight">Nos valeurs</h2>
+              <p className="text-rose-50/90 leading-relaxed text-lg">
+                Bienveillance, transparence et innovation guident notre accompagnement médical à
+                chaque étape de votre parcours de soins.
+              </p>
             </div>
-            <h2 className="text-2xl font-semibold mb-3">Nos valeurs</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Bienveillance, transparence et innovation guident notre accompagnement médical à
-              chaque étape de votre parcours de soins.
-            </p>
           </Card>
         </section>
 

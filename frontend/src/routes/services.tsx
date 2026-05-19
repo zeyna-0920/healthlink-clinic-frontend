@@ -24,42 +24,48 @@ const services = [
     icon: Stethoscope,
     title: "Consultations spécialisées",
     desc: "Médecins généralistes et spécialistes pour un diagnostic complet et personnalisé.",
-    color: "text-primary",
+    gradient: "from-blue-600 to-indigo-700",
+    shadow: "shadow-blue-500/20",
     badge: "Consultations sur place",
   },
   {
     icon: Video,
     title: "Téléconsultation sécurisée",
     desc: "Consultations vidéo rapides et confidentielles, pour gagner du temps sans vous déplacer.",
-    color: "text-medical",
+    gradient: "from-emerald-500 to-teal-700",
+    shadow: "shadow-emerald-500/20",
     badge: "Disponible 7j/7",
   },
   {
     icon: BedDouble,
     title: "Hospitalisation premium",
     desc: "Chambres modernes, suivi 24h/24 et coordination totale avec nos équipes soignantes.",
-    color: "text-success",
+    gradient: "from-sky-500 to-blue-700",
+    shadow: "shadow-sky-500/20",
     badge: "Lits disponibles en temps réel",
   },
   {
     icon: Syringe,
     title: "Soins infirmiers",
     desc: "Pansements, perfusions et soins post-opératoires réalisés par une équipe dédiée.",
-    color: "text-primary",
+    gradient: "from-purple-500 to-indigo-700",
+    shadow: "shadow-purple-500/20",
     badge: "Soins personnalisés",
   },
   {
     icon: ClipboardList,
     title: "Suivi médical",
     desc: "Dossier patient digital, rappels de rendez-vous et historique de soins centralisés.",
-    color: "text-medical",
+    gradient: "from-teal-500 to-emerald-700",
+    shadow: "shadow-teal-500/20",
     badge: "Piloté par la technologie",
   },
   {
     icon: HeartPulse,
     title: "Urgences 24h/24",
     desc: "Service d'urgence rapide et bien organisé, avec prise en charge prioritaire.",
-    color: "text-destructive",
+    gradient: "from-rose-500 to-red-700",
+    shadow: "shadow-rose-500/20",
     badge: "Intervention immédiate",
   },
 ];
@@ -82,13 +88,19 @@ function ServicesPage() {
               équipe dédiée.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-border/60 bg-white/60 backdrop-blur p-6 shadow-sm">
-                <p className="text-4xl font-semibold text-foreground">6</p>
-                <p className="mt-2 text-sm text-muted-foreground">services phares</p>
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-blue-500/20 hover:-translate-y-1">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
+                <p className="relative z-10 text-4xl font-black tracking-tighter">6</p>
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
+                  services phares
+                </p>
               </div>
-              <div className="rounded-3xl border border-border/60 bg-white/60 backdrop-blur p-6 shadow-sm">
-                <p className="text-4xl font-semibold text-foreground">24/7</p>
-                <p className="mt-2 text-sm text-muted-foreground">urgence et assistance</p>
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-rose-500 to-red-600 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-rose-500/20 hover:-translate-y-1">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
+                <p className="relative z-10 text-4xl font-black tracking-tighter">24/7</p>
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
+                  urgence et assistance
+                </p>
               </div>
             </div>
           </div>
@@ -100,51 +112,79 @@ function ServicesPage() {
               className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
-            <div className="absolute bottom-6 left-6 rounded-3xl border border-border/40 bg-white/80 p-5 shadow-lg backdrop-blur">
-              <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
-                Nos services
-              </p>
-              <p className="mt-2 text-xl font-semibold">Téléconsultation & suivi digital</p>
+            <div className="absolute bottom-8 left-8 right-8 rounded-[2rem] border-none bg-slate-900/60 p-6 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center shadow-inner">
+                  <Video className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.2em] text-white/90 font-bold">
+                    Nos services
+                  </p>
+                  <p className="text-xl font-bold text-white">Téléconsultation & suivi digital</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <section className="mt-16 grid gap-6 md:grid-cols-2">
+        <section className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
             <Card
               key={service.title}
-              className="overflow-hidden rounded-[1.75rem] border border-border/40 bg-white/60 backdrop-blur p-6 transition hover:-translate-y-1 hover:shadow-xl shadow-sm"
+              className={`group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br ${service.gradient} p-8 text-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:${service.shadow} hover:-translate-y-2`}
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted text-foreground shadow-sm mb-5">
-                <service.icon className={`h-7 w-7 ${service.color}`} />
+              <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+
+              <div className="relative z-10 space-y-5">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md shadow-inner transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+                  <service.icon className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold mb-2 tracking-tight">{service.title}</h2>
+                  <p className="text-white leading-relaxed font-medium line-clamp-2 group-hover:line-clamp-none transition-all">
+                    {service.desc}
+                  </p>
+                </div>
+                <div className="pt-2">
+                  <span className="inline-flex rounded-xl bg-white/20 backdrop-blur-md px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-sm">
+                    {service.badge}
+                  </span>
+                </div>
               </div>
-              <h2 className="text-2xl font-semibold mb-3 text-foreground">{service.title}</h2>
-              <p className="text-muted-foreground leading-relaxed mb-4">{service.desc}</p>
-              <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                {service.badge}
-              </span>
             </Card>
           ))}
         </section>
 
-        <section className="mt-16 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] items-center">
-          <div className="space-y-6">
-            <p className="text-sm uppercase tracking-[0.35em] text-muted-foreground font-semibold">
-              Pourquoi nous choisir
-            </p>
-            <h2 className="text-3xl font-bold">Un accompagnement de qualité à chaque étape</h2>
-            <p className="text-muted-foreground leading-relaxed">
-              Nous nous engageons à fournir un suivi professionnel, des infrastructures modernes et
-              une organisation fluide pour réduire l’attente et améliorer l’expérience patient.
-            </p>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-border/40 bg-white/60 backdrop-blur p-6 shadow-sm">
-                <p className="text-2xl font-semibold text-foreground">98%</p>
-                <p className="mt-2 text-sm text-muted-foreground">taux de satisfaction patient</p>
+        <section className="mt-24 grid gap-16 lg:grid-cols-[0.95fr_1.05fr] items-center">
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <p className="inline-flex rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
+                Pourquoi nous choisir
+              </p>
+              <h2 className="text-4xl font-bold tracking-tight">
+                Un accompagnement de qualité à chaque étape
+              </h2>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                Nous nous engageons à fournir un suivi professionnel, des infrastructures modernes
+                et une organisation fluide pour réduire l’attente et améliorer l’expérience patient.
+              </p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-emerald-500 to-teal-700 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-emerald-500/20 hover:-translate-y-1">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
+                <p className="relative z-10 text-4xl font-black tracking-tighter">98%</p>
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
+                  taux de satisfaction patient
+                </p>
               </div>
-              <div className="rounded-3xl border border-border/40 bg-white/60 backdrop-blur p-6 shadow-sm">
-                <p className="text-2xl font-semibold text-foreground">15+</p>
-                <p className="mt-2 text-sm text-muted-foreground">spécialités médicales</p>
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-indigo-500 to-blue-700 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-indigo-500/20 hover:-translate-y-1">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
+                <p className="relative z-10 text-4xl font-black tracking-tighter">15+</p>
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
+                  spécialités médicales
+                </p>
               </div>
             </div>
             <div className="flex gap-3 flex-wrap">

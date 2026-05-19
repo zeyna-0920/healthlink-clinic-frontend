@@ -44,12 +44,42 @@ const OCCUPIED = 18;
 const AVAILABLE = TOTAL_BEDS - OCCUPIED;
 
 const SPECIALTIES = [
-  { name: "Médecine Générale", icon: Stethoscope, color: "text-blue-500", bg: "bg-blue-50" },
-  { name: "Pédiatrie", icon: Baby, color: "text-pink-500", bg: "bg-pink-50" },
-  { name: "Cardiologie", icon: HeartPulse, color: "text-red-500", bg: "bg-red-50" },
-  { name: "Laboratoire", icon: Microscope, color: "text-emerald-500", bg: "bg-emerald-50" },
-  { name: "Urgences", icon: Activity, color: "text-orange-500", bg: "bg-orange-50" },
-  { name: "Maternité", icon: HeartPulse, color: "text-purple-500", bg: "bg-purple-50" },
+  {
+    name: "Médecine Générale",
+    icon: Stethoscope,
+    gradient: "from-blue-600 to-indigo-700",
+    shadow: "shadow-blue-500/20",
+  },
+  {
+    name: "Pédiatrie",
+    icon: Baby,
+    gradient: "from-pink-500 to-rose-600",
+    shadow: "shadow-rose-500/20",
+  },
+  {
+    name: "Cardiologie",
+    icon: HeartPulse,
+    gradient: "from-red-500 to-orange-600",
+    shadow: "shadow-orange-500/20",
+  },
+  {
+    name: "Laboratoire",
+    icon: Microscope,
+    gradient: "from-emerald-500 to-teal-700",
+    shadow: "shadow-emerald-500/20",
+  },
+  {
+    name: "Urgences",
+    icon: Activity,
+    gradient: "from-orange-500 to-amber-600",
+    shadow: "shadow-amber-500/20",
+  },
+  {
+    name: "Maternité",
+    icon: HeartPulse,
+    gradient: "from-purple-500 to-indigo-700",
+    shadow: "shadow-indigo-500/20",
+  },
 ];
 
 const TESTIMONIALS = [
@@ -68,7 +98,7 @@ const TESTIMONIALS = [
     rating: 5,
   },
   {
-    name: "Fatou Kane",
+    name: "Mme Fall",
     role: "Patiente",
     content:
       "Le suivi digital est excellent. On se sent vraiment accompagné même après la consultation.",
@@ -195,77 +225,71 @@ function HomePage() {
       </section>
 
       {/* QUICK ACTIONS SECTION */}
-      <section className="relative py-20 bg-white/40 backdrop-blur-sm border-y border-border/40">
+      <section className="relative py-24 bg-slate-50/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-3">
-            <Card className="relative overflow-hidden group p-8 rounded-[2rem] border-none shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Calendar className="h-32 w-32 text-primary" />
-              </div>
-              <div className="relative space-y-4">
-                <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-                  <Calendar className="h-7 w-7 text-primary" />
+            <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20">
+              <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+              <div className="relative z-10 space-y-5">
+                <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                  <Calendar className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold">Rendez-vous Facile</h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <h3 className="text-2xl font-bold tracking-tight">Rendez-vous Facile</h3>
+                <p className="text-blue-50/90 leading-relaxed text-lg">
                   Réservez votre consultation en quelques secondes. Choisissez votre médecin et
                   votre créneau.
                 </p>
                 <Button
-                  variant="link"
+                  variant="secondary"
                   asChild
-                  className="p-0 text-primary font-bold group-hover:gap-3 transition-all"
+                  className="bg-white text-blue-600 hover:bg-blue-50 rounded-xl font-bold px-6"
                 >
-                  <Link to="/rendez-vous">
+                  <Link to="/rendez-vous" className="flex items-center gap-2">
                     Prendre RDV <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
               </div>
             </Card>
 
-            <Card className="relative overflow-hidden group p-8 rounded-[2rem] border-none shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Video className="h-32 w-32 text-medical" />
-              </div>
-              <div className="relative space-y-4">
-                <div className="h-14 w-14 rounded-2xl bg-medical/10 flex items-center justify-center">
-                  <Video className="h-7 w-7 text-medical" />
+            <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-medical to-teal-700 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-medical/20">
+              <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+              <div className="relative z-10 space-y-5">
+                <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                  <Video className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold">Téléconsultation</h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <h3 className="text-2xl font-bold tracking-tight">Téléconsultation</h3>
+                <p className="text-emerald-50/90 leading-relaxed text-lg">
                   Consultez depuis votre domicile. Simple, sécurisé et rapide pour vos suivis
                   médicaux.
                 </p>
                 <Button
-                  variant="link"
+                  variant="secondary"
                   asChild
-                  className="p-0 text-medical font-bold group-hover:gap-3 transition-all"
+                  className="bg-white text-medical hover:bg-emerald-50 rounded-xl font-bold px-6"
                 >
-                  <Link to="/services">
+                  <Link to="/services" className="flex items-center gap-2">
                     En savoir plus <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
               </div>
             </Card>
 
-            <Card className="relative overflow-hidden group p-8 rounded-[2rem] border-none shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                <ClipboardList className="h-32 w-32 text-success" />
-              </div>
-              <div className="relative space-y-4">
-                <div className="h-14 w-14 rounded-2xl bg-success/10 flex items-center justify-center">
-                  <ClipboardList className="h-7 w-7 text-success" />
+            <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-success to-emerald-800 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-success/20">
+              <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+              <div className="relative z-10 space-y-5">
+                <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+                  <ClipboardList className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold">Tarifs Transparents</h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <h3 className="text-2xl font-bold tracking-tight">Tarifs Transparents</h3>
+                <p className="text-emerald-50/90 leading-relaxed text-lg">
                   Des tarifs fixes et accessibles pour tous. Enfant : 500 FCFA · Adulte : 1000 FCFA.
                 </p>
                 <Button
-                  variant="link"
+                  variant="secondary"
                   asChild
-                  className="p-0 text-success font-bold group-hover:gap-3 transition-all"
+                  className="bg-white text-success hover:bg-emerald-50 rounded-xl font-bold px-6"
                 >
-                  <Link to="/tarifs">
+                  <Link to="/tarifs" className="flex items-center gap-2">
                     Voir la liste <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
@@ -287,21 +311,28 @@ function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-8">
             {SPECIALTIES.map((spec) => (
               <div
                 key={spec.name}
-                className="group p-8 rounded-3xl border border-border/40 bg-white/60 backdrop-blur hover:bg-white transition-all hover:shadow-xl hover:-translate-y-1"
+                className={`group relative p-8 rounded-[2.5rem] border-none bg-gradient-to-br ${spec.gradient} text-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:${spec.shadow} hover:-translate-y-2`}
               >
-                <div
-                  className={`h-16 w-16 rounded-2xl ${spec.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}
-                >
-                  <spec.icon className={`h-8 w-8 ${spec.color}`} />
+                <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+                
+                <div className="relative z-10">
+                  <div
+                    className="h-20 w-20 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 shadow-inner"
+                  >
+                    <spec.icon className="h-10 w-10 text-white" />
+                  </div>
+                  <h3 className="text-xl font-extrabold mb-3 tracking-tight">{spec.name}</h3>
+                  <p className="text-white/80 leading-relaxed font-medium">
+                    Prise en charge spécialisée avec nos experts en {spec.name.toLowerCase()}.
+                  </p>
+                  <div className="mt-6 flex items-center text-white font-bold text-sm opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                    En savoir plus <ArrowRight className="h-4 w-4 ml-2" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{spec.name}</h3>
-                <p className="text-muted-foreground text-sm">
-                  Équipe de spécialistes dédiés et équipements modernes.
-                </p>
               </div>
             ))}
           </div>
@@ -309,35 +340,50 @@ function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24">
+      <section className="py-24 bg-slate-50/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Ce que disent nos patients</h2>
-            <p className="text-muted-foreground">
+          <div className="text-center mb-16 space-y-4">
+            <Badge className="bg-primary/10 text-primary border-none px-4 py-1.5 rounded-full">Témoignages</Badge>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">Ce que disent nos patients</h2>
+            <p className="text-xl text-muted-foreground max-w-xl mx-auto">
               La satisfaction de nos patients est notre plus belle récompense.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-10">
             {TESTIMONIALS.map((t, i) => (
               <Card
                 key={i}
-                className="p-8 rounded-[2rem] border-none shadow-lg bg-white/60 backdrop-blur relative"
+                className={`group relative p-10 rounded-[3rem] border-none text-white shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${
+                  i === 0 ? "bg-gradient-to-br from-blue-600 to-indigo-700 shadow-blue-500/20" : 
+                  i === 1 ? "bg-gradient-to-br from-emerald-600 to-teal-800 shadow-emerald-500/20" : 
+                  "bg-gradient-to-br from-purple-600 to-indigo-800 shadow-purple-500/20"
+                }`}
               >
-                <Quote className="absolute top-6 right-8 h-12 w-12 text-primary/5" />
-                <div className="flex gap-1 mb-6">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="text-lg italic mb-8 leading-relaxed">"{t.content}"</p>
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">
-                    {t.name[0]}
+                <div className="absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/5 blur-3xl transition-all group-hover:bg-white/10" />
+                
+                <Quote className="absolute top-10 right-10 h-12 w-12 text-white opacity-20 group-hover:scale-110 transition-transform" />
+                
+                <div className="relative z-10">
+                  <div className="flex gap-1 mb-8">
+                    {[...Array(5)].map((_, starIdx) => (
+                      <Star
+                        key={starIdx}
+                        className={`h-5 w-5 ${starIdx < t.rating ? "fill-amber-400 text-amber-400" : "text-white/20"}`}
+                      />
+                    ))}
                   </div>
-                  <div>
-                    <p className="font-bold">{t.name}</p>
-                    <p className="text-sm text-muted-foreground">{t.role}</p>
+
+                  <p className="text-xl italic mb-10 leading-relaxed text-white/90 font-medium">"{t.content}"</p>
+                  
+                  <div className="flex items-center gap-5 border-t border-white/10 pt-8">
+                    <div className="h-16 w-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center font-bold text-2xl shadow-inner">
+                      {t.name[0]}
+                    </div>
+                    <div>
+                      <p className="font-extrabold text-white text-xl">{t.name}</p>
+                      <p className="font-bold text-sm uppercase tracking-widest text-white/70">{t.role}</p>
+                    </div>
                   </div>
                 </div>
               </Card>
@@ -347,7 +393,7 @@ function HomePage() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="px-4 sm:px-8 pb-24">
+      <section className="px-4 sm:px-8 pb-24 pt-12">
         <div className="mx-auto max-w-7xl rounded-[3rem] bg-[image:var(--gradient-hero)] p-12 sm:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-primary/30">
           <Stethoscope className="absolute -top-12 -right-12 h-64 w-64 opacity-10 rotate-12" />
           <HeartPulse className="absolute -bottom-12 -left-12 h-64 w-64 opacity-10 -rotate-12" />
@@ -365,7 +411,7 @@ function HomePage() {
                 asChild
                 size="lg"
                 variant="secondary"
-                className="h-16 px-10 rounded-2xl text-lg font-bold shadow-xl"
+                className="h-16 px-10 rounded-2xl text-lg font-bold shadow-xl bg-white text-primary hover:bg-slate-50"
               >
                 <Link to="/rendez-vous">Prendre RDV Maintenant</Link>
               </Button>

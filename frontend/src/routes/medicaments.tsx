@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search, Loader2, AlertCircle, PackageSearch, Pill } from "lucide-react";
+import { Search, Loader2, AlertCircle, PackageSearch, Pill, CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,63 +66,46 @@ const CATEGORIES: { value: Categorie | "tous"; label: string }[] = [
 ];
 
 const BADGE_STYLES: Record<Categorie, string> = {
-  fievre: "bg-orange-100 text-orange-700 hover:bg-orange-100",
-  douleur: "bg-purple-100 text-purple-700 hover:bg-purple-100",
-  infection: "bg-emerald-100 text-emerald-700 hover:bg-emerald-100",
-  coeur: "bg-rose-100 text-rose-700 hover:bg-rose-100",
-  diarrhee: "bg-amber-100 text-amber-700 hover:bg-amber-100",
+  fievre: "bg-orange-500/20 text-orange-700 border-none",
+  douleur: "bg-purple-500/20 text-purple-700 border-none",
+  infection: "bg-emerald-500/20 text-emerald-700 border-none",
+  coeur: "bg-rose-500/20 text-rose-700 border-none",
+  diarrhee: "bg-amber-500/20 text-amber-700 border-none",
 };
 
 // Thèmes de couleur par catégorie pour habiller la carte entière
 const CARD_THEME: Record<
   Categorie,
   {
-    ring: string;
-    imgBg: string;
-    title: string;
-    accentBar: string;
-    button: string;
+    gradient: string;
+    shadow: string;
+    iconBg: string;
   }
 > = {
   fievre: {
-    ring: "hover:border-green-300",
-    imgBg: "bg-gradient-to-br from-green-50 to-green-100/60",
-    title: "text-green-900",
-    accentBar: "bg-gradient-to-r from-green-400 to-green-500",
-    button:
-      "border-green-200 text-green-700 hover:bg-green-500 hover:text-white hover:border-green-500",
+    gradient: "from-orange-500 to-amber-600",
+    shadow: "shadow-orange-500/20",
+    iconBg: "bg-orange-100",
   },
   douleur: {
-    ring: "hover:border-green-300",
-    imgBg: "bg-gradient-to-br from-green-50 to-green-100/60",
-    title: "text-green-900",
-    accentBar: "bg-gradient-to-r from-green-400 to-green-500",
-    button:
-      "border-green-200 text-green-700 hover:bg-green-500 hover:text-white hover:border-green-500",
+    gradient: "from-purple-500 to-indigo-700",
+    shadow: "shadow-purple-500/20",
+    iconBg: "bg-purple-100",
   },
   infection: {
-    ring: "hover:border-green-300",
-    imgBg: "bg-gradient-to-br from-green-50 to-green-100/60",
-    title: "text-green-900",
-    accentBar: "bg-gradient-to-r from-green-400 to-green-500",
-    button:
-      "border-green-200 text-green-700 hover:bg-green-500 hover:text-white hover:border-green-500",
+    gradient: "from-emerald-500 to-teal-700",
+    shadow: "shadow-emerald-500/20",
+    iconBg: "bg-emerald-100",
   },
   coeur: {
-    ring: "hover:border-green-300",
-    imgBg: "bg-gradient-to-br from-green-50 to-green-100/60",
-    title: "text-green-900",
-    accentBar: "bg-gradient-to-r from-green-400 to-green-500",
-    button:
-      "border-green-200 text-green-700 hover:bg-green-500 hover:text-white hover:border-green-500",
+    gradient: "from-rose-500 to-red-700",
+    shadow: "shadow-rose-500/20",
+    iconBg: "bg-rose-100",
   },
   diarrhee: {
-    ring: "hover:border-green-300",
-    imgBg: "bg-gradient-to-br from-green-50 to-green-100/60",
-    title: "text-green-900",
-    accentBar: "bg-gradient-to-r from-green-400 to-green-500",
-    button:
-      "border-green-200 text-green-700 hover:bg-green-500 hover:text-white hover:border-green-500",
+    gradient: "from-amber-500 to-orange-600",
+    shadow: "shadow-amber-500/20",
+    iconBg: "bg-amber-100",
   },
 };
 
@@ -180,18 +164,19 @@ function MedicamentsPage() {
   }, [meds, search, activeCat]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-50/50">
       {/* Hero */}
-      <section className="border-b border-border/40">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 text-sm text-primary font-medium mb-3">
-            <Pill className="h-4 w-4" />
-            Guide pratique
-          </div>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold text-foreground tracking-tight">
-            Guide des médicaments
+      <section className="relative overflow-hidden bg-white border-b border-slate-100">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,oklch(0.5_0.16_245_/_0.05),transparent_50%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <Badge variant="secondary" className="px-4 py-1.5 rounded-full bg-primary/10 text-primary border-none text-sm font-medium mb-6">
+            <Pill className="mr-2 h-4 w-4" />
+            Guide Pratique & Pharmaceutique
+          </Badge>
+          <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-tight">
+            Guide des <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">médicaments</span>
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+          <p className="mt-6 max-w-2xl text-xl text-muted-foreground leading-relaxed">
             Recherchez un médicament et filtrez par catégorie pour obtenir ses informations
             essentielles. Ce guide est informatif et ne remplace pas un avis médical.
           </p>
@@ -199,31 +184,34 @@ function MedicamentsPage() {
       </section>
 
       {/* Contenu */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {/* Barre de recherche + filtres */}
-        <div className="flex flex-col gap-4 mb-8">
-          <div className="relative max-w-xl">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="flex flex-col gap-8 mb-12">
+          <div className="relative max-w-2xl">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             <Input
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher un médicament..."
-              className="pl-10 h-11 bg-white/60 backdrop-blur border-border/60"
+              placeholder="Rechercher un médicament (ex: Paracétamol)..."
+              className="pl-14 h-16 rounded-[2rem] bg-white shadow-xl shadow-slate-200/50 border-none text-lg focus-visible:ring-primary transition-all"
               aria-label="Rechercher un médicament"
             />
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {CATEGORIES.map((cat) => {
               const active = activeCat === cat.value;
               return (
                 <Button
                   key={cat.value}
-                  size="sm"
+                  size="lg"
                   variant={active ? "default" : "outline"}
                   onClick={() => setActiveCat(cat.value)}
-                  className="rounded-full shadow-sm"
+                  className={cn(
+                    "rounded-2xl px-8 h-12 font-bold transition-all",
+                    active ? "shadow-lg shadow-primary/20" : "bg-white/50 backdrop-blur border-slate-200 hover:bg-white"
+                  )}
                 >
                   {cat.label}
                 </Button>
@@ -234,99 +222,113 @@ function MedicamentsPage() {
 
         {/* États */}
         {loading && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3 text-muted-foreground">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p>Chargement des médicaments...</p>
+          <div className="flex flex-col items-center justify-center py-32 gap-4 text-muted-foreground">
+            <div className="h-16 w-16 rounded-3xl bg-primary/10 flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+            <p className="font-bold text-lg">Chargement de la pharmacie...</p>
           </div>
         )}
 
         {error && !loading && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <AlertCircle className="h-10 w-10 text-destructive" />
-            <p className="text-foreground font-medium">Impossible de charger les médicaments</p>
-            <p className="text-sm text-muted-foreground">{error}</p>
+          <div className="flex flex-col items-center justify-center py-32 gap-4 text-center">
+            <div className="h-20 w-20 rounded-3xl bg-rose-50 flex items-center justify-center">
+              <AlertCircle className="h-10 w-10 text-rose-500" />
+            </div>
+            <div>
+              <p className="text-slate-900 font-black text-2xl">Oups ! Une erreur est survenue</p>
+              <p className="text-slate-500 mt-2 font-medium">{error}</p>
+            </div>
           </div>
         )}
 
         {!loading && !error && filtered.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
-            <PackageSearch className="h-10 w-10 text-muted-foreground" />
-            <p className="text-foreground font-medium">Aucun médicament trouvé</p>
-            <p className="text-sm text-muted-foreground">
-              Essayez un autre mot-clé ou changez de catégorie.
-            </p>
+          <div className="flex flex-col items-center justify-center py-32 gap-4 text-center">
+            <div className="h-20 w-20 rounded-3xl bg-slate-100 flex items-center justify-center">
+              <PackageSearch className="h-10 w-10 text-slate-400" />
+            </div>
+            <div>
+              <p className="text-slate-900 font-black text-2xl">Aucun médicament trouvé</p>
+              <p className="text-slate-500 mt-2 font-medium">
+                Essayez un autre mot-clé ou changez de catégorie.
+              </p>
+            </div>
           </div>
         )}
 
         {/* Grille */}
         {!loading && !error && filtered.length > 0 && (
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 transition-all duration-300">
+          <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((m) => {
               const theme = CARD_THEME[m.categorie];
               return (
                 <Card
                   key={m.id}
-                  className={`group relative overflow-hidden p-0 border-2 border-border/60 ${theme.ring} shadow-[var(--shadow-soft)] hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 bg-white/60 backdrop-blur`}
+                  className="group relative overflow-hidden rounded-[2.5rem] border-none bg-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
                 >
-                  <div className={`absolute top-0 left-0 right-0 h-1.5 ${theme.accentBar}`} />
-                  <div
-                    className={`aspect-[16/10] overflow-hidden ${theme.imgBg} flex items-center justify-center p-5`}
-                  >
+                  <div className="aspect-[4/3] overflow-hidden relative p-8 bg-slate-50 group-hover:bg-white transition-colors duration-500">
                     <img
                       src={IMG_MAP[m.image]}
                       alt={m.nom}
                       loading="lazy"
                       width={800}
                       height={512}
-                      className="h-full w-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-500"
+                      className="h-full w-full object-contain drop-shadow-2xl group-hover:scale-110 transition-transform duration-700"
                     />
-                  </div>
-                  <div className="p-5 flex flex-col gap-3">
-                    <Badge className={`w-fit border-0 ${BADGE_STYLES[m.categorie]}`}>
+                    <div className={`absolute top-6 right-6 px-4 py-1.5 rounded-xl bg-white shadow-lg text-[10px] font-black uppercase tracking-widest ${BADGE_STYLES[m.categorie]}`}>
                       {CAT_LABEL[m.categorie]}
-                    </Badge>
-                    <h3
-                      className={`font-display font-bold text-lg ${theme.title} leading-tight tracking-tight`}
-                    >
-                      {m.nom}
-                    </h3>
-                    <p className="text-sm text-muted-foreground/90 leading-relaxed line-clamp-3">
-                      {m.description}
-                    </p>
+                    </div>
+                  </div>
+
+                  <div className="p-8 space-y-6">
+                    <div className="space-y-2">
+                      <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight">
+                        {m.nom}
+                      </h3>
+                      <p className="text-sm text-slate-500 leading-relaxed font-medium line-clamp-2 group-hover:line-clamp-none transition-all">
+                        {m.description}
+                      </p>
+                    </div>
 
                     {/* Prix */}
-                    <div className="flex flex-col gap-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-green-700">
-                          Prix en clinique:
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center justify-between p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 transition-colors group-hover:bg-emerald-50">
+                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+                          Prix Clinique
                         </span>
-                        <span className="font-bold text-green-800">
-                          {m.prixClinic.toLocaleString()} FCFA
+                        <span className="text-lg font-black text-emerald-700">
+                          {m.prixClinic.toLocaleString()} <span className="text-[10px]">FCFA</span>
                         </span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-green-700">
-                          Prix en pharmacie:
+                      <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 transition-colors group-hover:bg-white">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                          Pharmacie ext.
                         </span>
-                        <span className="font-bold text-green-800">
-                          {m.prixPharmacie.toLocaleString()} FCFA
+                        <span className="text-lg font-bold text-slate-600">
+                          {m.prixPharmacie.toLocaleString()} <span className="text-[10px]">FCFA</span>
                         </span>
                       </div>
                     </div>
 
                     {/* Ordonnance */}
-                    <div className="flex items-center gap-2">
-                      <Badge variant={m.ordonnance ? "destructive" : "default"} className="text-xs">
+                    <div className="flex items-center gap-3">
+                      <div className={cn(
+                        "flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm",
+                        m.ordonnance ? "bg-rose-50 text-rose-600 border border-rose-100" : "bg-blue-50 text-blue-600 border border-blue-100"
+                      )}>
+                        {m.ordonnance ? <AlertCircle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
                         {m.ordonnance ? "Sur ordonnance" : "Sans ordonnance"}
-                      </Badge>
+                      </div>
                     </div>
 
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className={`mt-2 w-full font-medium transition-colors ${theme.button}`}
+                      size="lg"
+                      className={cn(
+                        "w-full h-14 rounded-2xl font-black text-lg shadow-xl transition-all duration-300",
+                        `bg-gradient-to-r ${theme.gradient} hover:opacity-90 hover:${theme.shadow}`
+                      )}
                     >
-                      🛒 Acheter
+                      🛒 Acheter en ligne
                     </Button>
                   </div>
                 </Card>

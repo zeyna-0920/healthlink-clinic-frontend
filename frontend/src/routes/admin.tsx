@@ -361,12 +361,21 @@ function AdminPage() {
                         <TableCell>
                           <div className="flex gap-2">
                             {appointment.status === "scheduled" && (
-                              <Button
-                                size="sm"
-                                onClick={() => handleStatusChange(appointment._id, "confirmed")}
-                              >
-                                Confirmer
-                              </Button>
+                              <>
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleStatusChange(appointment._id, "confirmed")}
+                                >
+                                  Confirmer
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="destructive"
+                                  onClick={() => handleStatusChange(appointment._id, "cancelled")}
+                                >
+                                  Refuser
+                                </Button>
+                              </>
                             )}
                             {appointment.status === "confirmed" && (
                               <Button

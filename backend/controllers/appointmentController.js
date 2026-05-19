@@ -1,7 +1,7 @@
 import Appointment from '../models/Appointment.js';
 import Patient from '../models/Patient.js';
 import Notification from '../models/Notification.js';
-import { sendAdminAppointmentNotification } from '../utils/emailService.js';
+import { sendAdminAppointmentNotification, sendPatientAppointmentConfirmation, sendPatientAppointmentRejection } from '../utils/emailService.js';
 
 // Créer un rendez-vous
 export const createAppointment = async (req, res) => {
@@ -113,14 +113,39 @@ export const updateAppointment = async (req, res) => {
     const { appointmentId } = req.params;
     const updateData = req.body;
 
+    const oldAppointment = await Appointment.findById(appointmentId);
+    if (!oldAppointment) {
+      return res.status(404).json({ message: 'Rendez-vous non trouvé' });
+    }
+
     const appointment = await Appointment.findByIdAndUpdate(
       appointmentId,
       updateData,
       { new: true, runValidators: true }
-    );
+    ).populate('patientId');
 
-    if (!appointment) {
-      return res.status(404).json({ message: 'Rendez-vous non trouvé' });
+    // Si le statut passe à 'confirmed', on envoie l'email de confirmation
+    if (oldAppointment.status !== 'confirmed' && appointment.status === 'confirmed') {
+      await Notification.create({
+        patientId: appointment.patientId._id,
+        type: 'appointment_confirmed',
+        title: 'Rendez-vous confirmé',
+        message: 'Votre rendez-vous a été confirmé au sein de notre clinic Moulaye Dabakh',
+        relatedId: appointmentId,
+      });
+      await sendPatientAppointmentConfirmation(appointment.patientId, appointment);
+    }
+
+    // Si le statut passe à 'cancelled', on envoie l'email de refus
+    if (oldAppointment.status !== 'cancelled' && appointment.status === 'cancelled') {
+      await Notification.create({
+        patientId: appointment.patientId._id,
+        type: 'appointment_cancelled',
+        title: 'Rendez-vous non confirmé',
+        message: 'Votre rendez-vous n\'a pas pu être confirmé',
+        relatedId: appointmentId,
+      });
+      await sendPatientAppointmentRejection(appointment.patientId, appointment);
     }
 
     res.status(200).json({
@@ -145,24 +170,27 @@ export const confirmAppointment = async (req, res) => {
       appointmentId,
       { status: 'confirmed' },
       { new: true }
-    );
+    ).populate('patientId');
 
     if (!appointment) {
       return res.status(404).json({ message: 'Rendez-vous non trouvé' });
     }
 
-    // Notification
+    // Notification interne pour le patient
     await Notification.create({
-      patientId: appointment.patientId,
+      patientId: appointment.patientId._id,
       type: 'appointment_confirmed',
       title: 'Rendez-vous confirmé',
-      message: 'Votre rendez-vous a été confirmé',
+      message: 'Votre rendez-vous a été confirmé au sein de notre clinic Moulaye Dabakh',
       relatedId: appointmentId,
     });
 
+    // Envoi de l'email de confirmation au patient
+    await sendPatientAppointmentConfirmation(appointment.patientId, appointment);
+
     res.status(200).json({
       success: true,
-      message: 'Rendez-vous confirmé',
+      message: 'Rendez-vous confirmé et email envoyé au patient',
       appointment,
     });
   } catch (error) {
@@ -180,17 +208,29 @@ export const cancelAppointment = async (req, res) => {
 
     const appointment = await Appointment.findByIdAndUpdate(
       appointmentId,
-      { status: 'completed' },
+      { status: 'cancelled' },
       { new: true }
-    );
+    ).populate('patientId');
 
     if (!appointment) {
       return res.status(404).json({ message: 'Rendez-vous non trouvé' });
     }
 
+    // Notification interne
+    await Notification.create({
+      patientId: appointment.patientId._id,
+      type: 'appointment_cancelled',
+      title: 'Rendez-vous non confirmé',
+      message: 'Votre rendez-vous n\'a pas pu être confirmé',
+      relatedId: appointmentId,
+    });
+
+    // Email de refus
+    await sendPatientAppointmentRejection(appointment.patientId, appointment);
+
     res.status(200).json({
       success: true,
-      message: 'Rendez-vous complété',
+      message: 'Rendez-vous annulé et patient notifié',
       appointment,
     });
   } catch (error) {

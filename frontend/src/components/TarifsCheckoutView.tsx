@@ -82,104 +82,125 @@ export function TarifsCheckoutView({
 
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 space-y-10">
         {isCheckout && pending && !paymentDone && (
-          <Card className="overflow-hidden border-2 border-primary/20 shadow-lg">
-            <div className="bg-[image:var(--gradient-hero)] px-6 py-4 text-primary-foreground">
-              <h2 className="text-xl font-bold flex items-center gap-2">
-                <Stethoscope className="h-5 w-5" />
+          <Card className="overflow-hidden border-none shadow-2xl rounded-[2.5rem] bg-white">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-6 text-white relative overflow-hidden">
+              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/10 blur-2xl" />
+              <h2 className="text-2xl font-bold flex items-center gap-3 relative z-10">
+                <Stethoscope className="h-6 w-6" />
                 Votre rendez-vous à régler
               </h2>
             </div>
-            <div className="p-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm border-b">
-              <div>
-                <p className="text-muted-foreground mb-1">Patient</p>
-                <p className="font-semibold">{pending.patientName}</p>
-              </div>
-              <div>
-                <p className="text-muted-foreground mb-1 flex items-center gap-1">
-                  <Calendar className="h-3.5 w-3.5" /> Date
+            <div className="p-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-sm border-b border-slate-100">
+              <div className="space-y-1">
+                <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                  Patient
                 </p>
-                <p className="font-semibold">{pending.appointmentDate}</p>
+                <p className="text-lg font-bold text-slate-900">{pending.patientName}</p>
               </div>
-              <div>
-                <p className="text-muted-foreground mb-1 flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" /> Heure
+              <div className="space-y-1">
+                <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1">
+                  <Calendar className="h-3 w-3" /> Date
                 </p>
-                <p className="font-semibold">{pending.appointmentTime}</p>
+                <p className="text-lg font-bold text-slate-900">{pending.appointmentDate}</p>
               </div>
-              <div>
-                <p className="text-muted-foreground mb-1">Montant</p>
-                <p className="text-2xl font-bold text-primary">
-                  {pending.amount.toLocaleString("fr-FR")} FCFA
+              <div className="space-y-1">
+                <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px] flex items-center gap-1">
+                  <Clock className="h-3 w-3" /> Heure
                 </p>
-                <Badge className="mt-2" variant="outline">
-                  {pending.period === "jour" ? "Tarif journée" : "Tarif nuit"} —{" "}
-                  {pending.ageGroup === "child" ? "enfant" : "adulte"}
-                </Badge>
+                <p className="text-lg font-bold text-slate-900">{pending.appointmentTime}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                  Montant à régler
+                </p>
+                <div className="flex flex-col">
+                  <p className="text-3xl font-black text-primary">
+                    {pending.amount.toLocaleString("fr-FR")} <span className="text-sm font-bold">FCFA</span>
+                  </p>
+                  <Badge
+                    className="mt-2 w-fit bg-primary/10 text-primary border-none font-bold"
+                    variant="outline"
+                  >
+                    {pending.period === "jour" ? "Tarif journée" : "Tarif nuit"} —{" "}
+                    {pending.ageGroup === "child" ? "enfant" : "adulte"}
+                  </Badge>
+                </div>
               </div>
             </div>
-            <div className="p-6 bg-muted/20 space-y-4">
-              <div className="flex items-center gap-2">
-                <Smartphone className="h-5 w-5 text-primary" />
-                <h3 className="font-semibold">Choisissez votre moyen de paiement</h3>
+            <div className="p-8 bg-slate-50/50 space-y-8">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Smartphone className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Choisissez votre moyen de paiement
+                </h3>
               </div>
-              <div className="space-y-2 max-w-md">
-                <Label htmlFor="pay-phone">Numéro mobile (Wave / Orange Money)</Label>
+              <div className="space-y-3 max-w-md">
+                <Label htmlFor="pay-phone" className="text-slate-600 font-bold ml-1">
+                  Numéro mobile (Wave / Orange Money)
+                </Label>
                 <Input
                   id="pay-phone"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+221 77 000 00 00"
+                  className="h-14 rounded-2xl border-slate-200 focus:ring-primary shadow-sm text-lg font-medium px-6"
                 />
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <Button
                   type="button"
                   size="lg"
-                  className="h-14 gap-3 bg-[#1DC4FF] hover:bg-[#19b0e8] text-white shadow-md"
+                  className="h-16 rounded-2xl gap-3 bg-[#1DC4FF] hover:bg-[#19b0e8] text-white shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1 font-bold text-lg"
                   disabled={paying !== null}
                   onClick={() => onPay("wave")}
                 >
                   {paying === "wave" ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <Loader2 className="h-6 w-6 animate-spin" />
                   ) : (
-                    <WaveIcon className="h-8 w-8 shrink-0" />
+                    <WaveIcon className="h-10 w-10 shrink-0" />
                   )}
                   Payer avec Wave
-                  <ArrowRight className="h-4 w-4 ml-auto opacity-80" />
+                  <ArrowRight className="h-5 w-5 ml-auto opacity-80" />
                 </Button>
                 <Button
                   type="button"
                   size="lg"
-                  className="h-14 gap-3 bg-[#FF7900] hover:bg-[#e66d00] text-white shadow-md"
+                  className="h-16 rounded-2xl gap-3 bg-[#FF7900] hover:bg-[#e66d00] text-white shadow-xl shadow-orange-500/20 transition-all hover:-translate-y-1 font-bold text-lg"
                   disabled={paying !== null}
                   onClick={() => onPay("orange_money")}
                 >
                   {paying === "orange_money" ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <Loader2 className="h-6 w-6 animate-spin" />
                   ) : (
-                    <OrangeMoneyIcon className="h-8 w-8 shrink-0" />
+                    <OrangeMoneyIcon className="h-10 w-10 shrink-0" />
                   )}
                   Orange Money
-                  <ArrowRight className="h-4 w-4 ml-auto opacity-80" />
+                  <ArrowRight className="h-5 w-5 ml-auto opacity-80" />
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                <ShieldCheck className="h-3.5 w-3.5" /> Paiement sécurisé — confirmation sur votre
-                téléphone.
+              <p className="text-sm text-slate-400 flex items-center gap-2 font-medium">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" /> Paiement sécurisé — confirmation
+                immédiate sur votre téléphone.
               </p>
             </div>
           </Card>
         )}
 
         {paymentDone && (
-          <Card className="p-8 text-center border-success/30 bg-success/5">
-            <CheckCircle2 className="h-14 w-14 text-success mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Paiement confirmé</h2>
-            <p className="text-muted-foreground mb-6">
-              Votre consultation est réservée et payée. À bientôt à la clinique.
+          <Card className="p-12 text-center border-none shadow-2xl rounded-[3rem] bg-emerald-50 relative overflow-hidden group">
+            <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl transition-all group-hover:bg-emerald-500/20" />
+            <div className="h-20 w-20 bg-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-500/30">
+              <CheckCircle2 className="h-10 w-10 text-white" />
+            </div>
+            <h2 className="text-3xl font-black text-slate-900 mb-3">Paiement confirmé !</h2>
+            <p className="text-slate-600 mb-10 text-lg font-medium max-w-md mx-auto">
+              Votre consultation est réservée et payée avec succès. Nous vous attendons avec
+              impatience à la clinique.
             </p>
-            <Button asChild>
-              <Link to="/dashboard">Voir mon espace</Link>
+            <Button asChild size="lg" className="rounded-2xl h-14 px-10 font-bold">
+              <Link to="/dashboard">Accéder à mon espace patient</Link>
             </Button>
           </Card>
         )}

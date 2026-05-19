@@ -68,6 +68,9 @@ export const ALL_CONSULTATION_HOURS = [
 
 export const CONSULTATION_TYPES = [
   { value: "generale", label: "Consultation générale", department: "Interne" },
+  { value: "gynécologie", label: "Consultation Gynécologie", department: "Gynécologie" },
+  { value: "pédiatrie", label: "Consultation Pédiatrie", department: "Pédiatrie" },
+  { value: "maternité", label: "Maternité / Accouchement", department: "Maternité" },
   { value: "tele", label: "Téléconsultation", department: "Interne" },
   { value: "soins", label: "Soins infirmiers", department: "Interne" },
   { value: "hospitalisation", label: "Hospitalisation", department: "Interne" },

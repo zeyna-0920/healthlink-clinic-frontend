@@ -134,28 +134,29 @@ function StatCard({
   trend,
   color = "primary",
 }: StatCardProps) {
-  const colorClasses = {
-    primary: "bg-primary/10 text-primary",
-    success: "bg-green-500/10 text-green-600",
-    warning: "bg-yellow-500/10 text-yellow-600",
-    destructive: "bg-red-500/10 text-red-600",
-    info: "bg-blue-500/10 text-blue-600",
+  const gradients = {
+    primary: "from-blue-600 to-indigo-700 shadow-blue-500/20",
+    success: "from-emerald-500 to-teal-700 shadow-emerald-500/20",
+    warning: "from-orange-500 to-amber-600 shadow-orange-500/20",
+    destructive: "from-rose-500 to-red-700 shadow-rose-500/20",
+    info: "from-sky-500 to-blue-700 shadow-sky-500/20",
   };
 
   return (
-    <Card className="relative overflow-hidden border-border/40 shadow-sm transition-all hover:shadow-md">
-      <CardContent className="p-6">
+    <Card
+      className={cn(
+        "group relative overflow-hidden border-none text-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-gradient-to-br",
+        gradients[color],
+      )}
+    >
+      <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
+      <CardContent className="p-6 relative z-10">
         <div className="flex items-center justify-between">
-          <div className={cn("rounded-xl p-2.5", colorClasses[color])}>
-            <Icon className="h-5 w-5" />
+          <div className="rounded-2xl bg-white/20 backdrop-blur-md p-3 shadow-inner">
+            <Icon className="h-6 w-6 text-white" />
           </div>
           {trend !== undefined && (
-            <div
-              className={cn(
-                "flex items-center gap-1 text-xs font-bold",
-                trend > 0 ? "text-green-600" : "text-red-600",
-              )}
-            >
+            <div className="flex items-center gap-1 rounded-full bg-white/20 backdrop-blur-md px-2.5 py-1 text-xs font-bold text-white">
               {trend > 0 ? (
                 <ArrowUpRight className="h-3 w-3" />
               ) : (
@@ -165,21 +166,15 @@ function StatCard({
             </div>
           )}
         </div>
-        <div className="mt-4">
-          <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        <div className="mt-5">
+          <p className="text-sm font-medium text-white/80 uppercase tracking-wider">{label}</p>
           {loading ? (
-            <Skeleton className="h-9 w-24 mt-1" />
+            <Skeleton className="h-9 w-24 mt-2 bg-white/20" />
           ) : (
-            <h3 className="text-2xl font-bold tracking-tight mt-1">{value}</h3>
+            <h3 className="text-3xl font-black tracking-tight mt-1">{value}</h3>
           )}
-          {subtext && <p className="text-xs text-muted-foreground mt-1.5">{subtext}</p>}
+          {subtext && <p className="text-xs text-white/70 mt-2 font-medium">{subtext}</p>}
         </div>
-        <div
-          className={cn(
-            "absolute bottom-0 left-0 h-1 w-full opacity-20",
-            color === "primary" ? "bg-primary" : `bg-${color}-500`,
-          )}
-        />
       </CardContent>
     </Card>
   );
