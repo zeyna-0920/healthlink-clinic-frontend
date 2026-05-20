@@ -15,12 +15,6 @@ export function getApiBaseUrl(): string {
   if (import.meta.env.DEV) {
     return "";
   }
-  if (import.meta.env.SSR) {
-    const serverUrl =
-      typeof process !== "undefined" && process.env?.API_URL
-        ? String(process.env.API_URL).replace(/\/$/, "")
-        : "http://127.0.0.1:5000";
-    return serverUrl;
-  }
-  return "";
+  // En production sur Vercel, si VITE_API_URL n'est pas défini, on utilise l'URL Render
+  return "https://healthlink-clinic-backend.onrender.com";
 }
