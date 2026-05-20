@@ -7,7 +7,7 @@ import {
   ShieldCheck,
   Clock,
   ArrowRight,
-  CheckCircle2,
+  CheckCircle,
   Users,
   Activity,
   HeartPulse,
@@ -192,9 +192,9 @@ function HomePage() {
               {/* Floating Cards */}
               <Card className="absolute -bottom-6 -left-8 p-5 rounded-3xl shadow-2xl border-none bg-white/90 backdrop-blur animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-2xl bg-success/20 flex items-center justify-center">
-                    <BedDouble className="h-6 w-6 text-success" />
-                  </div>
+                    <div className="h-12 w-12 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                      <CheckCircle className="h-6 w-6 text-white" />
+                    </div>
                   <div>
                     <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
                       Lits Disponibles

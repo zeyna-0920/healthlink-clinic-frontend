@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search, Loader2, AlertCircle, PackageSearch, Pill, CheckCircle2 } from "lucide-react";
+import { Search, Loader2, AlertCircle, PackageSearch, Pill, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -316,7 +316,7 @@ function MedicamentsPage() {
                         "flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-sm",
                         m.ordonnance ? "bg-rose-50 text-rose-600 border border-rose-100" : "bg-blue-50 text-blue-600 border border-blue-100"
                       )}>
-                        {m.ordonnance ? <AlertCircle className="h-3 w-3" /> : <CheckCircle2 className="h-3 w-3" />}
+                        {m.ordonnance ? <AlertCircle className="h-3 w-3" /> : <CheckCircle className="h-3 w-3" />}
                         {m.ordonnance ? "Sur ordonnance" : "Sans ordonnance"}
                       </div>
                     </div>

@@ -34,6 +34,7 @@ import appointmentRoutes from './routes/appointmentRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import medicamentRoutes from './routes/medicamentRoutes.js';
+import passementRoutes from './routes/passementRoutes.js';
 
 // Utiliser les routes
 app.use('/api/patients', patientRoutes);
@@ -42,6 +43,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/medicaments', medicamentRoutes);
+app.use('/api/passements', passementRoutes);
 
 // Route racine du backend
 app.get('/', (req, res) => {

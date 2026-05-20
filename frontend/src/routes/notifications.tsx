@@ -1,6 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Bell, CheckCircle2, Inbox, ShieldCheck } from "lucide-react";
+import {
+  Bell,
+  CheckCircle,
+  Clock,
+  MessageSquare,
+  AlertTriangle,
+  Mail,
+  Smartphone,
+  Check,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getNotifications, type Notification } from "./api/-clinic";
@@ -99,7 +108,7 @@ function NotificationsPage() {
                 </div>
                 <p className="mt-4 text-sm text-muted-foreground">{notification.message}</p>
                 <div className="mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  <CheckCircle2 className="h-4 w-4" />
+                  <CheckCircle className="h-4 w-4" />
                   Envoyé le {new Date(notification.sentAt).toLocaleDateString("fr-FR")}
                 </div>
               </Card>

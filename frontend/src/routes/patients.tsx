@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Search, UserCheck, Mail, Phone, CalendarDays, Eye, Plus, Lock } from "lucide-react";
+import { Search, UserCheck, Mail, Phone, Calendar, Eye, Plus, Lock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -69,12 +69,16 @@ function PatientsPage() {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return patients.filter((patient) => {
-      const fullName = `${patient.firstName} ${patient.lastName}`.toLowerCase();
+      const firstName = patient.firstName || "";
+      const lastName = patient.lastName || "";
+      const email = patient.email || "";
+      const phone = patient.phone || "";
+      const fullName = `${firstName} ${lastName}`.toLowerCase();
       return (
         !q ||
         fullName.includes(q) ||
-        patient.email.toLowerCase().includes(q) ||
-        patient.phone.toLowerCase().includes(q)
+        email.toLowerCase().includes(q) ||
+        phone.toLowerCase().includes(q)
       );
     });
   }, [patients, search]);
@@ -178,7 +182,7 @@ function PatientsPage() {
                         <Phone className="h-4 w-4" /> {patient.phone}
                       </div>
                       <div className="inline-flex items-center gap-2">
-                        <CalendarDays className="h-4 w-4" /> {formatDate(patient.dateOfBirth)}
+                        <Calendar className="h-4 w-4" /> {formatDate(patient.dateOfBirth)}
                       </div>
                       <div className="inline-flex items-center gap-2">
                         <UserCheck className="h-4 w-4" /> {patient.gender || "—"}

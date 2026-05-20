@@ -74,6 +74,21 @@ export type Appointment = {
   updatedAt: string;
 };
 
+export type Passement = {
+  _id: string;
+  patientId: string | Patient;
+  nurseName: string;
+  date: string;
+  time: string;
+  careType: string;
+  locationType: "at_home" | "at_clinic";
+  location?: string;
+  status: "scheduled" | "completed" | "cancelled";
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 const API_BASE_URL = getApiBaseUrl();
 
 async function safeFetch<T>(url: string, fallback: T): Promise<T> {
@@ -104,11 +119,18 @@ export function getPatients(): Promise<Patient[]> {
     headers: { "Content-Type": "application/json" },
   })
     .then(async (res) => {
-      if (!res.ok) return [];
+      if (!res.ok) {
+        console.error(`API Error: ${res.status} ${res.statusText}`);
+        return [];
+      }
       const data = await res.json();
+      console.log("Patients API Response:", data);
       return Array.isArray(data?.patients) ? data.patients : [];
     })
-    .catch(() => []);
+    .catch((err) => {
+      console.error("Fetch error for patients:", err);
+      return [];
+    });
 }
 
 export function getPatient(id: string): Promise<Patient | null> {
@@ -304,6 +326,52 @@ export async function sendAppointmentReminders(): Promise<{ success: boolean; me
     headers: { "Content-Type": "application/json" },
   });
   return res.json();
+}
+
+// Passements API
+export function getPassements(): Promise<Passement[]> {
+  return fetch(`${API_BASE_URL}/api/passements`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(async (res) => {
+      if (!res.ok) return [];
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    })
+    .catch(() => []);
+}
+
+export function createPassement(data: {
+  patientData?: Partial<Patient>;
+  passementData: Partial<Passement>;
+}): Promise<Passement> {
+  return fetch(`${API_BASE_URL}/api/passements`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error("Error creating passement:", err);
+      throw err;
+    });
+}
+
+export function updatePassementStatus(
+  id: string,
+  status: Passement["status"],
+): Promise<Passement> {
+  return fetch(`${API_BASE_URL}/api/passements/${id}/status`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error("Error updating passement status:", err);
+      throw err;
+    });
 }
 
 export type PaymentRecord = {

@@ -113,9 +113,10 @@ function PatientDetailPage() {
 
   if (loading) {
     return (
-      <div className=" min-h-screen">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
-          <Card className="p-10 text-center text-muted-foreground">Chargement du patient…</Card>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="h-12 w-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-slate-500 font-medium">Chargement du profil patient...</p>
         </div>
       </div>
     );
@@ -123,17 +124,17 @@ function PatientDetailPage() {
 
   if (error || !patient) {
     return (
-      <div className=" min-h-screen">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16">
-          <Card className="p-10 text-center text-destructive">
-            {error || "Patient non trouvé."}
-            <div className="mt-4">
-              <Button asChild variant="outline">
-                <Link to="/patients">Retour à la liste</Link>
-              </Button>
-            </div>
-          </Card>
-        </div>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <Card className="p-10 text-center max-w-md w-full rounded-[2.5rem] shadow-xl border-none">
+          <div className="h-20 w-20 bg-destructive/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <AlertTriangle className="h-10 w-10 text-destructive" />
+          </div>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Erreur</h2>
+          <p className="text-slate-500 mb-8">{error || "Patient non trouvé."}</p>
+          <Button asChild variant="default" className="w-full rounded-2xl h-12">
+            <Link to="/patients">Retour à la liste</Link>
+          </Button>
+        </Card>
       </div>
     );
   }

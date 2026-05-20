@@ -17,15 +17,35 @@ import {
   Activity,
   ArrowUpRight,
   ArrowDownRight,
-  CalendarDays,
   Stethoscope,
   ClipboardList,
   Lock,
+  MapPin,
+  Home,
+  Building2,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Table,
   TableBody,
@@ -35,6 +55,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { toast } from "sonner";
 import {
   Area,
   AreaChart,
@@ -56,11 +77,15 @@ import {
   getPayments,
   getNotifications,
   getAppointments,
+  getPassements,
+  createPassement,
+  updatePassementStatus,
   type Patient,
   type Bed,
   type Payment,
   type Notification,
   type Appointment,
+  type Passement,
 } from "./api/-clinic";
 import { cn } from "@/lib/utils";
 
@@ -189,7 +214,28 @@ function DashboardPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [passements, setPassements] = useState<Passement[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isPassementDialogOpen, setIsPassementDialogOpen] = useState(false);
+  const [newPassement, setNewPassement] = useState({
+    patientData: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      gender: "M" as "M" | "F",
+      dateOfBirth: "",
+    },
+    passementData: {
+      nurseName: "",
+      date: new Date().toISOString().split("T")[0],
+      time: "",
+      careType: "",
+      locationType: "at_clinic" as "at_clinic" | "at_home",
+      location: "",
+      notes: "",
+    },
+  });
 
   useEffect(() => {
     // Vérification de l'accès administrateur
@@ -211,6 +257,7 @@ function DashboardPage() {
           paymentsData,
           notificationsData,
           appointmentsData,
+          passementsData,
         ] = await Promise.all([
           getPatients(),
           getBeds(),
@@ -218,6 +265,7 @@ function DashboardPage() {
           getPayments(),
           getNotifications(),
           getAppointments(),
+          getPassements(),
         ]);
 
         setPatients(patientsData);
@@ -226,6 +274,7 @@ function DashboardPage() {
         setPayments(paymentsData);
         setNotifications(notificationsData);
         setAppointments(appointmentsData);
+        setPassements(passementsData);
       } catch (error) {
         console.error("Error loading dashboard data:", error);
       } finally {
@@ -235,6 +284,56 @@ function DashboardPage() {
 
     loadData();
   }, []);
+
+  const handleCreatePassement = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const created = await createPassement(newPassement);
+      setPassements([created, ...passements]);
+      setIsPassementDialogOpen(false);
+      toast.success("Passement enregistré avec succès");
+      // Reset form
+      setNewPassement({
+        patientData: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          gender: "M",
+          dateOfBirth: "",
+        },
+        passementData: {
+          nurseName: "",
+          date: new Date().toISOString().split("T")[0],
+          time: "",
+          careType: "",
+          locationType: "at_clinic",
+          location: "",
+          notes: "",
+        },
+      });
+      // Refresh patients list as well
+      const updatedPatients = await getPatients();
+      setPatients(updatedPatients);
+    } catch (error) {
+      toast.error("Erreur lors de l'enregistrement du passement");
+    }
+  };
+
+  const handlePassementStatusChange = async (
+    id: string,
+    status: Passement["status"],
+  ) => {
+    try {
+      await updatePassementStatus(id, status);
+      setPassements(
+        passements.map((p) => (p._id === id ? { ...p, status } : p)),
+      );
+      toast.success("Statut du passement mis à jour");
+    } catch (error) {
+      toast.error("Erreur lors de la mise à jour du statut");
+    }
+  };
 
   const totalRevenue = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
   const unreadNotifications = notifications.filter((n) => !n.isRead).length;
@@ -250,8 +349,10 @@ function DashboardPage() {
     ];
     return combined
       .sort((a, b) => {
-        const dateA = new Date("sentAt" in a ? a.sentAt : a.createdAt).getTime();
-        const dateB = new Date("sentAt" in b ? b.sentAt : b.createdAt).getTime();
+        const dateA = new Date("sentAt" in a ? a.sentAt : a.createdAt || 0).getTime();
+        const dateB = new Date("sentAt" in b ? b.sentAt : b.createdAt || 0).getTime();
+        if (isNaN(dateA)) return 1;
+        if (isNaN(dateB)) return -1;
         return dateB - dateA;
       })
       .slice(0, 10);
@@ -269,6 +370,25 @@ function DashboardPage() {
       ].filter((d) => d.value > 0),
     [bedStats],
   );
+
+  if (isAdmin === null || loading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+        <div className="space-y-4 text-center">
+          <div className="relative h-20 w-20 mx-auto">
+            <div className="absolute inset-0 border-4 border-indigo-100 rounded-2xl"></div>
+            <div className="absolute inset-0 border-4 border-indigo-600 border-t-transparent rounded-2xl animate-spin"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Activity className="h-8 w-8 text-indigo-600 animate-pulse" />
+            </div>
+          </div>
+          <p className="text-indigo-900/60 font-bold uppercase tracking-widest text-xs animate-pulse">
+            Initialisation du Dashboard...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (isAdmin === false) {
     return (
@@ -308,7 +428,7 @@ function DashboardPage() {
               Tableau de Bord
             </h1>
             <p className="text-slate-500 mt-1 flex items-center gap-2">
-              <CalendarDays className="h-4 w-4" />
+              <Calendar className="h-4 w-4" />
               {new Date().toLocaleDateString("fr-FR", {
                 weekday: "long",
                 day: "numeric",
@@ -319,6 +439,312 @@ function DashboardPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <Dialog open={isPassementDialogOpen} onOpenChange={setIsPassementDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="rounded-xl shadow-lg gap-2 bg-indigo-600 hover:bg-indigo-700 transition-all">
+                  <Stethoscope className="h-4 w-4" />
+                  Enregistrer Passement
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-bold text-indigo-900 flex items-center gap-2">
+                    <Stethoscope className="h-6 w-6 text-indigo-600" />
+                    Enregistrer un nouveau Passement
+                  </DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleCreatePassement} className="space-y-6 py-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-indigo-900 font-semibold">Prénom du Patient</Label>
+                      <Input
+                        required
+                        className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                        value={newPassement.patientData.firstName}
+                        onChange={(e) =>
+                          setNewPassement({
+                            ...newPassement,
+                            patientData: {
+                              ...newPassement.patientData,
+                              firstName: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-indigo-900 font-semibold">Nom du Patient</Label>
+                      <Input
+                        required
+                        className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                        value={newPassement.patientData.lastName}
+                        onChange={(e) =>
+                          setNewPassement({
+                            ...newPassement,
+                            patientData: {
+                              ...newPassement.patientData,
+                              lastName: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-indigo-900 font-semibold">Email</Label>
+                      <Input
+                        type="email"
+                        required
+                        className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                        value={newPassement.patientData.email}
+                        onChange={(e) =>
+                          setNewPassement({
+                            ...newPassement,
+                            patientData: {
+                              ...newPassement.patientData,
+                              email: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-indigo-900 font-semibold">Téléphone</Label>
+                      <Input
+                        required
+                        className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                        value={newPassement.patientData.phone}
+                        onChange={(e) =>
+                          setNewPassement({
+                            ...newPassement,
+                            patientData: {
+                              ...newPassement.patientData,
+                              phone: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-indigo-900 font-semibold">Genre</Label>
+                      <Select
+                        value={newPassement.patientData.gender}
+                        onValueChange={(value: "M" | "F") =>
+                          setNewPassement({
+                            ...newPassement,
+                            patientData: {
+                              ...newPassement.patientData,
+                              gender: value,
+                            },
+                          })
+                        }
+                      >
+                        <SelectTrigger className="rounded-xl border-indigo-100">
+                          <SelectValue placeholder="Genre" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="M">Masculin</SelectItem>
+                          <SelectItem value="F">Féminin</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-indigo-900 font-semibold">Date de naissance</Label>
+                      <Input
+                        type="date"
+                        required
+                        className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                        value={newPassement.patientData.dateOfBirth}
+                        onChange={(e) =>
+                          setNewPassement({
+                            ...newPassement,
+                            patientData: {
+                              ...newPassement.patientData,
+                              dateOfBirth: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border-t border-indigo-50 pt-6">
+                    <h3 className="font-bold text-lg text-indigo-900 mb-4 flex items-center gap-2">
+                      <ClipboardList className="h-5 w-5 text-indigo-600" /> Détails du Soin
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-indigo-900 font-semibold">
+                          Infirmier / Infirmière
+                        </Label>
+                        <Input
+                          required
+                          className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                          value={newPassement.passementData.nurseName}
+                          onChange={(e) =>
+                            setNewPassement({
+                              ...newPassement,
+                              passementData: {
+                                ...newPassement.passementData,
+                                nurseName: e.target.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-indigo-900 font-semibold">Type de soin</Label>
+                        <Input
+                          required
+                          placeholder="ex: Pansement, Injection..."
+                          className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                          value={newPassement.passementData.careType}
+                          onChange={(e) =>
+                            setNewPassement({
+                              ...newPassement,
+                              passementData: {
+                                ...newPassement.passementData,
+                                careType: e.target.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                      <div className="space-y-2">
+                        <Label className="text-indigo-900 font-semibold">Date</Label>
+                        <Input
+                          type="date"
+                          required
+                          className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                          value={newPassement.passementData.date}
+                          onChange={(e) =>
+                            setNewPassement({
+                              ...newPassement,
+                              passementData: {
+                                ...newPassement.passementData,
+                                date: e.target.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-indigo-900 font-semibold">Heure</Label>
+                        <Input
+                          type="time"
+                          required
+                          className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                          value={newPassement.passementData.time}
+                          onChange={(e) =>
+                            setNewPassement({
+                              ...newPassement,
+                              passementData: {
+                                ...newPassement.passementData,
+                                time: e.target.value,
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                      <div className="space-y-2">
+                        <Label className="text-indigo-900 font-semibold">Lieu du soin</Label>
+                        <Select
+                          value={newPassement.passementData.locationType}
+                          onValueChange={(value: "at_home" | "at_clinic") =>
+                            setNewPassement({
+                              ...newPassement,
+                              passementData: {
+                                ...newPassement.passementData,
+                                locationType: value,
+                              },
+                            })
+                          }
+                        >
+                          <SelectTrigger className="rounded-xl border-indigo-100">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="at_clinic">À la clinique</SelectItem>
+                            <SelectItem value="at_home">À domicile</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      {newPassement.passementData.locationType === "at_home" && (
+                        <div className="space-y-2">
+                          <Label className="text-indigo-900 font-semibold">Ville / Quartier</Label>
+                          <Select
+                            value={newPassement.passementData.location}
+                            onValueChange={(value) =>
+                              setNewPassement({
+                                ...newPassement,
+                                passementData: {
+                                  ...newPassement.passementData,
+                                  location: value,
+                                },
+                              })
+                            }
+                          >
+                            <SelectTrigger className="rounded-xl border-indigo-100">
+                              <SelectValue placeholder="Choisir un lieu" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Dakar">Dakar</SelectItem>
+                              <SelectItem value="Guédiawaye">Guédiawaye</SelectItem>
+                              <SelectItem value="Pikine">Pikine</SelectItem>
+                              <SelectItem value="Yoff">Yoff</SelectItem>
+                              <SelectItem value="Camberene">Camberene</SelectItem>
+                              <SelectItem value="Sacré Coeur">Sacré Coeur</SelectItem>
+                              <SelectItem value="Mermoz">Mermoz</SelectItem>
+                              <SelectItem value="Parcelles Assainies">
+                                Parcelles Assainies
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-2 mt-4">
+                      <Label className="text-indigo-900 font-semibold">Notes (optionnel)</Label>
+                      <Textarea
+                        className="rounded-xl border-indigo-100 focus:ring-indigo-500"
+                        value={newPassement.passementData.notes}
+                        onChange={(e) =>
+                          setNewPassement({
+                            ...newPassement,
+                            passementData: {
+                              ...newPassement.passementData,
+                              notes: e.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <DialogFooter>
+                    <Button
+                      type="submit"
+                      className="w-full rounded-xl h-12 bg-gradient-to-r from-indigo-600 to-blue-700 hover:shadow-lg transition-all"
+                    >
+                      Enregistrer le Patient et le Passement
+                    </Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
             <Button className="rounded-xl shadow-sm gap-2" size="sm" asChild>
               <Link to="/patients/new">
                 <Plus className="h-4 w-4" />
@@ -462,6 +888,166 @@ function DashboardPage() {
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Suivi des Passements */}
+            <Card className="border-none shadow-xl bg-white overflow-hidden rounded-[2rem]">
+              <CardHeader className="bg-gradient-to-r from-indigo-50 to-blue-50/30 border-b border-indigo-100/50 pb-6">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle className="text-xl font-bold text-indigo-900 flex items-center gap-2">
+                      <Stethoscope className="h-6 w-6 text-indigo-600" />
+                      Suivi des Passements (Soins Infirmiers)
+                    </CardTitle>
+                    <CardDescription className="text-indigo-600/70 font-medium">
+                      Gestion des interventions et soins à domicile ou clinique
+                    </CardDescription>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="bg-indigo-100 text-indigo-700 border-indigo-200 px-4 py-1 rounded-full font-bold"
+                  >
+                    {passements.length} interventions
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader className="bg-slate-50/50">
+                    <TableRow className="hover:bg-transparent border-none">
+                      <TableHead className="font-bold text-slate-700 py-4">Patient</TableHead>
+                      <TableHead className="font-bold text-slate-700">Infirmier(e)</TableHead>
+                      <TableHead className="font-bold text-slate-700">Type de soin</TableHead>
+                      <TableHead className="font-bold text-slate-700">Date & Heure</TableHead>
+                      <TableHead className="font-bold text-slate-700">Lieu</TableHead>
+                      <TableHead className="font-bold text-slate-700">Statut</TableHead>
+                      <TableHead className="font-bold text-slate-700 text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {loading ? (
+                      [1, 2, 3].map((i) => (
+                        <TableRow key={i}>
+                          <TableCell colSpan={7}>
+                            <Skeleton className="h-12 w-full rounded-xl" />
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    ) : passements.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-12">
+                          <div className="flex flex-col items-center gap-2 text-slate-400">
+                            <ClipboardList className="h-12 w-12 opacity-20" />
+                            <p>Aucun passement enregistré pour le moment.</p>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      passements.slice(0, 10).map((passement) => {
+                        const patient =
+                          typeof passement.patientId === "string"
+                            ? patients.find((p) => p._id === passement.patientId)
+                            : (passement.patientId as Patient);
+
+                        return (
+                          <TableRow
+                            key={passement._id}
+                            className="group hover:bg-indigo-50/30 transition-colors border-slate-100"
+                          >
+                            <TableCell className="font-bold text-slate-900 py-4">
+                              {patient
+                                ? `${patient.firstName} ${patient.lastName}`
+                                : "Patient inconnu"}
+                            </TableCell>
+                            <TableCell className="text-slate-600 font-medium">
+                              {passement.nurseName}
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant="outline"
+                                className="bg-white border-slate-200 text-slate-700 font-medium rounded-lg"
+                              >
+                                {passement.careType}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-slate-600">
+                              <div className="flex flex-col">
+                                <span className="font-bold">
+                                  {new Date(passement.date).toLocaleDateString("fr-FR")}
+                                </span>
+                                <span className="text-xs text-slate-400 font-medium">
+                                  à {passement.time}
+                                </span>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                {passement.locationType === "at_home" ? (
+                                  <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-xs font-bold border border-orange-100">
+                                    <Home className="h-3 w-3" />
+                                    Domicile ({passement.location})
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100">
+                                    <Building2 className="h-3 w-3" />
+                                    Clinique
+                                  </div>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                className={cn(
+                                  "rounded-full px-3 py-1 font-bold text-[10px] uppercase tracking-wider",
+                                  passement.status === "completed"
+                                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border border-emerald-200"
+                                    : passement.status === "cancelled"
+                                      ? "bg-rose-100 text-rose-700 hover:bg-rose-100 border border-rose-200"
+                                      : "bg-blue-100 text-blue-700 hover:bg-blue-100 border border-blue-200",
+                                )}
+                              >
+                                {passement.status === "scheduled"
+                                  ? "Programmé"
+                                  : passement.status === "completed"
+                                    ? "Terminé"
+                                    : "Annulé"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                {passement.status === "scheduled" && (
+                                  <>
+                                    <Button
+                                      size="sm"
+                                      variant="default"
+                                      className="h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700"
+                                      onClick={() =>
+                                        handlePassementStatusChange(passement._id, "completed")
+                                      }
+                                    >
+                                      Terminer
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      className="h-8 rounded-lg text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                                      onClick={() =>
+                                        handlePassementStatusChange(passement._id, "cancelled")
+                                      }
+                                    >
+                                      Annuler
+                                    </Button>
+                                  </>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
 

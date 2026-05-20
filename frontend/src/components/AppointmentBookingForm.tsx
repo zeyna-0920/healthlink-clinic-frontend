@@ -16,14 +16,14 @@ import { Badge } from "@/components/ui/badge";
 import {
   BedDouble,
   AlertCircle,
-  CheckCircle2,
+  CheckCircle,
   Clock,
   LogIn,
   Moon,
   Sun,
   Loader2,
   CreditCard,
-  CalendarDays,
+  Calendar as CalendarIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -44,6 +44,7 @@ const OCCUPIED_BEDS = 18;
 const AVAILABLE_BEDS = TOTAL_BEDS - OCCUPIED_BEDS;
 
 export function AppointmentBookingForm() {
+  console.log("Rendering AppointmentBookingForm...");
   const navigate = useNavigate();
   const [patient, setPatient] = useState(() => getStoredPatient());
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -177,7 +178,7 @@ export function AppointmentBookingForm() {
             <div className="relative z-10 flex items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <div className="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
-                  <CheckCircle2 className="h-6 w-6 text-white" />
+                  <CheckCircle className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <p className="text-sm font-bold uppercase tracking-widest text-emerald-50/80">Patient connecté</p>
@@ -216,7 +217,7 @@ export function AppointmentBookingForm() {
                   mode="single"
                   selected={date}
                   onSelect={setDate}
-                  disabled={(d) => d < new Date(new Date().setHours(0, 0, 0, 0))}
+                  disabled={{ before: new Date() }}
                   className="rounded-md border-none bg-transparent text-white"
                 />
               </div>
@@ -261,7 +262,7 @@ export function AppointmentBookingForm() {
             <div className="relative z-10 mb-10">
               <div className="flex items-center gap-4">
                 <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-inner">
-                  <CalendarDays className="h-7 w-7 text-primary" />
+                  <CalendarIcon className="h-7 w-7 text-primary" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-black text-slate-900">Détails du RDV</h3>
@@ -362,7 +363,7 @@ export function AppointmentBookingForm() {
               {isHospi && !hospiBlocked && (
                 <div className="flex items-start gap-4 rounded-[2rem] bg-emerald-50 border border-emerald-100 p-6 text-emerald-700 animate-in slide-in-from-top-4 duration-300">
                   <div className="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="h-6 w-6" />
+                    <CheckCircle className="h-6 w-6" />
                   </div>
                   <div className="space-y-1">
                     <p className="font-bold">Disponibilité confirmée</p>

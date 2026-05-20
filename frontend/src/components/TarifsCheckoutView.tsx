@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
   Smartphone,
-  CheckCircle2,
+  CheckCircle,
   Loader2,
   Calendar,
   Clock,
@@ -192,7 +192,7 @@ export function TarifsCheckoutView({
           <Card className="p-12 text-center border-none shadow-2xl rounded-[3rem] bg-emerald-50 relative overflow-hidden group">
             <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl transition-all group-hover:bg-emerald-500/20" />
             <div className="h-20 w-20 bg-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-500/30">
-              <CheckCircle2 className="h-10 w-10 text-white" />
+              <CheckCircle className="h-10 w-10 text-white" />
             </div>
             <h2 className="text-3xl font-black text-slate-900 mb-3">Paiement confirmé !</h2>
             <p className="text-slate-600 mb-10 text-lg font-medium max-w-md mx-auto">
