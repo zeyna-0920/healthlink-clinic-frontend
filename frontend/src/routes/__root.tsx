@@ -1,10 +1,9 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { EmergencyButton } from "@/components/EmergencyButton";
 import { Toaster } from "@/components/ui/sonner";
-
-import appCss from "../styles.css?url";
+import { Button } from "@/components/ui/button";
 
 function NotFoundComponent() {
   return (
@@ -26,46 +25,34 @@ function NotFoundComponent() {
   );
 }
 
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Clinique Moulaye Dabakh — Allo Docteur" },
-      {
-        name: "description",
-        content:
-          "Prenez rendez-vous en ligne, téléconsultez et accédez à des soins médicaux modernes à la Clinique Moulaye Dabakh.",
-      },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap",
-      },
-    ],
-  }),
-  component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-});
-
 function RootComponent() {
   return (
-    <>
-      <HeadContent />
-      <div className="flex min-h-screen flex-col">
-        <SiteHeader />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <SiteFooter />
-        <EmergencyButton />
-        <Toaster />
-      </div>
-      <Scripts />
-    </>
+    <div className="flex min-h-screen flex-col">
+      <SiteHeader />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <SiteFooter />
+      <EmergencyButton />
+      <Toaster />
+    </div>
   );
 }
+
+function ErrorComponent({ error }: { error: Error }) {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center p-4 text-center">
+      <h1 className="text-2xl font-bold text-destructive">Une erreur est survenue</h1>
+      <p className="mt-2 text-muted-foreground">{error.message}</p>
+      <Button asChild className="mt-4">
+        <Link to="/">Retour à l'accueil</Link>
+      </Button>
+    </div>
+  );
+}
+
+export const Route = createRootRoute({
+  component: RootComponent,
+  errorComponent: ErrorComponent,
+  notFoundComponent: NotFoundComponent,
+});
