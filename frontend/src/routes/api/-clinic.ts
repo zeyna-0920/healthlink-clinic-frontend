@@ -91,13 +91,20 @@ export type Passement = {
 
 const API_BASE_URL = getApiBaseUrl();
 
+// Récupérer les headers d'authentification
+function getAuthHeaders() {
+  const token = localStorage.getItem("authToken");
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
 async function safeFetch<T>(url: string, fallback: T): Promise<T> {
   try {
     const response = await fetch(url, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getAuthHeaders(),
     });
 
     if (!response.ok) {
@@ -116,7 +123,7 @@ async function safeFetch<T>(url: string, fallback: T): Promise<T> {
 export function getPatients(): Promise<Patient[]> {
   return fetch(`${API_BASE_URL}/api/patients`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) {
@@ -136,7 +143,7 @@ export function getPatients(): Promise<Patient[]> {
 export function getPatient(id: string): Promise<Patient | null> {
   return fetch(`${API_BASE_URL}/api/patients/${id}`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return null;
@@ -159,7 +166,7 @@ export function createPatient(patient: Omit<Patient, "_id">): Promise<Patient> {
 export function updatePatient(id: string, patient: Partial<Patient>): Promise<Patient> {
   return fetch(`${API_BASE_URL}/api/patients/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(patient),
   })
     .then((res) => res.json())
@@ -169,13 +176,14 @@ export function updatePatient(id: string, patient: Partial<Patient>): Promise<Pa
 export function deletePatient(id: string): Promise<void> {
   return fetch(`${API_BASE_URL}/api/patients/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   }).then(() => undefined);
 }
 
 export function getBeds(): Promise<Bed[]> {
   return fetch(`${API_BASE_URL}/api/beds`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return [];
@@ -193,7 +201,7 @@ export function getBedStatistics(): Promise<{
 }> {
   return fetch(`${API_BASE_URL}/api/beds/statistics`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return { total: 0, occupied: 0, available: 0, maintenance: 0 };
@@ -212,7 +220,7 @@ export function getBedStatistics(): Promise<{
 export function getPayments(): Promise<Payment[]> {
   return fetch(`${API_BASE_URL}/api/payments`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return [];
@@ -225,7 +233,7 @@ export function getPayments(): Promise<Payment[]> {
 export function getNotifications(): Promise<Notification[]> {
   return fetch(`${API_BASE_URL}/api/notifications`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return [];
@@ -238,7 +246,7 @@ export function getNotifications(): Promise<Notification[]> {
 export function getAppointments(): Promise<Appointment[]> {
   return fetch(`${API_BASE_URL}/api/appointments`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return [];
@@ -251,7 +259,7 @@ export function getAppointments(): Promise<Appointment[]> {
 export function getPatientAppointments(patientId: string): Promise<Appointment[]> {
   return fetch(`${API_BASE_URL}/api/appointments/patient/${patientId}`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return [];
@@ -264,7 +272,7 @@ export function getPatientAppointments(patientId: string): Promise<Appointment[]
 export function getAppointmentsByDate(date: string): Promise<Appointment[]> {
   return fetch(`${API_BASE_URL}/api/appointments/by-date?date=${date}`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return [];
@@ -280,7 +288,7 @@ export function updateAppointmentStatus(
 ): Promise<Appointment> {
   return fetch(`${API_BASE_URL}/api/appointments/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify({ status }),
   })
     .then((res) => res.json())
@@ -301,7 +309,7 @@ export async function createAppointment(
 ): Promise<{ success: boolean; appointment?: Appointment; message?: string }> {
   const res = await fetch(`${API_BASE_URL}/api/appointments/create`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(input),
   });
   const data = await res.json();
@@ -314,7 +322,7 @@ export async function createAppointment(
 export async function confirmAppointment(appointmentId: string): Promise<boolean> {
   const res = await fetch(`${API_BASE_URL}/api/appointments/${appointmentId}/confirm`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   });
   const data = await res.json();
   return Boolean(data.success);
@@ -323,7 +331,7 @@ export async function confirmAppointment(appointmentId: string): Promise<boolean
 export async function sendAppointmentReminders(): Promise<{ success: boolean; message: string }> {
   const res = await fetch(`${API_BASE_URL}/api/appointments/send-reminders`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   });
   return res.json();
 }
@@ -332,7 +340,7 @@ export async function sendAppointmentReminders(): Promise<{ success: boolean; me
 export function getPassements(): Promise<Passement[]> {
   return fetch(`${API_BASE_URL}/api/passements`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
   })
     .then(async (res) => {
       if (!res.ok) return [];
@@ -348,7 +356,7 @@ export function createPassement(data: {
 }): Promise<Passement> {
   return fetch(`${API_BASE_URL}/api/passements`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(data),
   })
     .then((res) => res.json())
@@ -364,7 +372,7 @@ export function updatePassementStatus(
 ): Promise<Passement> {
   return fetch(`${API_BASE_URL}/api/passements/${id}/status`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify({ status }),
   })
     .then((res) => res.json())
@@ -395,7 +403,7 @@ export async function createPayment(payload: {
 }): Promise<{ success: boolean; payment?: PaymentRecord; message?: string }> {
   const res = await fetch(`${API_BASE_URL}/api/payments/create`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(payload),
   });
   const data = await res.json();
@@ -412,7 +420,7 @@ export async function initiateWavePayment(payload: {
 }): Promise<{ success: boolean; message?: string; nextStep?: string }> {
   const res = await fetch(`${API_BASE_URL}/api/payments/wave/initiate`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(payload),
   });
   const data = await res.json();
@@ -430,7 +438,7 @@ export async function initiateOrangeMoneyPayment(payload: {
 }): Promise<{ success: boolean; message?: string; nextStep?: string }> {
   const res = await fetch(`${API_BASE_URL}/api/payments/orange-money/initiate`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(payload),
   });
   const data = await res.json();
@@ -444,7 +452,7 @@ export async function initiateOrangeMoneyPayment(payload: {
 export async function confirmPayment(paymentId: string): Promise<boolean> {
   const res = await fetch(`${API_BASE_URL}/api/payments/confirm`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify({ paymentId, reference: `REF_${Date.now()}` }),
   });
   const data = await res.json();

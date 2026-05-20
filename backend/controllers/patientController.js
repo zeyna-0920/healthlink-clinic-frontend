@@ -1,5 +1,13 @@
 import Patient from '../models/Patient.js';
 import Notification from '../models/Notification.js';
+import jwt from 'jsonwebtoken';
+
+// Générer un token JWT
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'votre_secret_jwt_tres_long_et_sur', {
+    expiresIn: '30d',
+  });
+};
 
 // Inscription d'un nouveau patient
 export const registerPatient = async (req, res) => {
@@ -62,6 +70,7 @@ export const registerPatient = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Patient enregistré avec succès',
+      token: generateToken(patient._id),
       patient: patient.toJSON(),
     });
   } catch (error) {
@@ -130,7 +139,7 @@ export const loginPatient = async (req, res) => {
     if (!patient.password) {
       console.log(`Patient trouvé (${normalizedEmail}) mais n'a pas de mot de passe défini.`);
       // Patient existant sans mot de passe - connexion temporaire
-      const token = Buffer.from(`${patient._id}:${Date.now()}:temp`).toString('base64');
+      const token = generateToken(patient._id);
 
       return res.status(200).json({
         success: true,
@@ -149,8 +158,8 @@ export const loginPatient = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
 
-    // Créer un token JWT simple
-    const token = Buffer.from(`${patient._id}:${Date.now()}`).toString('base64');
+    // Créer un token JWT
+    const token = generateToken(patient._id);
 
     res.status(200).json({
       success: true,

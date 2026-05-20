@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shield, Clock } from "lucide-react";
 import { toast } from "sonner";
+import { getApiBaseUrl } from "@/lib/api-base";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -20,12 +21,6 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-// Configuration admin
-const ADMIN_CREDENTIALS = {
-  email: "dienebat782@gmail.com",
-  password: "T2000@1970",
-};
-
 function AdminPage() {
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -34,7 +29,8 @@ function AdminPage() {
   // Vérifier si déjà authentifié
   useEffect(() => {
     const adminAuth = localStorage.getItem("adminAuthenticated");
-    if (adminAuth === "true") {
+    const token = localStorage.getItem("authToken");
+    if (adminAuth === "true" && token) {
       // @ts-ignore
       navigate({ to: "/dashboard" });
     }
@@ -44,19 +40,40 @@ function AdminPage() {
     e.preventDefault();
     setLoginLoading(true);
 
-    if (
-      loginData.email === ADMIN_CREDENTIALS.email &&
-      loginData.password === ADMIN_CREDENTIALS.password
-    ) {
-      localStorage.setItem("adminAuthenticated", "true");
-      toast.success("Connexion réussie");
-      // @ts-ignore
-      navigate({ to: "/dashboard" });
-    } else {
-      toast.error("Email ou mot de passe incorrect");
-    }
+    try {
+      const API_URL = `${getApiBaseUrl()}/api/patients/login`;
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
 
-    setLoginLoading(false);
+      const data = await response.json();
+
+      if (data.success) {
+        // Vérifier si c'est bien l'admin
+        const adminEmail = "dienebat782@gmail.com";
+        if (data.patient.email === adminEmail) {
+          localStorage.setItem("authToken", data.token);
+          localStorage.setItem("adminAuthenticated", "true");
+          localStorage.setItem("patient", JSON.stringify(data.patient));
+          toast.success("Connexion administrateur réussie");
+          // @ts-ignore
+          navigate({ to: "/dashboard" });
+        } else {
+          toast.error("Accès refusé. Vous n'avez pas les droits administrateur.");
+        }
+      } else {
+        toast.error(data.message || "Email ou mot de passe incorrect");
+      }
+    } catch (error) {
+      console.error("Erreur de connexion:", error);
+      toast.error("Erreur de connexion au serveur.");
+    } finally {
+      setLoginLoading(false);
+    }
   };
 
   return (

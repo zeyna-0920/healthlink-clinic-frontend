@@ -2,16 +2,46 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
 
 // Charger les variables d'environnement
 dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// --- Configuration de Sécurité ---
+
+// 1. Helmet : Ajoute des headers de sécurité HTTP (XSS, Clickjacking, etc.)
+app.use(helmet());
+
+// 2. CORS : Configuration plus restrictive
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL] 
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
+// 3. Rate Limiting : Limite le nombre de requêtes par IP pour éviter les attaques brute-force
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limite chaque IP à 100 requêtes par fenêtre
+  message: {
+    success: false,
+    message: "Trop de requêtes effectuées depuis cette IP, veuillez réessayer plus tard."
+  }
+});
+app.use('/api/', limiter);
+
+// 4. Sanitize : Protection contre les injections NoSQL
+app.use(mongoSanitize());
+
+// 5. Body Parsers
+app.use(express.json({ limit: '10kb' })); // Limite la taille du body pour éviter les attaques DoS
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Connexion MongoDB
 const connectDB = async () => {

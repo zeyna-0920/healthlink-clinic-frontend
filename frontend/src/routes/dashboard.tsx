@@ -240,7 +240,9 @@ function DashboardPage() {
   useEffect(() => {
     // Vérification de l'accès administrateur
     const adminAuth = localStorage.getItem("adminAuthenticated");
-    if (adminAuth !== "true") {
+    const token = localStorage.getItem("authToken");
+
+    if (adminAuth !== "true" || !token) {
       setIsAdmin(false);
       setLoading(false);
       return;
