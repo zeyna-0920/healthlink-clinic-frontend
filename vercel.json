@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "http://localhost:5000/api/$1"
+      "destination": "https://healthlink-clinic-backend.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",
