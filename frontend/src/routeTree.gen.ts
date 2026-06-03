@@ -12,12 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TarifsRouteImport } from './routes/tarifs'
 import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RendezVousRouteImport } from './routes/rendez-vous'
 import { Route as PersonnelRouteImport } from './routes/personnel'
 import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as PatientsRouteImport } from './routes/patients'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MedicamentsRouteImport } from './routes/medicaments'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BedsRouteImport } from './routes/beds'
@@ -41,6 +43,11 @@ const SetPasswordRoute = SetPasswordRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RendezVousRoute = RendezVousRouteImport.update({
@@ -71,6 +78,11 @@ const NotificationsRoute = NotificationsRouteImport.update({
 const MedicamentsRoute = MedicamentsRouteImport.update({
   id: '/medicaments',
   path: '/medicaments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -127,12 +139,14 @@ export interface FileRoutesByFullPath {
   '/beds': typeof BedsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/medicaments': typeof MedicamentsRoute
   '/notifications': typeof NotificationsRoute
   '/patients': typeof PatientsRouteWithChildren
   '/payments': typeof PaymentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/set-password': typeof SetPasswordRoute
   '/tarifs': typeof TarifsRoute
@@ -147,12 +161,14 @@ export interface FileRoutesByTo {
   '/beds': typeof BedsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/medicaments': typeof MedicamentsRoute
   '/notifications': typeof NotificationsRoute
   '/patients': typeof PatientsRouteWithChildren
   '/payments': typeof PaymentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/set-password': typeof SetPasswordRoute
   '/tarifs': typeof TarifsRoute
@@ -168,12 +184,14 @@ export interface FileRoutesById {
   '/beds': typeof BedsRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/medicaments': typeof MedicamentsRoute
   '/notifications': typeof NotificationsRoute
   '/patients': typeof PatientsRouteWithChildren
   '/payments': typeof PaymentsRoute
   '/personnel': typeof PersonnelRoute
   '/rendez-vous': typeof RendezVousRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/set-password': typeof SetPasswordRoute
   '/tarifs': typeof TarifsRoute
@@ -190,12 +208,14 @@ export interface FileRouteTypes {
     | '/beds'
     | '/contact'
     | '/dashboard'
+    | '/forgot-password'
     | '/medicaments'
     | '/notifications'
     | '/patients'
     | '/payments'
     | '/personnel'
     | '/rendez-vous'
+    | '/reset-password'
     | '/services'
     | '/set-password'
     | '/tarifs'
@@ -210,12 +230,14 @@ export interface FileRouteTypes {
     | '/beds'
     | '/contact'
     | '/dashboard'
+    | '/forgot-password'
     | '/medicaments'
     | '/notifications'
     | '/patients'
     | '/payments'
     | '/personnel'
     | '/rendez-vous'
+    | '/reset-password'
     | '/services'
     | '/set-password'
     | '/tarifs'
@@ -230,12 +252,14 @@ export interface FileRouteTypes {
     | '/beds'
     | '/contact'
     | '/dashboard'
+    | '/forgot-password'
     | '/medicaments'
     | '/notifications'
     | '/patients'
     | '/payments'
     | '/personnel'
     | '/rendez-vous'
+    | '/reset-password'
     | '/services'
     | '/set-password'
     | '/tarifs'
@@ -251,12 +275,14 @@ export interface RootRouteChildren {
   BedsRoute: typeof BedsRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   MedicamentsRoute: typeof MedicamentsRoute
   NotificationsRoute: typeof NotificationsRoute
   PatientsRoute: typeof PatientsRouteWithChildren
   PaymentsRoute: typeof PaymentsRoute
   PersonnelRoute: typeof PersonnelRoute
   RendezVousRoute: typeof RendezVousRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   SetPasswordRoute: typeof SetPasswordRoute
   TarifsRoute: typeof TarifsRoute
@@ -283,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rendez-vous': {
@@ -325,6 +358,13 @@ declare module '@tanstack/react-router' {
       path: '/medicaments'
       fullPath: '/medicaments'
       preLoaderRoute: typeof MedicamentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -415,12 +455,14 @@ const rootRouteChildren: RootRouteChildren = {
   BedsRoute: BedsRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   MedicamentsRoute: MedicamentsRoute,
   NotificationsRoute: NotificationsRoute,
   PatientsRoute: PatientsRouteWithChildren,
   PaymentsRoute: PaymentsRoute,
   PersonnelRoute: PersonnelRoute,
   RendezVousRoute: RendezVousRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   SetPasswordRoute: SetPasswordRoute,
   TarifsRoute: TarifsRoute,

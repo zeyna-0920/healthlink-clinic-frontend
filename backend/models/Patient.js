@@ -56,6 +56,18 @@ const patientSchema = new mongoose.Schema(
       phone: String,
       relationship: String,
     },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    githubId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
     isRegistered: {
       type: Boolean,
       default: false,

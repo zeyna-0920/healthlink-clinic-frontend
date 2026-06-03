@@ -1,6 +1,8 @@
 import Patient from '../models/Patient.js';
 import Notification from '../models/Notification.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 // Générer un token JWT
 const generateToken = (id) => {
@@ -8,6 +10,15 @@ const generateToken = (id) => {
     expiresIn: '30d',
   });
 };
+
+// Configurer le transporteur d'email
+const transporter = nodemailer.createTransport({
+  service: process.env.EMAIL_SERVICE || 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // Inscription d'un nouveau patient
 export const registerPatient = async (req, res) => {
@@ -27,14 +38,12 @@ export const registerPatient = async (req, res) => {
       emergencyContact,
     } = req.body;
 
-    // Vérifier si le patient existe déjà
     const normalizedEmail = email.toLowerCase().trim();
     const existingPatient = await Patient.findOne({ email: normalizedEmail });
     if (existingPatient) {
       return res.status(400).json({ success: false, message: 'Ce patient est déjà enregistré' });
     }
 
-    // Vérifier que le mot de passe est fourni
     if (!password || password.length < 6) {
       return res.status(400).json({ success: false, message: 'Le mot de passe est requis et doit contenir au moins 6 caractères' });
     }
@@ -58,7 +67,6 @@ export const registerPatient = async (req, res) => {
 
     await patient.save();
 
-    // Créer une notification de bienvenue
     await Notification.create({
       patientId: patient._id,
       type: 'registration_complete',
@@ -75,42 +83,7 @@ export const registerPatient = async (req, res) => {
     });
   } catch (error) {
     console.error('Erreur lors de l\'inscription:', error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// Définir un mot de passe pour un patient existant
-export const setPassword = async (req, res) => {
-  try {
-    const { patientId } = req.params;
-    const { password } = req.body;
-
-    if (!password || password.length < 6) {
-      return res.status(400).json({ success: false, message: 'Le mot de passe doit contenir au moins 6 caractères' });
-    }
-
-    const patient = await Patient.findById(patientId);
-
-    if (!patient) {
-      return res.status(404).json({ success: false, message: 'Patient non trouvé' });
-    }
-
-    // Mettre à jour le mot de passe
-    patient.password = password;
-    await patient.save();
-
-    res.status(200).json({
-      success: true,
-      message: 'Mot de passe défini avec succès',
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
@@ -118,26 +91,18 @@ export const setPassword = async (req, res) => {
 export const loginPatient = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Vérifier que les données sont fournies
     if (!email || !password) {
       return res.status(400).json({ success: false, message: 'Email et mot de passe requis' });
     }
 
-    // Normaliser l'email
     const normalizedEmail = email.toLowerCase().trim();
-
-    // Chercher le patient par email
     const patient = await Patient.findOne({ email: normalizedEmail }).select('+password');
 
     if (!patient) {
-      console.log(`Tentative de connexion échouée: patient non trouvé pour l'email ${normalizedEmail}`);
       return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
 
-    // Cas spécial : Le patient existe mais n'a pas de mot de passe (ex: créé par admin)
     if (!patient.password) {
-      console.log(`⚠️ Patient trouvé (${normalizedEmail}) mais n'a pas de mot de passe défini.`);
       const token = generateToken(patient._id);
       return res.status(200).json({
         success: true,
@@ -148,26 +113,17 @@ export const loginPatient = async (req, res) => {
       });
     }
 
-    // Sécurité : Vérifier si le mot de passe dans la DB est bien haché
     if (!patient.password.startsWith('$2a$') && !patient.password.startsWith('$2b$')) {
-      console.error(`🚨 ALERTE SÉCURITÉ: Le mot de passe pour ${normalizedEmail} n'est PAS haché dans la base de données !`);
-      return res.status(500).json({ success: false, message: 'Erreur interne de sécurité. Veuillez contacter l\'administrateur.' });
+      console.error(`🚨 ALERTE SÉCURITÉ: Le mot de passe pour ${normalizedEmail} n'est PAS haché !`);
+      return res.status(500).json({ success: false, message: 'Erreur interne de sécurité.' });
     }
 
-    // Vérifier le mot de passe
-    console.log(`Vérification du mot de passe pour: ${normalizedEmail}`);
     const isPasswordValid = await patient.comparePassword(password);
-
     if (!isPasswordValid) {
-      console.log(`❌ Mot de passe invalide pour le patient ${normalizedEmail}`);
       return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
 
-    console.log(`✅ Connexion réussie pour: ${normalizedEmail}`);
-
-    // Créer un token JWT
     const token = generateToken(patient._id);
-
     res.status(200).json({
       success: true,
       message: 'Connexion réussie',
@@ -176,136 +132,150 @@ export const loginPatient = async (req, res) => {
     });
   } catch (error) {
     console.error('Erreur lors de la connexion:', error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Récupérer un patient par ID
-export const getPatient = async (req, res) => {
+// Mot de passe oublié
+export const forgotPassword = async (req, res) => {
   try {
-    const { patientId } = req.params;
-    const patient = await Patient.findById(patientId);
+    const { email } = req.body;
+    const patient = await Patient.findOne({ email: email.toLowerCase().trim() });
 
     if (!patient) {
-      return res.status(404).json({ message: 'Patient non trouvé' });
+      return res.status(404).json({ success: false, message: 'Aucun utilisateur avec cet email' });
     }
 
-    res.status(200).json({
-      success: true,
-      patient,
-    });
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    patient.resetPasswordToken = resetToken;
+    patient.resetPasswordExpires = Date.now() + 3600000; // 1 heure
+
+    await patient.save();
+
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
+    console.log('Lien de réinitialisation:', resetUrl);
+
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      const mailOptions = {
+        to: patient.email,
+        from: process.env.EMAIL_USER,
+        subject: 'Réinitialisation de votre mot de passe - HealthLink Clinic',
+        text: `Vous recevez cet email car vous avez demandé la réinitialisation du mot de passe de votre compte.\n\n` +
+          `Veuillez cliquer sur le lien suivant :\n\n${resetUrl}\n\n` +
+          `Si vous n'avez pas demandé cela, ignorez cet email.\n`,
+      };
+      await transporter.sendMail(mailOptions);
+    }
+
+    res.status(200).json({ success: true, message: 'Email envoyé' });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: 'Erreur lors de l\'envoi' });
   }
 };
 
-// Récupérer tous les patients (Admin seulement)
+// Réinitialiser le mot de passe
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const patient = await Patient.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!patient) {
+      return res.status(400).json({ success: false, message: 'Lien invalide ou expiré' });
+    }
+
+    patient.password = password;
+    patient.resetPasswordToken = undefined;
+    patient.resetPasswordExpires = undefined;
+    await patient.save();
+
+    res.status(200).json({ success: true, message: 'Mot de passe mis à jour' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Social Login Success
+export const socialLoginSuccess = async (req, res) => {
+  if (req.user) {
+    const token = generateToken(req.user._id);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    res.redirect(`${frontendUrl}/auth?token=${token}&patient=${encodeURIComponent(JSON.stringify(req.user))}`);
+  } else {
+    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth?error=social_failed`);
+  }
+};
+
+// CRUD et autres fonctions
+export const getPatient = async (req, res) => {
+  try {
+    const patient = await Patient.findById(req.params.patientId);
+    if (!patient) return res.status(404).json({ message: 'Patient non trouvé' });
+    res.status(200).json({ success: true, patient });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 export const getAllPatients = async (req, res) => {
   try {
-    console.log('GET /api/patients - Récupération de tous les patients');
     const patients = await Patient.find({ status: { $nin: ['archived'] } });
-    console.log(`✅ ${patients.length} patients trouvés`);
-    res.status(200).json({
-      success: true,
-      count: patients.length,
-      patients,
-    });
+    res.status(200).json({ success: true, count: patients.length, patients });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Mettre à jour les informations d'un patient
 export const updatePatient = async (req, res) => {
   try {
     const { patientId } = req.params;
     const updateData = req.body;
-
-    // Sécurité : Ne pas permettre la mise à jour du mot de passe via cette route
-    if (updateData.password) {
-      delete updateData.password;
-    }
-
-    const patient = await Patient.findByIdAndUpdate(
-      patientId,
-      updateData,
-      { new: true, runValidators: true }
-    );
-
-    if (!patient) {
-      return res.status(404).json({ message: 'Patient non trouvé' });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Patient mis à jour',
-      patient,
-    });
+    if (updateData.password) delete updateData.password;
+    const patient = await Patient.findByIdAndUpdate(patientId, updateData, { new: true, runValidators: true });
+    if (!patient) return res.status(404).json({ message: 'Patient non trouvé' });
+    res.status(200).json({ success: true, message: 'Patient mis à jour', patient });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Supprimer un patient (archive)
 export const deletePatient = async (req, res) => {
   try {
-    const { patientId } = req.params;
-    const patient = await Patient.findByIdAndUpdate(
-      patientId,
-      { status: 'archived' },
-      { new: true }
-    );
-
-    if (!patient) {
-      return res.status(404).json({ message: 'Patient non trouvé' });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Patient archivé',
-    });
+    const patient = await Patient.findByIdAndUpdate(req.params.patientId, { status: 'archived' }, { new: true });
+    if (!patient) return res.status(404).json({ message: 'Patient non trouvé' });
+    res.status(200).json({ success: true, message: 'Patient archivé' });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// Rechercher un patient par email
 export const searchPatientByEmail = async (req, res) => {
   try {
     const { email } = req.query;
-    if (!email) {
-      return res.status(400).json({ success: false, message: 'Email requis' });
-    }
-
+    if (!email) return res.status(400).json({ success: false, message: 'Email requis' });
     const patient = await Patient.findOne({ email: email.toLowerCase().trim() });
-    
-    if (!patient) {
-      return res.status(404).json({ success: false, message: 'Aucun patient trouvé avec cet email' });
-    }
-
-    res.status(200).json({
-      success: true,
-      patient,
-    });
+    if (!patient) return res.status(404).json({ success: false, message: 'Aucun patient trouvé' });
+    res.status(200).json({ success: true, patient });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const setPassword = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+    const { password } = req.body;
+    if (!password || password.length < 6) return res.status(400).json({ success: false, message: '6 caractères min' });
+    const patient = await Patient.findById(patientId);
+    if (!patient) return res.status(404).json({ success: false, message: 'Patient non trouvé' });
+    patient.password = password;
+    await patient.save();
+    res.status(200).json({ success: true, message: 'Mot de passe défini' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

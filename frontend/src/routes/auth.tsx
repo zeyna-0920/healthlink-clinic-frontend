@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,9 @@ import {
   ChevronRight,
   HeartPulse,
   Activity,
-  UserPlus
+  UserPlus,
+  Github,
+  Chrome
 } from "lucide-react";
 import { toast } from "sonner";
 import { getApiBaseUrl } from "@/lib/api-base";
@@ -38,9 +40,30 @@ export const Route = createFileRoute("/auth")({
 const API_URL = `${getApiBaseUrl()}/api/patients`;
 
 function AuthPage() {
+  const navigate = useNavigate();
   const [tab, setTab] = useState("login");
   const [loginLoading, setLoginLoading] = useState(false);
   const [signupLoading, setSignupLoading] = useState(false);
+
+  // Gérer le retour du social login
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const patientStr = params.get("patient");
+    const error = params.get("error");
+
+    if (token && patientStr) {
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("patient", decodeURIComponent(patientStr));
+      toast.success("Connexion sociale réussie !");
+      setTimeout(() => {
+        // @ts-ignore
+        navigate({ to: "/rendez-vous" });
+      }, 500);
+    } else if (error) {
+      toast.error("Échec de la connexion sociale. Veuillez réessayer.");
+    }
+  }, [navigate]);
 
   // États du formulaire de connexion
   const [loginData, setLoginData] = useState({
@@ -73,6 +96,11 @@ function AuthPage() {
     });
   };
 
+  const handleSocialLogin = (provider: "google" | "github") => {
+    const backendBaseUrl = getApiBaseUrl() || "http://localhost:5000";
+    window.location.href = `${backendBaseUrl}/api/patients/auth/${provider}`;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -103,12 +131,14 @@ function AuthPage() {
         if (data.requiresPasswordSetup) {
           toast.info("Veuillez définir un mot de passe pour sécuriser votre compte.");
           setTimeout(() => {
-            window.location.href = "/set-password";
+            // @ts-ignore
+            navigate({ to: "/set-password" });
           }, 1000);
         } else {
           toast.success("Heureux de vous revoir !");
           setTimeout(() => {
-            window.location.href = "/rendez-vous";
+            // @ts-ignore
+            navigate({ to: "/rendez-vous" });
           }, 1000);
         }
       } else {
@@ -258,6 +288,34 @@ function AuthPage() {
 
               <div className="p-8">
                 <TabsContent value="login" className="mt-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <Button
+                      variant="outline"
+                      className="h-12 rounded-xl border-slate-200 hover:bg-slate-50 gap-2 font-bold"
+                      onClick={() => handleSocialLogin("google")}
+                    >
+                      <Chrome className="h-5 w-5 text-red-500" />
+                      Google
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-12 rounded-xl border-slate-200 hover:bg-slate-50 gap-2 font-bold"
+                      onClick={() => handleSocialLogin("github")}
+                    >
+                      <Github className="h-5 w-5" />
+                      GitHub
+                    </Button>
+                  </div>
+
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-100"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-white px-4 text-slate-400 font-bold tracking-wider">Ou avec email</span>
+                    </div>
+                  </div>
+
                   <form onSubmit={handleLogin} className="space-y-6">
                     <div className="space-y-4">
                       <div className="space-y-2">
@@ -279,7 +337,7 @@ function AuthPage() {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between ml-1">
                           <Label htmlFor="login-password" className="text-slate-700 font-semibold">Mot de passe</Label>
-                          <button type="button" className="text-xs font-bold text-primary hover:underline">Oublié ?</button>
+                          <Link to="/forgot-password" title="Réinitialiser" className="text-xs font-bold text-primary hover:underline">Oublié ?</Link>
                         </div>
                         <div className="relative group">
                           <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
@@ -314,6 +372,34 @@ function AuthPage() {
                 </TabsContent>
 
                 <TabsContent value="signup" className="mt-0 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <Button
+                      variant="outline"
+                      className="h-12 rounded-xl border-slate-200 hover:bg-slate-50 gap-2 font-bold"
+                      onClick={() => handleSocialLogin("google")}
+                    >
+                      <Chrome className="h-5 w-5 text-red-500" />
+                      Google
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-12 rounded-xl border-slate-200 hover:bg-slate-50 gap-2 font-bold"
+                      onClick={() => handleSocialLogin("github")}
+                    >
+                      <Github className="h-5 w-5" />
+                      GitHub
+                    </Button>
+                  </div>
+
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-100"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-white px-4 text-slate-400 font-bold tracking-wider">Ou avec email</span>
+                    </div>
+                  </div>
+
                   <form onSubmit={handleSignup} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">

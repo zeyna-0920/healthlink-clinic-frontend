@@ -8,6 +8,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
+import passport from 'passport';
+import configurePassport from './config/passport.js';
 
 // Importer les routes
 import patientRoutes from './routes/patientRoutes.js';
@@ -19,6 +21,10 @@ import medicamentRoutes from './routes/medicamentRoutes.js';
 import passementRoutes from './routes/passementRoutes.js';
 
 const app = express();
+
+// Configuration Passport
+configurePassport();
+app.use(passport.initialize());
 
 // --- Configuration de Sécurité ---
 
