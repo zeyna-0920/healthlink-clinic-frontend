@@ -132,7 +132,10 @@ export function getPatients(): Promise<Patient[]> {
         return [];
       }
       console.log("Patients API Response:", data);
-      return Array.isArray(data?.patients) ? data.patients : Array.isArray(data) ? data : [];
+      // Sécurisation : extraire le tableau patients de la réponse
+      if (data?.patients && Array.isArray(data.patients)) return data.patients;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch((err) => {
       console.error("Fetch error for patients:", err);
@@ -186,10 +189,12 @@ export function getBeds(): Promise<Bed[]> {
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
-      if (!res.ok) return [];
       const data = await res.json();
+      if (!res.ok) return [];
       // Le backend renvoie { success: true, beds: [...] } ou l'array directement
-      return Array.isArray(data?.beds) ? data.beds : Array.isArray(data) ? data : [];
+      if (data?.beds && Array.isArray(data.beds)) return data.beds;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch(() => []);
 }
@@ -224,10 +229,12 @@ export function getPayments(): Promise<Payment[]> {
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
-      if (!res.ok) return [];
       const data = await res.json();
-      // Le backend renvoie { success: true, payments: [...] }
-      return Array.isArray(data?.payments) ? data.payments : Array.isArray(data) ? data : [];
+      if (!res.ok) return [];
+      // Le backend renvoie { success: true, payments: [...] } ou l'array directement
+      if (data?.payments && Array.isArray(data.payments)) return data.payments;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch(() => []);
 }
@@ -238,9 +245,12 @@ export function getNotifications(): Promise<Notification[]> {
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
-      if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.notifications) ? data.notifications : Array.isArray(data) ? data : [];
+      if (!res.ok) return [];
+      // Le backend renvoie { success: true, notifications: [...] } ou l'array directement
+      if (data?.notifications && Array.isArray(data.notifications)) return data.notifications;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch(() => []);
 }
@@ -251,9 +261,12 @@ export function getAppointments(): Promise<Appointment[]> {
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
-      if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.appointments) ? data.appointments : Array.isArray(data) ? data : [];
+      if (!res.ok) return [];
+      // Le backend renvoie { success: true, appointments: [...] } ou l'array directement
+      if (data?.appointments && Array.isArray(data.appointments)) return data.appointments;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch(() => []);
 }
@@ -264,9 +277,12 @@ export function getPatientAppointments(patientId: string): Promise<Appointment[]
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
-      if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.appointments) ? data.appointments : Array.isArray(data) ? data : [];
+      if (!res.ok) return [];
+      // Le backend renvoie { success: true, appointments: [...] } ou l'array directement
+      if (data?.appointments && Array.isArray(data.appointments)) return data.appointments;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch(() => []);
 }
@@ -277,9 +293,12 @@ export function getAppointmentsByDate(date: string): Promise<Appointment[]> {
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
-      if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.appointments) ? data.appointments : Array.isArray(data) ? data : [];
+      if (!res.ok) return [];
+      // Le backend renvoie { success: true, appointments: [...] } ou l'array directement
+      if (data?.appointments && Array.isArray(data.appointments)) return data.appointments;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch(() => []);
 }
@@ -345,9 +364,12 @@ export function getPassements(): Promise<Passement[]> {
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
-      if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data) ? data : [];
+      if (!res.ok) return [];
+      // Le backend renvoie { success: true, data: [...] } ou l'array directement
+      if (data?.data && Array.isArray(data.data)) return data.data;
+      if (Array.isArray(data)) return data;
+      return [];
     })
     .catch(() => []);
 }

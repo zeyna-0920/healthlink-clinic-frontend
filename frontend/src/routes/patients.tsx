@@ -68,11 +68,11 @@ function PatientsPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return patients.filter((patient) => {
-      const firstName = patient.firstName || "";
-      const lastName = patient.lastName || "";
-      const email = patient.email || "";
-      const phone = patient.phone || "";
+    return (patients ?? []).filter((patient) => {
+      const firstName = patient?.firstName || "";
+      const lastName = patient?.lastName || "";
+      const email = patient?.email || "";
+      const phone = patient?.phone || "";
       const fullName = `${firstName} ${lastName}`.toLowerCase();
       return (
         !q ||

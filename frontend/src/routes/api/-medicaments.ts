@@ -167,18 +167,21 @@ export async function getMedicaments(): Promise<Medicament[]> {
       },
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
       console.warn(
         "Impossible de récupérer les médicaments depuis l'API, utilisation des données locales",
+        data
       );
       return medicamentsLocaux;
     }
 
-    const data = await response.json();
+    // Vérifier que les données sont valides (peut être dans data.data ou data directement)
+    const meds = data?.data && Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : [];
 
-    // Vérifier que les données sont valides
-    if (Array.isArray(data) && data.length > 0) {
-      return data;
+    if (meds.length > 0) {
+      return meds;
     }
 
     // Si aucune donnée depuis l'API, utiliser les données locales

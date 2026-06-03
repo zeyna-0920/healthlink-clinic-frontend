@@ -337,22 +337,22 @@ function DashboardPage() {
     }
   };
 
-  const totalRevenue = payments.reduce((sum, p) => sum + (p.amount || 0), 0);
-  const unreadNotifications = notifications.filter((n) => !n.isRead).length;
-  const recentPatients = patients.slice(0, 5);
-  const recentPayments = payments.slice(0, 5);
-  const recentNotifications = notifications.slice(0, 5);
-  const recentAppointments = appointments.slice(0, 5);
+  const totalRevenue = (payments ?? []).reduce((sum, p) => sum + (p?.amount || 0), 0);
+  const unreadNotifications = (notifications ?? []).filter((n) => !n?.isRead).length;
+  const recentPatients = (patients ?? []).slice(0, 5);
+  const recentPayments = (payments ?? []).slice(0, 5);
+  const recentNotifications = (notifications ?? []).slice(0, 5);
+  const recentAppointments = (appointments ?? []).slice(0, 5);
 
   const activityFeed = useMemo(() => {
     const combined = [
-      ...notifications.map((n) => ({ ...n, activityType: "notification" })),
-      ...appointments.map((a) => ({ ...a, activityType: "appointment" })),
+      ...(notifications ?? []).map((n) => ({ ...n, activityType: "notification" })),
+      ...(appointments ?? []).map((a) => ({ ...a, activityType: "appointment" })),
     ];
     return combined
       .sort((a, b) => {
-        const dateA = new Date("sentAt" in a ? a.sentAt : a.createdAt || 0).getTime();
-        const dateB = new Date("sentAt" in b ? b.sentAt : b.createdAt || 0).getTime();
+        const dateA = new Date("sentAt" in a ? a.sentAt : (a as any).createdAt || 0).getTime();
+        const dateB = new Date("sentAt" in b ? b.sentAt : (b as any).createdAt || 0).getTime();
         if (isNaN(dateA)) return 1;
         if (isNaN(dateB)) return -1;
         return dateB - dateA;
@@ -361,14 +361,14 @@ function DashboardPage() {
   }, [notifications, appointments]);
 
   const bedOccupancyRate =
-    bedStats.total > 0 ? Math.round((bedStats.occupied / bedStats.total) * 100) : 0;
+    (bedStats?.total || 0) > 0 ? Math.round(((bedStats?.occupied || 0) / bedStats.total) * 100) : 0;
 
   const bedChartData = useMemo(
     () =>
       [
-        { name: "Occupés", value: bedStats.occupied, color: "hsl(var(--destructive))" },
-        { name: "Disponibles", value: bedStats.available, color: "hsl(var(--primary))" },
-        { name: "Maintenance", value: bedStats.maintenance, color: "hsl(var(--muted-foreground))" },
+        { name: "Occupés", value: bedStats?.occupied || 0, color: "hsl(var(--destructive))" },
+        { name: "Disponibles", value: bedStats?.available || 0, color: "hsl(var(--primary))" },
+        { name: "Maintenance", value: bedStats?.maintenance || 0, color: "hsl(var(--muted-foreground))" },
       ].filter((d) => d.value > 0),
     [bedStats],
   );
