@@ -135,12 +135,10 @@ export const loginPatient = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
 
-    // Vérifier si le patient a un mot de passe défini
+    // Cas spécial : Le patient existe mais n'a pas de mot de passe (ex: créé par admin)
     if (!patient.password) {
-      console.log(`Patient trouvé (${normalizedEmail}) mais n'a pas de mot de passe défini.`);
-      // Patient existant sans mot de passe - connexion temporaire
+      console.log(`⚠️ Patient trouvé (${normalizedEmail}) mais n'a pas de mot de passe défini.`);
       const token = generateToken(patient._id);
-
       return res.status(200).json({
         success: true,
         message: 'Connexion réussie. Veuillez définir un mot de passe.',
@@ -150,13 +148,22 @@ export const loginPatient = async (req, res) => {
       });
     }
 
+    // Sécurité : Vérifier si le mot de passe dans la DB est bien haché
+    if (!patient.password.startsWith('$2a$') && !patient.password.startsWith('$2b$')) {
+      console.error(`🚨 ALERTE SÉCURITÉ: Le mot de passe pour ${normalizedEmail} n'est PAS haché dans la base de données !`);
+      return res.status(500).json({ success: false, message: 'Erreur interne de sécurité. Veuillez contacter l\'administrateur.' });
+    }
+
     // Vérifier le mot de passe
+    console.log(`Vérification du mot de passe pour: ${normalizedEmail}`);
     const isPasswordValid = await patient.comparePassword(password);
 
     if (!isPasswordValid) {
-      console.log(`Mot de passe invalide pour le patient ${normalizedEmail}`);
+      console.log(`❌ Mot de passe invalide pour le patient ${normalizedEmail}`);
       return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
     }
+
+    console.log(`✅ Connexion réussie pour: ${normalizedEmail}`);
 
     // Créer un token JWT
     const token = generateToken(patient._id);
@@ -223,6 +230,11 @@ export const updatePatient = async (req, res) => {
     const { patientId } = req.params;
     const updateData = req.body;
 
+    // Sécurité : Ne pas permettre la mise à jour du mot de passe via cette route
+    if (updateData.password) {
+      delete updateData.password;
+    }
+
     const patient = await Patient.findByIdAndUpdate(
       patientId,
       updateData,
@@ -263,7 +275,6 @@ export const deletePatient = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Patient archivé',
-      patient,
     });
   } catch (error) {
     res.status(500).json({
@@ -277,13 +288,14 @@ export const deletePatient = async (req, res) => {
 export const searchPatientByEmail = async (req, res) => {
   try {
     const { email } = req.query;
-    const patient = await Patient.findOne({ email });
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email requis' });
+    }
 
+    const patient = await Patient.findOne({ email: email.toLowerCase().trim() });
+    
     if (!patient) {
-      return res.status(404).json({
-        success: false,
-        message: 'Patient non trouvé',
-      });
+      return res.status(404).json({ success: false, message: 'Aucun patient trouvé avec cet email' });
     }
 
     res.status(200).json({
