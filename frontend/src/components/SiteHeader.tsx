@@ -116,6 +116,11 @@ export function SiteHeader() {
           </nav>
 
           <div className="hidden lg:flex items-center gap-2">
+            {!isAdmin && (
+              <Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
+                <Link to="/admin">Staff</Link>
+              </Button>
+            )}
             <Button asChild variant="ghost" size="sm">
               <Link to="/auth">Connexion</Link>
             </Button>

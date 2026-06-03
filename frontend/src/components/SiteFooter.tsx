@@ -109,6 +109,7 @@ export function SiteFooter() {
                   { to: "/medicaments", label: "Médicaments" },
                   { to: "/tarifs", label: "Tarifs" },
                   { to: "/rendez-vous", label: "Rendez-vous" },
+                  { to: "/admin", label: "Administration" },
                 ].map((l) => (
                   <li key={l.to}>
                     <Link
