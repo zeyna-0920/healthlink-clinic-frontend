@@ -133,6 +133,7 @@ function MedicamentsPage() {
       setLoading(true);
       setError(null);
       try {
+        console.log("Chargement des médicaments...");
         let data: Medicament[];
         if (API_URL) {
           const res = await fetch(API_URL);
@@ -297,7 +298,7 @@ function MedicamentsPage() {
                           Prix Clinique
                         </span>
                         <span className="text-lg font-black text-emerald-700">
-                          {m.prixClinic.toLocaleString()} <span className="text-[10px]">FCFA</span>
+                          {(m.prixClinic ?? 0).toLocaleString()} <span className="text-[10px]">FCFA</span>
                         </span>
                       </div>
                       <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 transition-colors group-hover:bg-white">
@@ -305,7 +306,7 @@ function MedicamentsPage() {
                           Pharmacie ext.
                         </span>
                         <span className="text-lg font-bold text-slate-600">
-                          {m.prixPharmacie.toLocaleString()} <span className="text-[10px]">FCFA</span>
+                          {(m.prixPharmacie ?? 0).toLocaleString()} <span className="text-[10px]">FCFA</span>
                         </span>
                       </div>
                     </div>

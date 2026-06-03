@@ -3,7 +3,9 @@ import Medicament from '../models/Medicament.js';
 // Récupérer tous les médicaments
 export const getAllMedicaments = async (req, res) => {
   try {
+    console.log('GET /api/medicaments - Récupération de tous les médicaments');
     const medicaments = await Medicament.find({ active: true }).sort({ nom: 1 });
+    console.log(`✅ ${medicaments.length} médicaments trouvés`);
     
     if (!medicaments || medicaments.length === 0) {
       return res.status(200).json([]);
@@ -36,6 +38,7 @@ export const getAllMedicaments = async (req, res) => {
 export const getMedicamentById = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(`GET /api/medicaments/${id} - Récupération d'un médicament`);
     const medicament = await Medicament.findById(id);
 
     if (!medicament) {
@@ -62,7 +65,7 @@ export const getMedicamentById = async (req, res) => {
 // Créer un médicament
 export const createMedicament = async (req, res) => {
   try {
-    const { nom, description, categorie, image, dosage, sideEffects, contraindications, prix, stock } = req.body;
+    const { nom, description, categorie, image, dosage, sideEffects, contraindications, prixClinic, prixPharmacie, ordonnance, stock } = req.body;
 
     // Vérifier que le nom et la catégorie sont fournis
     if (!nom || !description || !categorie || !image) {
@@ -80,7 +83,9 @@ export const createMedicament = async (req, res) => {
       dosage,
       sideEffects,
       contraindications,
-      prix,
+      prixClinic,
+      prixPharmacie,
+      ordonnance,
       stock,
     });
 
@@ -111,7 +116,7 @@ export const createMedicament = async (req, res) => {
 export const updateMedicament = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nom, description, categorie, image, dosage, sideEffects, contraindications, prix, stock, active } = req.body;
+    const { nom, description, categorie, image, dosage, sideEffects, contraindications, prixClinic, prixPharmacie, ordonnance, stock, active } = req.body;
 
     const medicament = await Medicament.findByIdAndUpdate(
       id,
@@ -123,7 +128,9 @@ export const updateMedicament = async (req, res) => {
         dosage,
         sideEffects,
         contraindications,
-        prix,
+        prixClinic,
+        prixPharmacie,
+        ordonnance,
         stock,
         active,
       },
@@ -188,6 +195,7 @@ export const deleteMedicament = async (req, res) => {
 export const getMedicamentsByCategory = async (req, res) => {
   try {
     const { categorie } = req.params;
+    console.log(`GET /api/medicaments/categorie/${categorie} - Recherche par catégorie`);
     const validCategories = ['fievre', 'douleur', 'infection', 'coeur', 'diarrhee'];
 
     if (!validCategories.includes(categorie)) {
@@ -199,10 +207,19 @@ export const getMedicamentsByCategory = async (req, res) => {
 
     const medicaments = await Medicament.find({ categorie, active: true }).sort({ nom: 1 });
 
-    res.status(200).json({
-      success: true,
-      data: medicaments,
-    });
+    // Formater pour correspondre au format attendu par le frontend (array direct)
+    const formattedMedicaments = medicaments.map((med) => ({
+      id: med._id.toString(),
+      nom: med.nom,
+      description: med.description,
+      categorie: med.categorie,
+      image: med.image,
+      prixClinic: med.prixClinic,
+      prixPharmacie: med.prixPharmacie,
+      ordonnance: med.ordonnance,
+    }));
+
+    res.status(200).json(formattedMedicaments);
   } catch (error) {
     console.error('Erreur lors de la recherche par catégorie:', error);
     res.status(500).json({

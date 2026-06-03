@@ -341,7 +341,7 @@ export function AppointmentBookingForm() {
                   </div>
                   <div className="text-right">
                     <span className="text-4xl font-black">
-                      {pricePreview.amount.toLocaleString("fr-FR")}
+                      {(pricePreview.amount ?? 0).toLocaleString("fr-FR")}
                     </span>
                     <span className="ml-2 text-sm font-bold opacity-70 text-white">FCFA</span>
                   </div>

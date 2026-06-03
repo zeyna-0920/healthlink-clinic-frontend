@@ -5,16 +5,15 @@
  * - `VITE_API_URL` : prioritaire si défini (ex. déploiement).
  */
 export function getApiBaseUrl(): string {
+  // 1. Vérifier si une URL est explicitement définie dans l'env (ex: Vercel Dashboard)
   const fromEnv = import.meta.env.VITE_API_URL;
   if (fromEnv != null && String(fromEnv).trim() !== "") {
     return String(fromEnv).replace(/\/$/, "");
   }
-  if (import.meta.env.DEV && import.meta.env.SSR) {
-    return "http://127.0.0.1:5000";
-  }
-  if (import.meta.env.DEV) {
-    return "";
-  }
-  // En production sur Vercel, si VITE_API_URL n'est pas défini, on utilise l'URL Render
-  return "https://healthlink-clinic-backend.onrender.com";
+
+  // 2. En production (Vercel) ou développement
+  // Nous retournons une chaîne vide pour utiliser des URLs relatives (/api/...)
+  // Cela permet à Vercel de proxifier les requêtes vers Render via vercel.json
+  // et évite les problèmes de CORS et de configuration d'URL en dur.
+  return "";
 }

@@ -22,10 +22,10 @@ export const protect = async (req, res, next) => {
       // Ajouter l'utilisateur à la requête (sans le mot de passe)
       req.user = await Patient.findById(decoded.id).select('-password');
       
-      next();
+      return next();
     } catch (error) {
       console.error(error);
-      res.status(401).json({
+      return res.status(401).json({
         success: false,
         message: 'Non autorisé, token invalide'
       });
@@ -33,7 +33,7 @@ export const protect = async (req, res, next) => {
   }
 
   if (!token) {
-    res.status(401).json({
+    return res.status(401).json({
       success: false,
       message: 'Non autorisé, aucun token fourni'
     });
@@ -48,9 +48,9 @@ export const admin = (req, res, next) => {
   const adminEmail = "dienebat782@gmail.com";
   
   if (req.user && req.user.email === adminEmail) {
-    next();
+    return next();
   } else {
-    res.status(403).json({
+    return res.status(403).json({
       success: false,
       message: 'Accès refusé, droits administrateur requis'
     });

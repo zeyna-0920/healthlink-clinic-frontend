@@ -198,10 +198,12 @@ export const getPatient = async (req, res) => {
   }
 };
 
-// Récupérer tous les patients
+// Récupérer tous les patients (Admin seulement)
 export const getAllPatients = async (req, res) => {
   try {
+    console.log('GET /api/patients - Récupération de tous les patients');
     const patients = await Patient.find({ status: { $nin: ['archived'] } });
+    console.log(`✅ ${patients.length} patients trouvés`);
     res.status(200).json({
       success: true,
       count: patients.length,

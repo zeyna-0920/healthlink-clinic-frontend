@@ -87,12 +87,14 @@ export const getPatientAppointments = async (req, res) => {
   }
 };
 
-// Récupérer tous les rendez-vous
+// Récupérer tous les rendez-vous (Admin seulement)
 export const getAllAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.find()
-      .populate('patientId', 'firstName lastName email phone')
-      .sort({ appointmentDate: 1 });
+    console.log('GET /api/appointments - Récupération de tous les rendez-vous');
+    const appointments = await Appointment.find({})
+      .populate('patientId', 'firstName lastName email')
+      .sort({ appointmentDate: -1 });
+    console.log(`✅ ${appointments.length} rendez-vous trouvés`);
 
     res.status(200).json({
       success: true,

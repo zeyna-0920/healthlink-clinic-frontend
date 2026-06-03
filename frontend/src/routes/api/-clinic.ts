@@ -126,13 +126,13 @@ export function getPatients(): Promise<Patient[]> {
     headers: getAuthHeaders(),
   })
     .then(async (res) => {
+      const data = await res.json();
       if (!res.ok) {
-        console.error(`API Error: ${res.status} ${res.statusText}`);
+        console.error(`API Error: ${res.status} ${res.statusText}`, data);
         return [];
       }
-      const data = await res.json();
       console.log("Patients API Response:", data);
-      return Array.isArray(data?.patients) ? data.patients : [];
+      return Array.isArray(data?.patients) ? data.patients : Array.isArray(data) ? data : [];
     })
     .catch((err) => {
       console.error("Fetch error for patients:", err);
@@ -188,7 +188,8 @@ export function getBeds(): Promise<Bed[]> {
     .then(async (res) => {
       if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.beds) ? data.beds : [];
+      // Le backend renvoie { success: true, beds: [...] } ou l'array directement
+      return Array.isArray(data?.beds) ? data.beds : Array.isArray(data) ? data : [];
     })
     .catch(() => []);
 }
@@ -206,12 +207,12 @@ export function getBedStatistics(): Promise<{
     .then(async (res) => {
       if (!res.ok) return { total: 0, occupied: 0, available: 0, maintenance: 0 };
       const data = await res.json();
-      const stats = data?.statistics ?? {};
+      const stats = data?.statistics || data || {};
       return {
-        total: stats.totalBeds ?? 0,
-        occupied: stats.occupiedBeds ?? 0,
-        available: stats.availableBeds ?? 0,
-        maintenance: stats.maintenanceBeds ?? 0,
+        total: stats.totalBeds ?? stats.total ?? 0,
+        occupied: stats.occupiedBeds ?? stats.occupied ?? 0,
+        available: stats.availableBeds ?? stats.available ?? 0,
+        maintenance: stats.maintenanceBeds ?? stats.maintenance ?? 0,
       };
     })
     .catch(() => ({ total: 0, occupied: 0, available: 0, maintenance: 0 }));
@@ -225,7 +226,8 @@ export function getPayments(): Promise<Payment[]> {
     .then(async (res) => {
       if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.payments) ? data.payments : [];
+      // Le backend renvoie { success: true, payments: [...] }
+      return Array.isArray(data?.payments) ? data.payments : Array.isArray(data) ? data : [];
     })
     .catch(() => []);
 }
@@ -238,7 +240,7 @@ export function getNotifications(): Promise<Notification[]> {
     .then(async (res) => {
       if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.notifications) ? data.notifications : [];
+      return Array.isArray(data?.notifications) ? data.notifications : Array.isArray(data) ? data : [];
     })
     .catch(() => []);
 }
@@ -251,7 +253,7 @@ export function getAppointments(): Promise<Appointment[]> {
     .then(async (res) => {
       if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.appointments) ? data.appointments : [];
+      return Array.isArray(data?.appointments) ? data.appointments : Array.isArray(data) ? data : [];
     })
     .catch(() => []);
 }
@@ -264,7 +266,7 @@ export function getPatientAppointments(patientId: string): Promise<Appointment[]
     .then(async (res) => {
       if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.appointments) ? data.appointments : [];
+      return Array.isArray(data?.appointments) ? data.appointments : Array.isArray(data) ? data : [];
     })
     .catch(() => []);
 }
@@ -277,7 +279,7 @@ export function getAppointmentsByDate(date: string): Promise<Appointment[]> {
     .then(async (res) => {
       if (!res.ok) return [];
       const data = await res.json();
-      return Array.isArray(data?.appointments) ? data.appointments : [];
+      return Array.isArray(data?.appointments) ? data.appointments : Array.isArray(data) ? data : [];
     })
     .catch(() => []);
 }

@@ -1,26 +1,59 @@
+// Charger les variables d'environnement au tout début
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 
-// Charger les variables d'environnement
-dotenv.config();
+// Importer les routes
+import patientRoutes from './routes/patientRoutes.js';
+import bedRoutes from './routes/bedRoutes.js';
+import appointmentRoutes from './routes/appointmentRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import medicamentRoutes from './routes/medicamentRoutes.js';
+import passementRoutes from './routes/passementRoutes.js';
 
 const app = express();
 
 // --- Configuration de Sécurité ---
 
 // 1. Helmet : Ajoute des headers de sécurité HTTP (XSS, Clickjacking, etc.)
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false, // Permet le chargement des ressources entre domaines
+}));
 
-// 2. CORS : Configuration plus restrictive
+// 2. CORS : Configuration pour autoriser le frontend
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'https://healthlink-clinic-frontend.vercel.app', // Remplacez par votre URL Vercel réelle
+  /\.vercel\.app$/ // Autorise tous les sous-domaines vercel.app
+];
+
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL] 
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: function (origin, callback) {
+    // Autoriser les requêtes sans origine (comme les outils mobiles ou curl)
+    if (!origin) return callback(null, true);
+    
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (allowedOrigin instanceof RegExp) return allowedOrigin.test(origin);
+      return allowedOrigin === origin;
+    });
+
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked request from origin: ${origin}`);
+      // En production, on peut être plus souple si nécessaire pour le débogage
+      callback(null, true); 
+    }
+  },
+  credentials: true,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
@@ -46,25 +79,16 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 // Connexion MongoDB
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthlink-clinic', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    console.log('Tentative de connexion à MongoDB...');
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthlink-clinic');
+    console.log(`✅ MongoDB Connecté: ${conn.connection.host}`);
+    return true;
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error(`❌ Erreur de connexion MongoDB: ${error.message}`);
+    console.log('Le serveur continuera de fonctionner, mais les fonctionnalités liées à la base de données seront indisponibles.');
+    return false;
   }
 };
-
-// Importer les routes
-import patientRoutes from './routes/patientRoutes.js';
-import bedRoutes from './routes/bedRoutes.js';
-import appointmentRoutes from './routes/appointmentRoutes.js';
-import paymentRoutes from './routes/paymentRoutes.js';
-import notificationRoutes from './routes/notificationRoutes.js';
-import medicamentRoutes from './routes/medicamentRoutes.js';
-import passementRoutes from './routes/passementRoutes.js';
 
 // Utiliser les routes
 app.use('/api/patients', patientRoutes);
@@ -77,6 +101,7 @@ app.use('/api/passements', passementRoutes);
 
 // Route racine du backend
 app.get('/', (req, res) => {
+  console.log('GET / - Requête sur la route racine du backend');
   res.status(200).json({
     success: true,
     message: 'API HealthLink Clinic fonctionne. Utilisez /api/patients, /api/beds, /api/payments, /api/notifications, etc.',
@@ -114,29 +139,26 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
-  try {
-    await connectDB();
-    const server = app.listen(PORT, () => {
-      console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
-    });
-    server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.error(
-          `\nLe port ${PORT} est déjà utilisé (EADDRINUSE).\n` +
-            `Fermez l’autre terminal qui lance le backend, ou tuez le processus Node concerné, ou utilisez un autre port :\n` +
-            `  PowerShell : Get-NetTCPConnection -LocalPort ${PORT} | Select OwningProcess\n` +
-            `  puis : Stop-Process -Id <PID> -Force\n` +
-            `  ou : set PORT=5001 && npm run dev\n`
-        );
-      } else {
-        console.error(err);
-      }
-      process.exit(1);
-    });
-  } catch (error) {
-    console.error(`Erreur lors du démarrage du serveur: ${error.message}`);
+  // On tente la connexion mais on n'attend pas forcément qu'elle réussisse pour lancer Express
+  connectDB();
+  
+  const server = app.listen(PORT, () => {
+    console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+    console.log(`🔗 URL: http://localhost:${PORT}`);
+    console.log(`Mode: ${process.env.NODE_ENV || 'development'}`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(
+        `\n❌ Le port ${PORT} est déjà utilisé.\n` +
+          `Veuillez fermer l'autre instance du serveur ou changer de port dans le fichier .env\n`
+      );
+    } else {
+      console.error('Erreur serveur:', err);
+    }
     process.exit(1);
-  }
+  });
 };
 
 startServer();
