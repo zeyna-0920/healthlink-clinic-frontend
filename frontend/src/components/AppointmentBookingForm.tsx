@@ -92,11 +92,14 @@ export function AppointmentBookingForm() {
     const { amount, period: tariffPeriod } = getConsultationAmount(hour, ageGroup);
     const department = getDepartmentForType(type);
 
+    console.log("DEBUG: Submit started", { patientId: patient._id, amount, tariffPeriod });
+
     setSubmitting(true);
     try {
       const appointmentDate = new Date(date);
       appointmentDate.setHours(12, 0, 0, 0);
 
+      console.log("DEBUG: Calling createAppointment...");
       const result = await createAppointment({
         patientId: patient._id,
         appointmentDate: appointmentDate.toISOString(),
@@ -106,13 +109,17 @@ export function AppointmentBookingForm() {
         doctorName: "À assigner",
       });
 
+      console.log("DEBUG: createAppointment result", result);
+
       if (!result.success || !result.appointment?._id) {
         toast.error(result.message || "Échec de la réservation.");
         return;
       }
 
+      console.log("DEBUG: Calling confirmAppointment...");
       await confirmAppointment(result.appointment._id);
 
+      console.log("DEBUG: Saving pending checkout...");
       savePendingCheckout({
         appointmentId: result.appointment._id,
         patientId: patient._id,
@@ -127,11 +134,13 @@ export function AppointmentBookingForm() {
       });
 
       toast.success("Rendez-vous confirmé ! Passez au paiement.");
+      console.log("DEBUG: Navigating to /tarifs");
       navigate({
         to: "/tarifs",
         search: { checkout: "1", appointmentId: result.appointment._id },
       });
-    } catch {
+    } catch (error) {
+      console.error("DEBUG: Catch error", error);
       toast.error("Erreur réseau. Vérifiez que le serveur est démarré.");
     } finally {
       setSubmitting(false);

@@ -22,6 +22,13 @@ import passementRoutes from './routes/passementRoutes.js';
 
 const app = express();
 
+// Log toutes les requêtes entrantes pour debug
+app.use((req, res, next) => {
+  console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
+  if (req.method === 'POST') console.log('Body:', req.body);
+  next();
+});
+
 // Configuration Passport
 configurePassport();
 app.use(passport.initialize());
@@ -66,10 +73,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// 3. Rate Limiting : Limite le nombre de requêtes par IP pour éviter les attaques brute-force
+// 3. Rate Limiting : Désactivé ou augmenté en développement pour éviter les blocages de test
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limite chaque IP à 100 requêtes par fenêtre
+  windowMs: 15 * 60 * 1000,
+  max: 1000, // Augmenté à 1000 pour le dev
   message: {
     success: false,
     message: "Trop de requêtes effectuées depuis cette IP, veuillez réessayer plus tard."
@@ -150,7 +157,7 @@ const startServer = async () => {
   // On tente la connexion mais on n'attend pas forcément qu'elle réussisse pour lancer Express
   connectDB();
   
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Serveur démarré sur le port ${PORT}`);
     console.log(`🔗 URL: http://localhost:${PORT}`);
     console.log(`Mode: ${process.env.NODE_ENV || 'development'}`);

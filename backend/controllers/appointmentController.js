@@ -1,10 +1,16 @@
 import Appointment from '../models/Appointment.js';
 import Patient from '../models/Patient.js';
 import Notification from '../models/Notification.js';
-import { sendAdminAppointmentNotification, sendPatientAppointmentConfirmation, sendPatientAppointmentRejection } from '../utils/emailService.js';
+import { 
+  sendAdminAppointmentNotification, 
+  sendPatientAppointmentConfirmation, 
+  sendPatientAppointmentRejection,
+  sendPatientAppointmentReceived
+} from '../utils/emailService.js';
 
 // Créer un rendez-vous
 export const createAppointment = async (req, res) => {
+  console.log('--- Requête: Créer un rendez-vous ---');
   try {
     const {
       patientId,
@@ -14,6 +20,7 @@ export const createAppointment = async (req, res) => {
       doctorName,
       reason,
     } = req.body;
+    console.log(`Patient ID: ${patientId}, Date: ${appointmentDate}, Time: ${appointmentTime}`);
 
     const patient = await Patient.findById(patientId);
     if (!patient) {
@@ -31,13 +38,14 @@ export const createAppointment = async (req, res) => {
     });
 
     await appointment.save();
+    console.log(`✅ Rendez-vous sauvegardé en base de données: ${appointment._id}`);
 
     // Notification pour le patient
     await Notification.create({
       patientId,
-      type: 'appointment_confirmed',
-      title: 'Rendez-vous confirmé',
-      message: `Votre rendez-vous est confirmé pour le ${appointmentDate} à ${appointmentTime}`,
+      type: 'appointment_scheduled',
+      title: 'Rendez-vous enregistré',
+      message: `Votre demande de rendez-vous pour le ${appointmentDate} à ${appointmentTime} est en attente de confirmation.`,
       relatedId: appointment._id,
     });
 
@@ -51,11 +59,24 @@ export const createAppointment = async (req, res) => {
     });
 
     // Envoi de l'email à l'administrateur
-    await sendAdminAppointmentNotification(patient, appointment);
+    const adminEmailResult = await sendAdminAppointmentNotification(patient, appointment);
+    if (!adminEmailResult.success) {
+      console.error(`⚠️ Email Admin non envoyé: ${adminEmailResult.error}`);
+    }
+
+    // Envoi de l'email de réception au patient
+    const patientEmailResult = await sendPatientAppointmentReceived(patient, appointment);
+    if (!patientEmailResult.success) {
+      console.error(`⚠️ Email Patient non envoyé: ${patientEmailResult.error}`);
+    }
 
     res.status(201).json({
       success: true,
-      message: 'Rendez-vous créé',
+      message: 'Rendez-vous créé et notifications traitées',
+      emailStatus: {
+        admin: adminEmailResult.success,
+        patient: patientEmailResult.success
+      },
       appointment,
     });
   } catch (error) {
@@ -165,8 +186,10 @@ export const updateAppointment = async (req, res) => {
 
 // Confirmer un rendez-vous
 export const confirmAppointment = async (req, res) => {
+  console.log('--- Requête: Confirmer un rendez-vous ---');
   try {
     const { appointmentId } = req.params;
+    console.log(`Appointment ID: ${appointmentId}`);
 
     const appointment = await Appointment.findByIdAndUpdate(
       appointmentId,
@@ -188,11 +211,17 @@ export const confirmAppointment = async (req, res) => {
     });
 
     // Envoi de l'email de confirmation au patient
-    await sendPatientAppointmentConfirmation(appointment.patientId, appointment);
+    const emailResult = await sendPatientAppointmentConfirmation(appointment.patientId, appointment);
+    if (emailResult.success) {
+      console.log(`✅ Email de confirmation envoyé au patient: ${appointment.patientId.email}`);
+    } else {
+      console.error(`⚠️ Échec de l'envoi de l'email de confirmation: ${emailResult.error}`);
+    }
 
     res.status(200).json({
       success: true,
       message: 'Rendez-vous confirmé et email envoyé au patient',
+      emailSent: emailResult.success,
       appointment,
     });
   } catch (error) {

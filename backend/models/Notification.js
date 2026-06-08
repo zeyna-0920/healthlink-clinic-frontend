@@ -9,7 +9,7 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['appointment_reminder', 'appointment_confirmed', 'appointment_request', 'payment_reminder', 'payment_successful', 'payment_failed', 'registration_complete', 'bed_assigned', 'bed_released', 'admin_alert'],
+      enum: ['appointment_reminder', 'appointment_confirmed', 'appointment_scheduled', 'appointment_request', 'appointment_cancelled', 'payment_reminder', 'payment_successful', 'payment_failed', 'registration_complete', 'bed_assigned', 'bed_released', 'admin_alert'],
       required: true,
     },
     title: String,

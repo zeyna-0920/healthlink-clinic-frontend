@@ -2,7 +2,7 @@ import Patient from '../models/Patient.js';
 import Notification from '../models/Notification.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import nodemailer from 'nodemailer';
+import { sendWelcomeEmail } from '../utils/emailService.js';
 
 // Générer un token JWT
 const generateToken = (id) => {
@@ -10,15 +10,6 @@ const generateToken = (id) => {
     expiresIn: '30d',
   });
 };
-
-// Configurer le transporteur d'email
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE || 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 // Inscription d'un nouveau patient
 export const registerPatient = async (req, res) => {
@@ -75,9 +66,16 @@ export const registerPatient = async (req, res) => {
       channel: 'email',
     });
 
+    // Envoi de l'email de bienvenue
+    const welcomeEmailResult = await sendWelcomeEmail(patient);
+    if (!welcomeEmailResult.success) {
+      console.error(`⚠️ Email de bienvenue non envoyé: ${welcomeEmailResult.error}`);
+    }
+
     res.status(201).json({
       success: true,
       message: 'Patient enregistré avec succès',
+      emailSent: welcomeEmailResult.success,
       token: generateToken(patient._id),
       patient: patient.toJSON(),
     });
