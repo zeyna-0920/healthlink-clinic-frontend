@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 // Charger le .env depuis le dossier backend (plus robuste)
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
-console.log('--- Initialisation du service Email ---');
+console.log('--- INITIALISATION EMAIL V2 (PORT 587) ---');
 console.log('EMAIL_USER:', process.env.EMAIL_USER);
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '********' : 'NON DÉFINI');
 console.log('ADMIN_EMAIL:', process.env.ADMIN_EMAIL);
