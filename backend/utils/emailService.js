@@ -14,14 +14,17 @@ console.log('EMAIL_USER:', process.env.EMAIL_USER);
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '********' : 'NON DÉFINI');
 console.log('ADMIN_EMAIL:', process.env.ADMIN_EMAIL);
 
-// Configuration du transporteur d'email
+// Configuration du transporteur d'email (Optimisée pour Render)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true pour le port 465, false pour les autres
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
   tls: {
+    // Ne pas échouer sur les certificats invalides (nécessaire pour certains serveurs cloud)
     rejectUnauthorized: false
   }
 });
