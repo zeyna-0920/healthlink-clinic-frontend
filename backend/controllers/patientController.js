@@ -221,9 +221,12 @@ export const getPatient = async (req, res) => {
 
 export const getAllPatients = async (req, res) => {
   try {
+    console.log('--- Requête Admin: Récupération de tous les patients ---');
     const patients = await Patient.find({ status: { $nin: ['archived'] } });
+    console.log(`✅ ${patients.length} patients trouvés`);
     res.status(200).json({ success: true, count: patients.length, patients });
   } catch (error) {
+    console.error('❌ Erreur getAllPatients:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
