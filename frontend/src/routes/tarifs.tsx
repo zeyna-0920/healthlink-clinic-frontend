@@ -73,6 +73,7 @@ function TarifsPage() {
 
     setPaying(method);
     try {
+      console.log("DEBUG: Creating payment record...");
       const created = await createPayment({
         patientId: patient._id,
         appointmentId: pending.appointmentId,
@@ -81,6 +82,8 @@ function TarifsPage() {
         phoneNumber: phone.trim(),
         description: `Consultation ${pending.consultationLabel} — ${pending.appointmentDate} ${pending.appointmentTime}`,
       });
+
+      console.log("DEBUG: Payment record created", created);
 
       if (!created.success || !created.payment?._id) {
         toast.error(created.message || "Impossible de créer le paiement.");

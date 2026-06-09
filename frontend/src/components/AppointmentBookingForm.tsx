@@ -36,8 +36,8 @@ import {
   getTariffPeriodFromTime,
   TARIFFS,
 } from "@/lib/pricing";
-import { getStoredPatient, savePendingCheckout } from "@/lib/patient-session";
-import { confirmAppointment, createAppointment } from "@/routes/api/-clinic";
+import { getAuthToken, getStoredPatient, savePendingCheckout } from "@/lib/patient-session";
+import { createAppointment } from "@/routes/api/-clinic";
 
 const TOTAL_BEDS = 20;
 const OCCUPIED_BEDS = 18;
@@ -79,6 +79,12 @@ export function AppointmentBookingForm() {
       return;
     }
 
+    if (!getAuthToken()) {
+      toast.error("Votre session a expiré. Reconnectez-vous.");
+      navigate({ to: "/auth" });
+      return;
+    }
+
     if (!date || !hour || !type || !reason.trim()) {
       toast.error("Veuillez remplir tous les champs.");
       return;
@@ -113,11 +119,14 @@ export function AppointmentBookingForm() {
 
       if (!result.success || !result.appointment?._id) {
         toast.error(result.message || "Échec de la réservation.");
+        if (result.message?.includes("Session expirée")) {
+          navigate({ to: "/auth" });
+        }
         return;
       }
 
-      console.log("DEBUG: Calling confirmAppointment...");
-      await confirmAppointment(result.appointment._id);
+      // Supprimé : await confirmAppointment(result.appointment._id); 
+      // La confirmation se fera après le paiement réel.
 
       console.log("DEBUG: Saving pending checkout...");
       savePendingCheckout({
@@ -133,15 +142,14 @@ export function AppointmentBookingForm() {
         phone: patient.phone,
       });
 
-      toast.success("Rendez-vous confirmé ! Passez au paiement.");
-      console.log("DEBUG: Navigating to /tarifs");
-      navigate({
+      toast.success("Rendez-vous enregistré ! Passez au paiement.");
+      await navigate({
         to: "/tarifs",
         search: { checkout: "1", appointmentId: result.appointment._id },
       });
     } catch (error) {
-      console.error("DEBUG: Catch error", error);
-      toast.error("Erreur réseau. Vérifiez que le serveur est démarré.");
+      console.error("Erreur réservation:", error);
+      toast.error("Erreur inattendue. Réessayez ou reconnectez-vous.");
     } finally {
       setSubmitting(false);
     }
