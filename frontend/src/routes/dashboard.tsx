@@ -252,6 +252,9 @@ function DashboardPage() {
     const loadData = async () => {
       setLoading(true);
       try {
+        console.log("--- Dashboard: Démarrage du chargement des données ---");
+        
+        // Exécuter les requêtes en parallèle mais gérer les erreurs individuellement
         const [
           patientsData,
           bedsData,
@@ -261,24 +264,32 @@ function DashboardPage() {
           appointmentsData,
           passementsData,
         ] = await Promise.all([
-          getPatients(),
-          getBeds(),
-          getBedStatistics(),
-          getPayments(),
-          getNotifications(),
-          getAppointments(),
-          getPassements(),
+          getPatients().catch(err => { console.error("Error getPatients:", err); return []; }),
+          getBeds().catch(err => { console.error("Error getBeds:", err); return []; }),
+          getBedStatistics().catch(err => { console.error("Error getBedStatistics:", err); return { total: 0, occupied: 0, available: 0, maintenance: 0 }; }),
+          getPayments().catch(err => { console.error("Error getPayments:", err); return []; }),
+          getNotifications().catch(err => { console.error("Error getNotifications:", err); return []; }),
+          getAppointments().catch(err => { console.error("Error getAppointments:", err); return []; }),
+          getPassements().catch(err => { console.error("Error getPassements:", err); return []; }),
         ]);
 
-        setPatients(patientsData);
-        setBeds(bedsData);
-        setBedStats(bedStatsData);
-        setPayments(paymentsData);
-        setNotifications(notificationsData);
-        setAppointments(appointmentsData);
-        setPassements(passementsData);
+        console.log(`--- Dashboard: Données reçues ---`, {
+          patientsCount: patientsData.length,
+          bedsCount: bedsData.length,
+          paymentsCount: paymentsData.length,
+          appointmentsCount: appointmentsData.length,
+          passementsCount: (passementsData || []).length
+        });
+
+        setPatients(Array.isArray(patientsData) ? patientsData : []);
+        setBeds(Array.isArray(bedsData) ? bedsData : []);
+        setBedStats(bedStatsData || { total: 0, occupied: 0, available: 0, maintenance: 0 });
+        setPayments(Array.isArray(paymentsData) ? paymentsData : []);
+        setNotifications(Array.isArray(notificationsData) ? notificationsData : []);
+        setAppointments(Array.isArray(appointmentsData) ? appointmentsData : []);
+        setPassements(Array.isArray(passementsData) ? passementsData : []);
       } catch (error) {
-        console.error("Error loading dashboard data:", error);
+        console.error("Critical error loading dashboard data:", error);
       } finally {
         setLoading(false);
       }
