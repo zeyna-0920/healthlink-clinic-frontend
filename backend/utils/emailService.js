@@ -1,42 +1,48 @@
 import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const emailUser = process.env.EMAIL_USER || process.env.SMTP_USER;
+const emailPass = process.env.EMAIL_PASS || process.env.SMTP_PASSWORD;
+const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+const smtpPort = Number(process.env.SMTP_PORT || 587);
+const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
 
-// Charger le .env depuis le dossier backend (plus robuste)
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
+console.log('--- INITIALISATION EMAIL ---');
+console.log('SMTP_HOST:', smtpHost);
+console.log('EMAIL_USER:', emailUser || 'NON DÉFINI');
+console.log('EMAIL_PASS:', emailPass ? '********' : 'NON DÉFINI');
+console.log('ADMIN_EMAIL:', process.env.ADMIN_EMAIL || 'NON DÉFINI');
+console.log('FRONTEND_URL:', frontendUrl);
 
-console.log('--- INITIALISATION EMAIL V2 (PORT 587) ---');
-console.log('EMAIL_USER:', process.env.EMAIL_USER);
-console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '********' : 'NON DÉFINI');
-console.log('ADMIN_EMAIL:', process.env.ADMIN_EMAIL);
-
-// Configuration du transporteur d'email (Optimisée pour Render)
+// Configuration du transporteur d'email (Render / Gmail)
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // true pour le port 465, false pour les autres
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+  host: smtpHost,
+  port: smtpPort,
+  secure: smtpPort === 465,
+  auth: emailUser && emailPass ? { user: emailUser, pass: emailPass } : undefined,
   tls: {
-    // Ne pas échouer sur les certificats invalides (nécessaire pour certains serveurs cloud)
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
+
+function ensureEmailConfigured() {
+  if (!emailUser || !emailPass) {
+    return 'EMAIL_USER et EMAIL_PASS (ou SMTP_USER / SMTP_PASSWORD) doivent être définis sur le serveur';
+  }
+  return null;
+}
 
 // Vérifier la connexion au démarrage
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('❌ Erreur de configuration Nodemailer:', error);
-  } else {
-    console.log('✅ Serveur d\'email prêt à envoyer des messages');
-  }
-});
+if (ensureEmailConfigured()) {
+  console.error('❌ Email non configuré:', ensureEmailConfigured());
+} else {
+  transporter.verify((error) => {
+    if (error) {
+      console.error('❌ Erreur de configuration Nodemailer:', error.message);
+    } else {
+      console.log('✅ Serveur d\'email prêt à envoyer des messages');
+    }
+  });
+}
 
 /**
  * Envoie un email de notification à l'administrateur pour un nouveau rendez-vous
@@ -44,6 +50,12 @@ transporter.verify((error, success) => {
  * @param {Object} appointment - Les informations du rendez-vous
  */
 export const sendAdminAppointmentNotification = async (patient, appointment) => {
+  const configError = ensureEmailConfigured();
+  if (configError) {
+    console.error('❌', configError);
+    return { success: false, error: configError };
+  }
+
   const adminEmail = process.env.ADMIN_EMAIL || 'dienebat782@gmail.com';
 
   const calculateAge = (birthDate) => {
@@ -58,7 +70,7 @@ export const sendAdminAppointmentNotification = async (patient, appointment) => 
   };
 
   const mailOptions = {
-    from: `"HealthLink Clinic" <${process.env.EMAIL_USER || 'noreply@healthlink.sn'}>`,
+    from: `"HealthLink Clinic" <${emailUser || 'noreply@healthlink.sn'}>`,
     to: adminEmail,
     subject: `🚨 Nouveau Rendez-vous : ${patient.firstName} ${patient.lastName}`,
     html: `
@@ -89,7 +101,7 @@ export const sendAdminAppointmentNotification = async (patient, appointment) => 
           </table>
 
           <div style="margin-top: 30px; text-align: center;">
-            <a href="http://localhost:3000/admin" style="background: #0ea5e9; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Gérer sur le Dashboard</a>
+            <a href="${frontendUrl}/admin" style="background: #0ea5e9; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Gérer sur le Dashboard</a>
           </div>
         </div>
         <div style="background: #f8fafc; color: #64748b; padding: 15px; text-align: center; font-size: 12px;">
@@ -121,7 +133,7 @@ export const sendAdminAppointmentNotification = async (patient, appointment) => 
  */
 export const sendPatientAppointmentReceived = async (patient, appointment) => {
   const mailOptions = {
-    from: `"HealthLink Clinic" <${process.env.EMAIL_USER || 'noreply@healthlink.sn'}>`,
+    from: `"HealthLink Clinic" <${emailUser || 'noreply@healthlink.sn'}>`,
     to: patient.email,
     subject: `📩 Demande de rendez-vous reçue - HealthLink Clinic`,
     html: `
@@ -170,7 +182,7 @@ export const sendPatientAppointmentReceived = async (patient, appointment) => {
  */
 export const sendWelcomeEmail = async (patient) => {
   const mailOptions = {
-    from: `"HealthLink Clinic" <${process.env.EMAIL_USER || 'noreply@healthlink.sn'}>`,
+    from: `"HealthLink Clinic" <${emailUser || 'noreply@healthlink.sn'}>`,
     to: patient.email,
     subject: `👋 Bienvenue chez HealthLink Clinic, ${patient.firstName} !`,
     html: `
@@ -191,7 +203,7 @@ export const sendWelcomeEmail = async (patient) => {
           </ul>
 
           <div style="margin-top: 30px; text-align: center;">
-            <a href="http://localhost:3000/login" style="background: #0ea5e9; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Accéder à mon espace</a>
+            <a href="${frontendUrl}/auth" style="background: #0ea5e9; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Accéder à mon espace</a>
           </div>
 
           <p style="margin-top: 30px;">À très bientôt,<br>L'équipe HealthLink Clinic</p>
@@ -221,7 +233,7 @@ export const sendWelcomeEmail = async (patient) => {
  */
 export const sendPatientAppointmentConfirmation = async (patient, appointment) => {
   const mailOptions = {
-    from: `"HealthLink Clinic" <${process.env.EMAIL_USER || 'noreply@healthlink.sn'}>`,
+    from: `"HealthLink Clinic" <${emailUser || 'noreply@healthlink.sn'}>`,
     to: patient.email,
     subject: `✅ Confirmation de votre rendez-vous - HealthLink Clinic`,
     html: `
@@ -278,7 +290,7 @@ export const sendPatientAppointmentConfirmation = async (patient, appointment) =
  */
 export const sendPatientAppointmentRejection = async (patient, appointment) => {
   const mailOptions = {
-    from: `"HealthLink Clinic" <${process.env.EMAIL_USER || 'noreply@healthlink.sn'}>`,
+    from: `"HealthLink Clinic" <${emailUser || 'noreply@healthlink.sn'}>`,
     to: patient.email,
     subject: `❌ Information concernant votre rendez-vous - HealthLink Clinic`,
     html: `

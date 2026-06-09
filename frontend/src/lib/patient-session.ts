@@ -44,13 +44,13 @@ export type PendingCheckout = {
 };
 
 export function savePendingCheckout(data: PendingCheckout): void {
-  sessionStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify(data));
+  localStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify(data));
 }
 
 export function getPendingCheckout(): PendingCheckout | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = sessionStorage.getItem(PENDING_CHECKOUT_KEY);
+    const raw = localStorage.getItem(PENDING_CHECKOUT_KEY);
     if (!raw) return null;
     return JSON.parse(raw) as PendingCheckout;
   } catch {
@@ -59,5 +59,5 @@ export function getPendingCheckout(): PendingCheckout | null {
 }
 
 export function clearPendingCheckout(): void {
-  sessionStorage.removeItem(PENDING_CHECKOUT_KEY);
+  localStorage.removeItem(PENDING_CHECKOUT_KEY);
 }

@@ -328,16 +328,38 @@ export type CreateAppointmentInput = {
 export async function createAppointment(
   input: CreateAppointmentInput,
 ): Promise<{ success: boolean; appointment?: Appointment; message?: string }> {
-  const res = await fetch(`${API_BASE_URL}/api/appointments/create`, {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(input),
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    return { success: false, message: data.message || "Impossible de créer le rendez-vous" };
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/appointments/create`, {
+      method: "POST",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(input),
+    });
+
+    let data: { message?: string; appointment?: Appointment } = {};
+    try {
+      data = await res.json();
+    } catch {
+      return {
+        success: false,
+        message: `Réponse serveur invalide (${res.status}). Réessayez dans quelques instants.`,
+      };
+    }
+
+    if (!res.ok) {
+      const message =
+        res.status === 401
+          ? "Session expirée. Reconnectez-vous pour réserver."
+          : data.message || `Impossible de créer le rendez-vous (${res.status})`;
+      return { success: false, message };
+    }
+
+    return { success: true, appointment: data.appointment };
+  } catch {
+    return {
+      success: false,
+      message: "Impossible de contacter le serveur. Vérifiez votre connexion.",
+    };
   }
-  return { success: true, appointment: data.appointment };
 }
 
 export async function confirmAppointment(appointmentId: string): Promise<boolean> {

@@ -5,15 +5,19 @@
  * - `VITE_API_URL` : prioritaire si défini (ex. déploiement).
  */
 export function getApiBaseUrl(): string {
-  // 1. Vérifier si une URL est explicitement définie dans l'env (ex: Vercel Dashboard)
   const fromEnv = import.meta.env.VITE_API_URL;
   if (fromEnv != null && String(fromEnv).trim() !== "") {
-    return String(fromEnv).replace(/\/$/, "");
+    const url = String(fromEnv).replace(/\/$/, "");
+    // En production, ignorer localhost (erreur fréquente dans les variables Vercel)
+    if (import.meta.env.PROD && /localhost|127\.0\.0\.1/.test(url)) {
+      console.warn(
+        "VITE_API_URL pointe vers localhost en production — utilisation des URLs relatives /api/",
+      );
+      return "";
+    }
+    return url;
   }
 
-  // 2. En production (Vercel) ou développement
-  // Nous retournons une chaîne vide pour utiliser des URLs relatives (/api/...)
-  // Cela permet à Vercel de proxifier les requêtes vers Render via vercel.json
-  // et évite les problèmes de CORS et de configuration d'URL en dur.
+  // URLs relatives : Vercel proxifie /api/* vers Render (vercel.json)
   return "";
 }

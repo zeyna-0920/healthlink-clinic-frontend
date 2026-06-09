@@ -125,10 +125,16 @@ app.get('/', (req, res) => {
 
 // Route de test
 app.get('/api/health', (req, res) => {
+  const emailConfigured = Boolean(
+    (process.env.EMAIL_USER || process.env.SMTP_USER) &&
+      (process.env.EMAIL_PASS || process.env.SMTP_PASSWORD),
+  );
   res.status(200).json({
     success: true,
     message: 'Serveur en bonne santé',
     timestamp: new Date().toISOString(),
+    emailConfigured,
+    mongoConnected: mongoose.connection.readyState === 1,
   });
 });
 

@@ -58,25 +58,24 @@ export const createAppointment = async (req, res) => {
       relatedId: appointment._id,
     });
 
-    // Envoi de l'email à l'administrateur
-    const adminEmailResult = await sendAdminAppointmentNotification(patient, appointment);
-    if (!adminEmailResult.success) {
-      console.error(`⚠️ Email Admin non envoyé: ${adminEmailResult.error}`);
-    }
-
-    // Envoi de l'email de réception au patient
-    const patientEmailResult = await sendPatientAppointmentReceived(patient, appointment);
-    if (!patientEmailResult.success) {
-      console.error(`⚠️ Email Patient non envoyé: ${patientEmailResult.error}`);
-    }
+    // Emails en arrière-plan : ne pas bloquer la réponse (évite les timeouts sur Render)
+    Promise.all([
+      sendAdminAppointmentNotification(patient, appointment),
+      sendPatientAppointmentReceived(patient, appointment),
+    ])
+      .then(([adminEmailResult, patientEmailResult]) => {
+        if (!adminEmailResult.success) {
+          console.error(`⚠️ Email Admin non envoyé: ${adminEmailResult.error}`);
+        }
+        if (!patientEmailResult.success) {
+          console.error(`⚠️ Email Patient non envoyé: ${patientEmailResult.error}`);
+        }
+      })
+      .catch((err) => console.error('⚠️ Erreur envoi emails rendez-vous:', err));
 
     res.status(201).json({
       success: true,
       message: 'Rendez-vous créé et notifications traitées',
-      emailStatus: {
-        admin: adminEmailResult.success,
-        patient: patientEmailResult.success
-      },
       appointment,
     });
   } catch (error) {

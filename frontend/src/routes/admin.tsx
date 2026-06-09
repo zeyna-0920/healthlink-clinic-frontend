@@ -21,16 +21,19 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
+const ADMIN_EMAIL = "dienebat782@gmail.com";
+
 function AdminPage() {
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // Vérifier si déjà authentifié
+  // Rediriger vers le dashboard seulement si c'est bien l'admin déjà connecté
   useEffect(() => {
     const adminAuth = localStorage.getItem("adminAuthenticated");
     const token = localStorage.getItem("authToken");
-    if (adminAuth === "true" && token) {
+    const patient = JSON.parse(localStorage.getItem("patient") || "{}");
+    if (adminAuth === "true" && token && patient?.email === ADMIN_EMAIL) {
       // @ts-ignore
       navigate({ to: "/dashboard" });
     }
@@ -54,8 +57,7 @@ function AdminPage() {
 
       if (data.success) {
         // Vérifier si c'est bien l'admin
-        const adminEmail = "dienebat782@gmail.com";
-        if (data.patient.email === adminEmail) {
+        if (data.patient.email === ADMIN_EMAIL) {
           localStorage.setItem("authToken", data.token);
           localStorage.setItem("adminAuthenticated", "true");
           localStorage.setItem("patient", JSON.stringify(data.patient));
