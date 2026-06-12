@@ -34,8 +34,7 @@ function AdminPage() {
     const token = localStorage.getItem("authToken");
     const patient = JSON.parse(localStorage.getItem("patient") || "{}");
     if (adminAuth === "true" && token && patient?.email === ADMIN_EMAIL) {
-      // @ts-ignore
-      navigate({ to: "/dashboard" });
+      navigate("/dashboard");
     }
   }, [navigate]);
 
@@ -62,8 +61,7 @@ function AdminPage() {
           localStorage.setItem("adminAuthenticated", "true");
           localStorage.setItem("patient", JSON.stringify(data.patient));
           toast.success("Authentification administrateur confirmée");
-          // @ts-ignore
-          navigate({ to: "/dashboard" });
+          navigate("/dashboard");
         } else {
           toast.error("Accès restreint au personnel autorisé uniquement.");
         }

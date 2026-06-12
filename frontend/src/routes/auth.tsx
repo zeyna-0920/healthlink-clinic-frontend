@@ -57,8 +57,7 @@ function AuthPage() {
       localStorage.setItem("patient", decodeURIComponent(patientStr));
       toast.success("Connexion sociale réussie !");
       setTimeout(() => {
-        // @ts-ignore
-        navigate({ to: "/rendez-vous" });
+        navigate("/rendez-vous");
       }, 500);
     } else if (error) {
       toast.error("Échec de la connexion sociale. Veuillez réessayer.");
@@ -131,14 +130,12 @@ function AuthPage() {
         if (data.requiresPasswordSetup) {
           toast.info("Veuillez définir un mot de passe pour sécuriser votre compte.");
           setTimeout(() => {
-            // @ts-ignore
-            navigate({ to: "/set-password" });
+            navigate("/set-password");
           }, 1000);
         } else {
           toast.success("Heureux de vous revoir !");
           setTimeout(() => {
-            // @ts-ignore
-            navigate({ to: "/rendez-vous" });
+            navigate("/rendez-vous");
           }, 1000);
         }
       } else {
