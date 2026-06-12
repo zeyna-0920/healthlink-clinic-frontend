@@ -30,11 +30,16 @@ function AdminPage() {
 
   // Rediriger vers le dashboard seulement si c'est bien l'admin déjà connecté
   useEffect(() => {
-    const adminAuth = localStorage.getItem("adminAuthenticated");
-    const token = localStorage.getItem("authToken");
-    const patient = JSON.parse(localStorage.getItem("patient") || "{}");
-    if (adminAuth === "true" && token && patient?.email === ADMIN_EMAIL) {
-      navigate("/dashboard");
+    try {
+      const adminAuth = localStorage.getItem("adminAuthenticated");
+      const token = localStorage.getItem("authToken");
+      const patientStr = localStorage.getItem("patient");
+      const patient = patientStr ? JSON.parse(patientStr) : {};
+      if (adminAuth === "true" && token && patient?.email === ADMIN_EMAIL) {
+        navigate("/dashboard");
+      }
+    } catch (e) {
+      // Ignore invalid localStorage data
     }
   }, [navigate]);
 
