@@ -72,6 +72,9 @@ const medicalTeam = [
     gradient: "from-sky-500 to-blue-700",
     shadow: "shadow-sky-500/20",
   },
+];
+
+const supportTeam = [
   {
     name: "Mommy Ndiaye",
     role: "Sage-femme",
@@ -82,9 +85,6 @@ const medicalTeam = [
     gradient: "from-rose-500 to-red-600",
     shadow: "shadow-rose-500/20",
   },
-];
-
-const supportTeam = [
   {
     name: "Trésorier",
     role: "Gestion des tickets & paiements",
@@ -181,19 +181,19 @@ function PersonnelPage() {
         </div>
 
         {/* Personnel médical */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-stretch mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch mb-4">
           {medicalTeam.map((m) => (
             <Card
               key={m.name}
-              className="group relative overflow-hidden rounded-[2.5rem] border-none bg-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 h-full min-h-[420px] flex flex-col"
+              className="group relative overflow-hidden rounded-[2.5rem] border-none bg-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 h-full flex flex-col"
             >
-              <div className="h-[220px] w-full overflow-hidden relative">
+              <div className="h-[200px] w-full overflow-hidden relative">
                 <img
                   src={m.img}
                   alt={m.name}
                   loading="lazy"
                   width={640}
-                  height={220}
+                  height={200}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className={`absolute inset-0 bg-gradient-to-t ${m.gradient} opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
@@ -214,7 +214,7 @@ function PersonnelPage() {
                 </div>
               </div>
 
-              <div className="p-4 flex-1 flex flex-col justify-between">
+              <div className="p-[14px] flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight">{m.name}</h3>
                   <div className="inline-block mt-2 px-3 py-1 rounded-lg bg-[#1D9E75] text-white text-xs font-bold uppercase tracking-widest">
@@ -292,22 +292,22 @@ function PersonnelPage() {
         </div>
 
         {/* Personnel administratif & support */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-4">
           <Badge className="bg-primary/10 text-primary border-none px-4 py-1.5 rounded-full">Personnel administratif &amp; support</Badge>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
           {supportTeam.map((m) => (
             <Card
               key={m.name}
-              className="group relative overflow-hidden rounded-[2.5rem] border-none bg-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 h-full min-h-[420px] flex flex-col"
+              className="group relative overflow-hidden rounded-[2.5rem] border-none bg-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 h-full flex flex-col"
             >
-              <div className="h-[220px] w-full overflow-hidden relative">
+              <div className="h-[200px] w-full overflow-hidden relative">
                 <img
                   src={m.img}
                   alt={m.name}
                   loading="lazy"
                   width={640}
-                  height={220}
+                  height={200}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className={`absolute inset-0 bg-gradient-to-t ${m.gradient} opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
@@ -328,7 +328,7 @@ function PersonnelPage() {
                 </div>
               </div>
 
-              <div className="p-4 flex-1 flex flex-col justify-between">
+              <div className="p-[14px] flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight">{m.name}</h3>
                   <div className={`inline-block mt-2 px-3 py-1 rounded-lg ${m.role === "Gestion des tickets & paiements" ? "bg-[#0F6E56]" : "bg-[#1D9E75]"} text-white text-xs font-bold uppercase tracking-widest`}>
