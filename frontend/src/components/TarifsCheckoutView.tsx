@@ -66,7 +66,7 @@ export function TarifsCheckoutView({
     <div className="min-h-screen ">
       <section className="relative overflow-hidden border-b border-border/60 bg-[image:var(--gradient-hero)] text-primary-foreground">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.12),transparent_50%)]" />
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-14 sm:py-20 text-center">
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-9 sm:py-14 text-center">
           <Badge className="mb-4 bg-white/15 text-white border-white/25 hover:bg-white/20">
             Paiement sécurisé
           </Badge>
@@ -80,7 +80,7 @@ export function TarifsCheckoutView({
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 space-y-10">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-12 pb-8 space-y-10">
         {isCheckout && pending && !paymentDone && (
           <Card className="overflow-hidden border-none shadow-2xl rounded-[2.5rem] bg-white">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-6 text-white relative overflow-hidden">

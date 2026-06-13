@@ -9,8 +9,8 @@ const tarifsGrid = [
     period: "jour",
     label: "Consultation de jour",
     icon: Sun,
-    gradient: "from-amber-500 to-orange-600",
-    shadow: "shadow-orange-500/20",
+    gradient: "from-[#1D9E75] to-[#1D9E75]",
+    shadow: "shadow-[#1D9E75]/20",
     hours: TARIFFS.jour.hours,
     child: TARIFFS.jour.child,
     adult: TARIFFS.jour.adult,
@@ -19,8 +19,8 @@ const tarifsGrid = [
     period: "nuit",
     label: "Consultation de nuit",
     icon: Moon,
-    gradient: "from-indigo-600 to-blue-800",
-    shadow: "shadow-indigo-500/20",
+    gradient: "from-[#085041] to-[#085041]",
+    shadow: "shadow-[#085041]/20",
     hours: TARIFFS.nuit.hours,
     child: TARIFFS.nuit.child,
     adult: TARIFFS.nuit.adult,
@@ -61,7 +61,7 @@ export function TarifsGrid({ showCta = true }: Props) {
               </div>
 
               <div className="grid gap-4">
-                <div className="flex items-center justify-between p-5 rounded-[1.5rem] bg-white/10 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
+                <div className="flex items-center justify-between p-5 rounded-[1.5rem] bg-white/15 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
                   <span className="flex items-center gap-3 font-bold text-lg">
                     <Baby className="h-6 w-6" /> Enfant
                   </span>
@@ -73,7 +73,7 @@ export function TarifsGrid({ showCta = true }: Props) {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between p-5 rounded-[1.5rem] bg-white/10 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
+                <div className="flex items-center justify-between p-5 rounded-[1.5rem] bg-white/15 backdrop-blur-sm border border-white/10 transition-colors group-hover:bg-white/20">
                   <span className="flex items-center gap-3 font-bold text-lg">
                     <User className="h-6 w-6" /> Adulte
                   </span>
@@ -91,7 +91,7 @@ export function TarifsGrid({ showCta = true }: Props) {
       </div>
 
       {showCta && (
-        <Card className="p-10 text-center border-none bg-slate-50 rounded-[2.5rem] shadow-inner relative overflow-hidden group">
+        <Card className="p-10 text-center border-none bg-[#f0faf6] rounded-[12px] shadow-inner relative overflow-hidden group">
           <div className="absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-primary/5 blur-3xl transition-all group-hover:bg-primary/10" />
           <p className="text-slate-500 mb-6 text-lg font-medium relative z-10">
             Prenez d&apos;abord un rendez-vous pour accéder au paiement en ligne.
