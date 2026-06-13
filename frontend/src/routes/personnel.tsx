@@ -31,7 +31,7 @@ export const Route = createFileRoute("/personnel")({
   component: PersonnelPage,
 });
 
-const team = [
+const medicalTeam = [
   {
     name: "Dr Ablaye Diop",
     role: "Médecin",
@@ -82,6 +82,9 @@ const team = [
     gradient: "from-rose-500 to-red-600",
     shadow: "shadow-rose-500/20",
   },
+];
+
+const supportTeam = [
   {
     name: "Trésorier",
     role: "Gestion des tickets & paiements",
@@ -161,10 +164,10 @@ function PersonnelPage() {
   return (
     <div className="min-h-screen bg-slate-50/50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-8 space-y-4">
           <Badge className="bg-primary/10 text-primary border-none px-4 py-1.5 rounded-full">Notre Équipe</Badge>
           <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
-            Des experts <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">à votre service</span>
+            Des experts <span className="bg-gradient-to-r from-[#1D9E75] to-[#0F6E56] bg-clip-text text-transparent">à votre service</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Une équipe dévouée et expérimentée, engagée pour votre santé au quotidien.
@@ -177,8 +180,9 @@ function PersonnelPage() {
           )}
         </div>
 
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {team.map((m) => (
+        {/* Personnel médical */}
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+          {medicalTeam.map((m) => (
             <Card
               key={m.name}
               className="group relative overflow-hidden rounded-[2.5rem] border-none bg-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
@@ -213,19 +217,133 @@ function PersonnelPage() {
               <div className="p-8 space-y-6">
                 <div>
                   <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight">{m.name}</h3>
-                  <div className={`inline-block mt-2 px-3 py-1 rounded-lg bg-gradient-to-r ${m.gradient} text-white text-xs font-bold uppercase tracking-widest`}>
+                  <div className="inline-block mt-2 px-3 py-1 rounded-lg bg-[#1D9E75] text-white text-xs font-bold uppercase tracking-widest">
                     {m.role}
                   </div>
                 </div>
 
                 <div className="space-y-4 pt-2">
                   <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100 group-hover:bg-white group-hover:border-slate-200 transition-colors">
-                    <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${m.gradient} flex items-center justify-center shadow-lg ${m.shadow} scale-90`}>
-                      <Mail className="h-5 w-5 text-white" />
+                    <div className="h-10 w-10 rounded-xl bg-[#E1F5EE] flex items-center justify-center scale-90">
+                      <Mail className="h-5 w-5 text-[#0F6E56]" />
                     </div>
                     <div className="min-w-0">
                       <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email</p>
-                      <p className="text-sm font-bold text-slate-600 truncate">{m.email}</p>
+                      <p className="text-[11px] font-bold text-slate-600">{m.email}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <Button
+                    variant={canContact ? "default" : "secondary"}
+                    size="lg"
+                    className={cn(
+                      "rounded-[1.5rem] gap-2 h-14 font-bold shadow-lg transition-all active:scale-95",
+                      canContact && `bg-gradient-to-r ${m.gradient} border-none hover:opacity-90 hover:${m.shadow}`
+                    )}
+                    disabled={!canContact && !loading}
+                    asChild={canContact}
+                    onClick={handleRestrictedClick}
+                  >
+                    {canContact ? (
+                      <a href={`tel:${m.phone.replace(/\s/g, "")}`}>
+                        <Phone className="h-5 w-5" />
+                        Appeler
+                      </a>
+                    ) : (
+                      <span>
+                        <Phone className="h-5 w-5" />
+                        Appeler
+                      </span>
+                    )}
+                  </Button>
+                  <Button
+                    variant={canContact ? "outline" : "secondary"}
+                    size="lg"
+                    className={cn(
+                      "rounded-[1.5rem] gap-2 h-14 font-bold transition-all active:scale-95",
+                      canContact ? "border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50" : "bg-slate-100"
+                    )}
+                    disabled={!canContact && !loading}
+                    asChild={canContact}
+                    onClick={handleRestrictedClick}
+                  >
+                    {canContact ? (
+                      <a
+                        href={`https://wa.me/${m.phone.replace(/[^0-9]/g, "")}?text=Bonjour ${m.name}, je suis un patient de la Clinique Moulaye Dabakh.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                        WhatsApp
+                      </a>
+                    ) : (
+                      <span>
+                        <MessageCircle className="h-5 w-5" />
+                        WhatsApp
+                      </span>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        {/* Personnel administratif & support */}
+        <div className="text-center mb-10">
+          <Badge className="bg-primary/10 text-primary border-none px-4 py-1.5 rounded-full">Personnel administratif &amp; support</Badge>
+        </div>
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          {supportTeam.map((m) => (
+            <Card
+              key={m.name}
+              className="group relative overflow-hidden rounded-[2.5rem] border-none bg-white shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
+            >
+              <div className="aspect-[4/5] overflow-hidden relative">
+                <img
+                  src={m.img}
+                  alt={m.name}
+                  loading="lazy"
+                  width={640}
+                  height={640}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${m.gradient} opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
+                
+                {!canContact && !loading && (
+                  <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-white/90 p-4 rounded-2xl shadow-2xl scale-90 group-hover:scale-100 transition-transform duration-300">
+                      <Lock className="h-6 w-6 text-slate-400" />
+                    </div>
+                  </div>
+                )}
+
+                <div className="absolute bottom-4 left-4 right-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+                  <div className="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-lg">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Expérience</p>
+                    <p className="text-sm font-bold text-slate-900">{m.age} ans d&apos;expertise</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-8 space-y-6">
+                <div>
+                  <h3 className="text-2xl font-black text-slate-900 leading-tight tracking-tight">{m.name}</h3>
+                  <div className={`inline-block mt-2 px-3 py-1 rounded-lg ${m.role === "Gestion des tickets & paiements" ? "bg-[#0F6E56]" : "bg-[#1D9E75]"} text-white text-xs font-bold uppercase tracking-widest`}>
+                    {m.role}
+                  </div>
+                </div>
+
+                <div className="space-y-4 pt-2">
+                  <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100 group-hover:bg-white group-hover:border-slate-200 transition-colors">
+                    <div className="h-10 w-10 rounded-xl bg-[#E1F5EE] flex items-center justify-center scale-90">
+                      <Mail className="h-5 w-5 text-[#0F6E56]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email</p>
+                      <p className="text-[11px] font-bold text-slate-600">{m.email}</p>
                     </div>
                   </div>
                 </div>
