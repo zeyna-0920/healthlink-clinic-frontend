@@ -98,7 +98,7 @@ function HomePage() {
   return (
     <div className="flex flex-col gap-0">
       {/* HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-white to-slate-50">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#f0faf6]">
         {/* Decorative Medical Icon on Left */}
         <div className="absolute left-8 top-1/4 h-32 w-32 opacity-5 text-[#1D9E75]">
           <Stethoscope className="w-full h-full" />
@@ -216,22 +216,22 @@ function HomePage() {
       </section>
 
       {/* QUICK ACTIONS SECTION */}
-      <section className="relative py-16 bg-slate-50">
+      <section className="relative py-16 pb-8 bg-slate-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 md:grid-cols-3">
-            <Card className="group relative overflow-hidden rounded-[2.5rem] border border-[#1D9E75]/10 bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1D9E75]/10">
+            <Card className="group relative overflow-hidden rounded-[2.5rem] border border-[#1D9E75]/10 bg-[#1D9E75] p-8 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1D9E75]/10">
               <div className="relative z-10 space-y-5">
-                <div className="h-16 w-16 rounded-2xl bg-[#1D9E75]/10 flex items-center justify-center">
-                  <Calendar className="h-8 w-8 text-[#1D9E75]" />
+                <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center">
+                  <Calendar className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold tracking-tight text-slate-900">Rendez-vous Facile</h3>
-                <p className="text-slate-600 leading-relaxed text-lg">
+                <h3 className="text-2xl font-bold tracking-tight">Rendez-vous Facile</h3>
+                <p className="text-white/90 leading-relaxed text-lg">
                   Réservez votre consultation en quelques secondes. Choisissez votre médecin et
                   votre créneau.
                 </p>
                 <Button
                   asChild
-                  className="bg-[#1D9E75] hover:bg-[#0F6E56] rounded-xl font-bold px-6 text-white"
+                  className="bg-white text-[#1D9E75] hover:bg-slate-100 rounded-xl font-bold px-6"
                 >
                   <Link to="/rendez-vous" className="flex items-center gap-2">
                     Prendre RDV <ArrowRight className="h-4 w-4" />
@@ -240,7 +240,7 @@ function HomePage() {
               </div>
             </Card>
 
-            <Card className="group relative overflow-hidden rounded-[2.5rem] border border-[#1D9E75]/10 bg-gradient-to-br from-[#1D9E75] to-[#0F6E56] p-8 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1D9E75]/10">
+            <Card className="group relative overflow-hidden rounded-[2.5rem] border border-[#0F6E56]/10 bg-[#0F6E56] p-8 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#0F6E56]/10">
               <div className="relative z-10 space-y-5">
                 <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center">
                   <Video className="h-8 w-8 text-white" />
@@ -262,18 +262,18 @@ function HomePage() {
               </div>
             </Card>
 
-            <Card className="group relative overflow-hidden rounded-[2.5rem] border border-[#1D9E75]/10 bg-white p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1D9E75]/10">
+            <Card className="group relative overflow-hidden rounded-[2.5rem] border border-[#085041]/10 bg-[#085041] p-8 text-white shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#085041]/10">
               <div className="relative z-10 space-y-5">
-                <div className="h-16 w-16 rounded-2xl bg-[#0F6E56]/10 flex items-center justify-center">
-                  <ClipboardList className="h-8 w-8 text-[#0F6E56]" />
+                <div className="h-16 w-16 rounded-2xl bg-white/20 flex items-center justify-center">
+                  <ClipboardList className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold tracking-tight text-slate-900">Tarifs Transparents</h3>
-                <p className="text-slate-600 leading-relaxed text-lg">
+                <h3 className="text-2xl font-bold tracking-tight">Tarifs Transparents</h3>
+                <p className="text-white/90 leading-relaxed text-lg">
                   Des tarifs fixes et accessibles pour tous. Enfant : 500 FCFA · Adulte : 1000 FCFA.
                 </p>
                 <Button
                   asChild
-                  className="bg-[#0F6E56] hover:bg-[#1D9E75] rounded-xl font-bold px-6 text-white"
+                  className="bg-white text-[#085041] hover:bg-slate-100 rounded-xl font-bold px-6"
                 >
                   <Link to="/tarifs" className="flex items-center gap-2">
                     Voir la liste <ArrowRight className="h-4 w-4" />
@@ -286,7 +286,7 @@ function HomePage() {
       </section>
 
       {/* SPECIALTIES SECTION */}
-      <section className="py-16 overflow-hidden">
+      <section className="py-16 pt-8 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-12">
             <Badge className="bg-[#1D9E75]/10 text-[#0F6E56] border-none">Nos Spécialités</Badge>
@@ -301,21 +301,38 @@ function HomePage() {
             {SPECIALTIES.map((spec) => (
               <div
                 key={spec.name}
-                className="group relative p-8 rounded-[2.5rem] border border-[#1D9E75]/20 bg-white shadow-md transition-all duration-500 hover:shadow-xl hover:shadow-[#1D9E75]/10 hover:-translate-y-1"
+                className="group relative p-8 rounded-[2.5rem] border border-[#1D9E75]/30 bg-white shadow-md transition-all duration-500 hover:shadow-xl hover:shadow-[#1D9E75]/10 hover:-translate-y-1"
               >
                 <div className="relative z-10">
                   <div
-                    className="h-20 w-20 rounded-3xl bg-[#1D9E75]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500"
+                    className="h-20 w-20 rounded-full bg-[#E1F5EE] flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500"
                   >
-                    <spec.icon className="h-10 w-10 text-[#1D9E75]" />
+                    <spec.icon className="h-10 w-10 text-[#0F6E56]" />
                   </div>
-                  <h3 className="text-xl font-extrabold mb-3 tracking-tight text-slate-900">{spec.name}</h3>
-                  <p className="text-slate-600 leading-relaxed font-medium">
+                  <h3 className="text-xl font-extrabold mb-3 tracking-tight text-black">{spec.name}</h3>
+                  <p className="text-gray-600 leading-relaxed font-medium mb-6">
                     Prise en charge spécialisée avec nos experts en {spec.name.toLowerCase()}.
                   </p>
+                  <Link 
+                    to="/services" 
+                    className="inline-flex items-center gap-1 text-[#0F6E56] font-semibold hover:text-[#1D9E75] transition-colors"
+                  >
+                    En savoir plus <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <Button
+              asChild
+              className="bg-[#1D9E75] hover:bg-[#0F6E56] rounded-xl font-bold px-8 py-6 text-white"
+            >
+              <Link to="/services">
+                Voir toutes nos spécialités
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -335,9 +352,9 @@ function HomePage() {
             {TESTIMONIALS.map((t, i) => (
               <Card
                 key={i}
-                className="group relative p-10 rounded-[3rem] border border-[#1D9E75]/20 bg-white shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1D9E75]/10"
+                className="group relative p-10 rounded-[3rem] border-l-4 border-l-[#1D9E75] border border-slate-100 bg-white shadow-md transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1D9E75]/10"
               >
-                <Quote className="absolute top-10 right-10 h-12 w-12 text-[#1D9E75] opacity-20" />
+                <Quote className="absolute top-10 right-10 h-12 w-12 text-[#1D9E75] opacity-[0.08]" />
                 
                 <div className="relative z-10">
                   <div className="flex gap-1 mb-6">
@@ -349,14 +366,14 @@ function HomePage() {
                     ))}
                   </div>
 
-                  <p className="text-2xl italic mb-8 leading-relaxed text-slate-700 font-medium">"{t.content}"</p>
+                  <p className="text-2xl mb-8 leading-relaxed text-black font-medium not-italic">"{t.content}"</p>
                   
                   <div className="flex items-center gap-5 border-t border-slate-100 pt-6">
                     <div className="h-16 w-16 rounded-2xl bg-[#1D9E75]/10 flex items-center justify-center font-bold text-2xl text-[#1D9E75]">
                       {t.name[0]}
                     </div>
                     <div>
-                      <p className="font-extrabold text-slate-900 text-xl">{t.name}</p>
+                      <p className="font-extrabold text-black text-xl">{t.name}</p>
                       <p className="font-bold text-sm uppercase tracking-widest text-slate-500">{t.role}</p>
                     </div>
                   </div>

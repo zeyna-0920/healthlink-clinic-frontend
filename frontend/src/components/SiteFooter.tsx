@@ -18,37 +18,6 @@ import { Input } from "@/components/ui/input";
 export function SiteFooter() {
   return (
     <footer className="relative mt-16 text-foreground">
-      {/* CTA strip */}
-      <div className="relative -mb-16 z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-[image:var(--gradient-hero)] p-6 sm:p-8 shadow-[var(--shadow-card)] flex flex-col md:flex-row items-center justify-between gap-5 text-primary-foreground">
-          <div>
-            <h3 className="font-display text-xl sm:text-2xl font-bold">
-              Besoin d'une consultation ?
-            </h3>
-            <p className="text-sm opacity-90 mt-1">
-              Réservez en ligne en moins de 2 minutes — réponse rapide garantie.
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <Button asChild size="lg" variant="secondary" className="rounded-full">
-              <Link to="/rendez-vous">
-                Prendre RDV <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="rounded-full bg-transparent border-white/40 text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
-            >
-              <a href="tel:+221331234567">
-                <Phone className="h-4 w-4" /> Appeler
-              </a>
-            </Button>
-          </div>
-        </div>
-      </div>
-
       {/* Main footer */}
       <div className=" border-t border-border pt-24 pb-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
