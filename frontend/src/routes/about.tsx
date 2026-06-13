@@ -36,17 +36,17 @@ function AboutPage() {
               et accompagnement humain pour garantir un parcours de soins simple, rapide et serein.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-red-500 to-rose-600 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-rose-500/20 hover:-translate-y-1">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-[#1D9E75] to-[#0F6E56] p-6 text-white shadow-lg transition-all duration-300 hover:shadow-[#1D9E75]/20 hover:-translate-y-1">
                 <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
                 <p className="relative z-10 text-4xl font-black tracking-tighter">24/7</p>
-                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-rose-50/90">
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white/90">
                   Urgences et assistance patients
                 </p>
               </div>
-              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-blue-500 to-indigo-600 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-blue-500/20 hover:-translate-y-1">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-[#0F6E56] to-[#085041] p-6 text-white shadow-lg transition-all duration-300 hover:shadow-[#0F6E56]/20 hover:-translate-y-1">
                 <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
                 <p className="relative z-10 text-4xl font-black tracking-tighter">15+</p>
-                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-blue-50/90">
+                <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white/90">
                   spécialités médicales disponibles
                 </p>
               </div>
@@ -71,42 +71,42 @@ function AboutPage() {
         </div>
 
         <section className="mt-16 grid gap-10 lg:grid-cols-3">
-          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20">
+          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-[#1D9E75] to-[#0F6E56] p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#1D9E75]/20">
             <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
             <div className="relative z-10">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md mb-6 shadow-inner">
                 <Target className="h-7 w-7 text-white" />
               </div>
               <h2 className="text-2xl font-bold mb-4 tracking-tight">Notre mission</h2>
-              <p className="text-blue-50/90 leading-relaxed text-lg">
+              <p className="text-white/90 leading-relaxed text-lg">
                 Faciliter l'accès aux soins par la prise de rendez-vous en ligne, la consultation à
                 distance et la coordination proactive entre patients et équipes médicales.
               </p>
             </div>
           </Card>
 
-          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-emerald-500 to-teal-700 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-emerald-500/20">
+          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-[#0F6E56] to-[#085041] p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#0F6E56]/20">
             <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
             <div className="relative z-10">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md mb-6 shadow-inner">
                 <Sparkles className="h-7 w-7 text-white" />
               </div>
               <h2 className="text-2xl font-bold mb-4 tracking-tight">Notre vision</h2>
-              <p className="text-emerald-50/90 leading-relaxed text-lg">
+              <p className="text-white/90 leading-relaxed text-lg">
                 Être un modèle de soin moderne au Sénégal, centré sur la qualité, la sécurité et le
                 confort de chaque patient.
               </p>
             </div>
           </Card>
 
-          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-rose-500 to-orange-600 p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-rose-500/20">
+          <Card className="group relative overflow-hidden rounded-[2.5rem] border-none bg-gradient-to-br from-[#085041] to-[#063D31] p-8 text-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#085041]/20">
             <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
             <div className="relative z-10">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md mb-6 shadow-inner">
                 <Heart className="h-7 w-7 text-white" />
               </div>
               <h2 className="text-2xl font-bold mb-4 tracking-tight">Nos valeurs</h2>
-              <p className="text-rose-50/90 leading-relaxed text-lg">
+              <p className="text-white/90 leading-relaxed text-lg">
                 Bienveillance, transparence et innovation guident notre accompagnement médical à
                 chaque étape de votre parcours de soins.
               </p>
@@ -114,7 +114,7 @@ function AboutPage() {
           </Card>
         </section>
 
-        <section className="mt-16">
+        <section className="mt-8">
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] items-center">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400 font-semibold mb-3">
