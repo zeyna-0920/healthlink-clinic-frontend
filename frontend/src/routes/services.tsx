@@ -24,48 +24,48 @@ const services = [
     icon: Stethoscope,
     title: "Consultations spécialisées",
     desc: "Médecins généralistes et spécialistes pour un diagnostic complet et personnalisé.",
-    gradient: "from-blue-600 to-indigo-700",
-    shadow: "shadow-blue-500/20",
+    gradient: "from-[#1D9E75] to-[#0F6E56]",
+    shadow: "shadow-[#1D9E75]/20",
     badge: "Consultations sur place",
   },
   {
     icon: Video,
     title: "Téléconsultation sécurisée",
     desc: "Consultations vidéo rapides et confidentielles, pour gagner du temps sans vous déplacer.",
-    gradient: "from-emerald-500 to-teal-700",
-    shadow: "shadow-emerald-500/20",
+    gradient: "from-[#0F6E56] to-[#085041]",
+    shadow: "shadow-[#0F6E56]/20",
     badge: "Disponible 7j/7",
   },
   {
     icon: BedDouble,
     title: "Hospitalisation premium",
     desc: "Chambres modernes, suivi 24h/24 et coordination totale avec nos équipes soignantes.",
-    gradient: "from-sky-500 to-blue-700",
-    shadow: "shadow-sky-500/20",
+    gradient: "from-[#085041] to-[#063D31]",
+    shadow: "shadow-[#085041]/20",
     badge: "Lits disponibles en temps réel",
   },
   {
     icon: Syringe,
     title: "Soins infirmiers",
     desc: "Pansements, perfusions et soins post-opératoires réalisés par une équipe dédiée.",
-    gradient: "from-purple-500 to-indigo-700",
-    shadow: "shadow-purple-500/20",
+    gradient: "from-[#1D9E75] to-[#0F6E56]",
+    shadow: "shadow-[#1D9E75]/20",
     badge: "Soins personnalisés",
   },
   {
     icon: ClipboardList,
     title: "Suivi médical",
     desc: "Dossier patient digital, rappels de rendez-vous et historique de soins centralisés.",
-    gradient: "from-teal-500 to-emerald-700",
-    shadow: "shadow-teal-500/20",
+    gradient: "from-[#0F6E56] to-[#085041]",
+    shadow: "shadow-[#0F6E56]/20",
     badge: "Piloté par la technologie",
   },
   {
     icon: HeartPulse,
     title: "Urgences 24h/24",
     desc: "Service d'urgence rapide et bien organisé, avec prise en charge prioritaire.",
-    gradient: "from-rose-500 to-red-700",
-    shadow: "shadow-rose-500/20",
+    gradient: "from-[#085041] to-[#063D31]",
+    shadow: "shadow-[#085041]/20",
     badge: "Intervention immédiate",
   },
 ];
@@ -88,14 +88,14 @@ function ServicesPage() {
               équipe dédiée.
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-blue-500/20 hover:-translate-y-1">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-[#0F6E56] to-[#085041] p-6 text-white shadow-lg transition-all duration-300 hover:shadow-[#0F6E56]/20 hover:-translate-y-1">
                 <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
                 <p className="relative z-10 text-4xl font-black tracking-tighter">6</p>
                 <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
                   services phares
                 </p>
               </div>
-              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-rose-500 to-red-600 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-rose-500/20 hover:-translate-y-1">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-[#1D9E75] to-[#0F6E56] p-6 text-white shadow-lg transition-all duration-300 hover:shadow-[#1D9E75]/20 hover:-translate-y-1">
                 <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
                 <p className="relative z-10 text-4xl font-black tracking-tighter">24/7</p>
                 <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
@@ -142,7 +142,7 @@ function ServicesPage() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold mb-2 tracking-tight">{service.title}</h2>
-                  <p className="text-white leading-relaxed font-medium line-clamp-2 group-hover:line-clamp-none transition-all">
+                  <p className="text-white leading-relaxed font-medium">
                     {service.desc}
                   </p>
                 </div>
@@ -156,7 +156,7 @@ function ServicesPage() {
           ))}
         </section>
 
-        <section className="mt-24 grid gap-16 lg:grid-cols-[0.95fr_1.05fr] items-center">
+        <section className="mt-12 grid gap-16 lg:grid-cols-[0.95fr_1.05fr] items-center">
           <div className="space-y-8">
             <div className="space-y-4">
               <p className="inline-flex rounded-full bg-primary/10 px-4 py-1 text-sm font-semibold text-primary">
@@ -172,14 +172,14 @@ function ServicesPage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
-              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-emerald-500 to-teal-700 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-emerald-500/20 hover:-translate-y-1">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-[#1D9E75] to-[#0F6E56] p-6 text-white shadow-lg transition-all duration-300 hover:shadow-[#1D9E75]/20 hover:-translate-y-1">
                 <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
                 <p className="relative z-10 text-4xl font-black tracking-tighter">98%</p>
                 <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
                   taux de satisfaction patient
                 </p>
               </div>
-              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-indigo-500 to-blue-700 p-6 text-white shadow-lg transition-all duration-300 hover:shadow-indigo-500/20 hover:-translate-y-1">
+              <div className="group relative overflow-hidden rounded-3xl border-none bg-gradient-to-br from-[#0F6E56] to-[#085041] p-6 text-white shadow-lg transition-all duration-300 hover:shadow-[#0F6E56]/20 hover:-translate-y-1">
                 <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10 blur-xl transition-all group-hover:bg-white/20" />
                 <p className="relative z-10 text-4xl font-black tracking-tighter">15+</p>
                 <p className="relative z-10 mt-2 text-sm font-bold uppercase tracking-wider text-white">
