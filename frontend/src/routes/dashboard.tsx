@@ -147,7 +147,7 @@ interface StatCardProps {
   subtext?: string;
   loading?: boolean;
   trend?: number;
-  color?: "primary" | "success" | "warning" | "destructive" | "info";
+  color?: "primary" | "success" | "warning" | "destructive" | "info" | string;
 }
 
 function StatCard({
@@ -167,11 +167,13 @@ function StatCard({
     info: "from-sky-500 to-blue-700 shadow-sky-500/20",
   };
 
+  const gradientClass = gradients[color as keyof typeof gradients] || color;
+
   return (
     <Card
       className={cn(
         "group relative overflow-hidden border-none text-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-gradient-to-br",
-        gradients[color],
+        gradientClass,
       )}
     >
       <div className="absolute -right-6 -top-6 h-32 w-32 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20" />
@@ -454,7 +456,7 @@ function DashboardPage() {
           <div className="flex flex-wrap items-center gap-3">
             <Dialog open={isPassementDialogOpen} onOpenChange={setIsPassementDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="rounded-xl shadow-lg gap-2 bg-indigo-600 hover:bg-indigo-700 transition-all">
+                <Button className="rounded-xl shadow-lg gap-2 bg-[#1D9E75] hover:bg-[#0F6E56] transition-all text-white">
                   <Stethoscope className="h-4 w-4" />
                   Enregistrer Passement
                 </Button>
@@ -758,7 +760,7 @@ function DashboardPage() {
               </DialogContent>
             </Dialog>
 
-            <Button className="rounded-xl shadow-sm gap-2" size="sm" asChild>
+            <Button className="rounded-xl shadow-sm gap-2 bg-[#0F6E56] hover:bg-[#085041] text-white" size="sm" asChild>
               <Link to="/patients/new">
                 <Plus className="h-4 w-4" />
                 Nouveau Patient
@@ -779,7 +781,7 @@ function DashboardPage() {
               <Link to="/notifications">
                 <Bell className="h-5 w-5" />
                 {unreadNotifications > 0 && (
-                  <span className="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-destructive" />
+                  <span className="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-[#085041]" />
                 )}
               </Link>
             </Button>
@@ -795,7 +797,7 @@ function DashboardPage() {
             subtext={`${recentPatients.length} cette semaine`}
             loading={loading}
             trend={12}
-            color="primary"
+            color="from-[#1D9E75] to-[#0F6E56] shadow-[#1D9E75]/20"
           />
           <StatCard
             icon={Activity}
@@ -804,7 +806,7 @@ function DashboardPage() {
             subtext={`${bedStats.occupied} lits occupés`}
             loading={loading}
             trend={-5}
-            color="success"
+            color="from-[#0F6E56] to-[#085041] shadow-[#0F6E56]/20"
           />
           <StatCard
             icon={CreditCard}
@@ -813,7 +815,7 @@ function DashboardPage() {
             subtext="Paiements validés"
             loading={loading}
             trend={8}
-            color="info"
+            color="from-[#085041] to-[#063D31] shadow-[#085041]/20"
           />
           <StatCard
             icon={Bell}
@@ -821,7 +823,7 @@ function DashboardPage() {
             value={unreadNotifications}
             subtext="Alertes non lues"
             loading={loading}
-            color="warning"
+            color="from-[#063D31] to-[#052E24] shadow-[#063D31]/20"
           />
         </div>
 
@@ -848,8 +850,8 @@ function DashboardPage() {
                     <AreaChart data={revenueData}>
                       <defs>
                         <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                          <stop offset="5%" stopColor="#1D9E75" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#1D9E75" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid
@@ -893,7 +895,7 @@ function DashboardPage() {
                       <Area
                         type="monotone"
                         dataKey="amount"
-                        stroke="hsl(var(--primary))"
+                        stroke="#1D9E75"
                         strokeWidth={3}
                         fillOpacity={1}
                         fill="url(#colorRevenue)"
@@ -1196,7 +1198,7 @@ function DashboardPage() {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="border-border/40 shadow-sm bg-slate-900 text-white overflow-hidden">
+            <Card className="border-border/40 shadow-sm bg-[#0F6E56] text-white overflow-hidden">
               <CardHeader>
                 <CardTitle className="text-lg font-bold text-white">Actions Rapides</CardTitle>
               </CardHeader>
@@ -1229,7 +1231,7 @@ function DashboardPage() {
             <Card className="border-border/40 shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-lg font-bold">Flux d'Activité</CardTitle>
-                <Badge variant="outline" className="text-[10px] uppercase">
+                <Badge variant="outline" className="text-[10px] uppercase bg-[#EF9F27]/10 text-[#EF9F27] border-[#EF9F27]/20">
                   {unreadNotifications} Alertes
                 </Badge>
               </CardHeader>
@@ -1330,7 +1332,7 @@ function DashboardPage() {
         </div>
 
         {/* Payments Section Full Width */}
-        <div className="mt-10">
+        <div className="mt-8">
           <Card className="border-border/40 shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
